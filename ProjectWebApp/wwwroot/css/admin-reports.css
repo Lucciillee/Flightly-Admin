@@ -1,0 +1,135 @@
+﻿:root {
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* General layout */
+.content {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    gap: 24px;
+}
+
+/* Card structure */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-h {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 20px;
+}
+
+/* Form grid */
+.grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+input,
+select {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.95rem;
+}
+
+    input:focus,
+    select:focus {
+        outline: 2px solid rgba(13,139,242,0.25);
+        border-color: var(--blue);
+    }
+
+/* Buttons */
+.actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        background: rgba(13,139,242,0.08);
+    }
+
+    .btn.primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .btn.outline {
+        background: transparent;
+        border: 1px solid var(--blue);
+        color: var(--blue);
+    }
+
+        .btn.outline:hover {
+            background: rgba(13,139,242,0.08);
+        }
+
+/* Preview section */
+.preview-card {
+    margin-top: 20px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Chart container */
+.chart-wrapper {
+    height: 220px; /* 👈 Adjust this to control chart height */
+    position: relative;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+    .grid3 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .grid3 {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        padding: 20px;
+    }
+}

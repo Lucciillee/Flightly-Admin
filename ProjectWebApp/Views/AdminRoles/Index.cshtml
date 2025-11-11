@@ -1,0 +1,128 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Admin Role Management";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-roles.css" asp-append-version="true" />
+}
+
+<div class="content stack">
+
+    <!-- Dashboard-style Stats -->
+    <div class="tiles">
+        <div class="card stat blue">
+            <div class="icon">👥</div>
+            <div>
+                <div class="label">Total Admins</div>
+                <div class="value">3</div>
+            </div>
+        </div>
+
+        <div class="card stat green">
+            <div class="icon">✅</div>
+            <div>
+                <div class="label">Active</div>
+                <div class="value">2</div>
+            </div>
+        </div>
+
+        <div class="card stat orange">
+            <div class="icon">🚫</div>
+            <div>
+                <div class="label">Disabled</div>
+                <div class="value">1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Admin -->
+    <div class="card">
+        <div class="card-h">Create Sub-Admin</div>
+        <div class="card-b">
+            <form class="grid1">
+                <label class="field">
+                    <span>Name</span>
+                    <input placeholder="Finance Admin" />
+                </label>
+
+                <label class="field">
+                    <span>Email</span>
+                    <input type="email" placeholder="finance@domain.com" />
+                </label>
+
+                <label class="field">
+                    <span>Role</span>
+                    <select>
+                        <option>Finance</option>
+                        <option>Marketing</option>
+                        <option>Operations</option>
+                    </select>
+                </label>
+
+                <button class="btn primary full">Create Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admins Table -->
+    <div class="card">
+        <div class="card-h flex-between">
+            <span>Admins</span>
+            <div class="search-bar">
+                <input type="text" id="adminSearch" placeholder="Search by name or email..." />
+            </div>
+        </div>
+        <div class="card-b">
+            <table class="table" id="adminsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fatima S.</td>
+                        <td>fatima@domain.com</td>
+                        <td>Marketing</td>
+                        <td><span class="badge ok">Active</span></td>
+                        <td class="right"><button class="btn small">Disable</button></td>
+                    </tr>
+                    <tr>
+                        <td>Omar K.</td>
+                        <td>omar@domain.com</td>
+                        <td>Finance</td>
+                        <td><span class="badge ok">Active</span></td>
+                        <td class="right"><button class="btn small">Disable</button></td>
+                    </tr>
+                    <tr>
+                        <td>Nora L.</td>
+                        <td>nora@domain.com</td>
+                        <td>Operations</td>
+                        <td><span class="badge">Disabled</span></td>
+                        <td class="right"><button class="btn small">Enable</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Simple client-side search
+        const searchInput = document.getElementById('adminSearch');
+        const rows = document.querySelectorAll('#adminsTable tbody tr');
+
+        searchInput.addEventListener('keyup', () => {
+            const val = searchInput.value.toLowerCase();
+            rows.forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+            });
+        });
+    </script>
+}

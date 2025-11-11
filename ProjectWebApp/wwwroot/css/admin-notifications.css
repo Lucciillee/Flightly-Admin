@@ -1,0 +1,195 @@
+﻿:root {
+    --blue: #0d8bf2;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* === PAGE LAYOUT === */
+.content {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* === FLOATING STAT BOX (TOP RIGHT UNDER HEADER) === */
+.top-bar {
+    position: fixed;
+    top: 80px; /* adjust depending on your header height */
+    right: 40px;
+    z-index: 1000;
+}
+
+.notif-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 8px 14px;
+    transition: 0.25s ease;
+}
+
+    .notif-stat:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(13,139,242,0.18);
+    }
+
+    .notif-stat .label {
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .notif-stat .count {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--blue);
+    }
+
+/* === GRID LAYOUT === */
+.grid2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 5px; /* ⬆ push content lower so it doesn’t overlap with stat */
+}
+
+/* === CARDS === */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.card-h {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 20px;
+}
+
+.scroll {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* === FORM === */
+.grid1 {
+    display: grid;
+    gap: 16px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+input,
+select,
+textarea {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.95rem;
+    transition: 0.2s ease;
+}
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: 2px solid rgba(13,139,242,.25);
+        border-color: var(--blue);
+    }
+
+/* === BUTTONS === */
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        background: rgba(13,139,242,0.08);
+    }
+
+    .btn.primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: transparent;
+    }
+
+/* === TABLE === */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+
+    .table th,
+    .table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+    }
+
+    .table thead th {
+        background: #f8fbff;
+        position: sticky;
+        top: 0;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(13,139,242,0.05);
+    }
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+    .content {
+        padding: 20px;
+    }
+
+    .top-bar {
+        position: static;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+    }
+
+    .notif-stat {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}

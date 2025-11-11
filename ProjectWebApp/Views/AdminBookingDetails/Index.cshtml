@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Booking Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-booking-details.css" asp-append-version="true" />
+}
+
+<div class="content">
+    <section class="grid2">
+
+        <!-- Booking Summary -->
+        <div class="card">
+            <div class="card-h">Summary</div>
+            <div class="card-b">
+                <div class="row">
+                    <div>
+                        <div class="muted small">User</div>
+                        <div class="big">Rana Ahmed</div>
+                    </div>
+                    <div>
+                        <div class="muted small">Email</div>
+                        <div>rana@example.com</div>
+                    </div>
+                    <div>
+                        <div class="muted small">Payment</div>
+                        <div><span class="badge ok">Paid</span> • Visa **** 5123</div>
+                    </div>
+                    <div>
+                        <div class="muted small">Total</div>
+                        <div class="big">$420</div>
+                    </div>
+                </div>
+
+                <hr class="line" />
+
+                <div class="row">
+                    <div>
+                        <div class="muted small">Flight</div>
+                        <div class="big">GF 008 • BAH → DXB</div>
+                        <div class="muted">Dep: 2025-10-30 09:20 • Arr: 2025-10-30 11:10</div>
+                        <div class="muted">Seat: 4A • Economy</div>
+                    </div>
+                    <div>
+                        <div class="muted small">Status</div>
+                        <div><span class="badge ok">Confirmed</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card actions">
+            <div class="card-h">Actions</div>
+            <div class="card-b">
+                <div class="col">
+                    <button class="btn">Resend Email</button>
+                    <button class="btn">Refund</button>
+                    <button class="btn danger">Cancel Booking</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>

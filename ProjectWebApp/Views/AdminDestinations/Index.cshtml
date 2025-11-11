@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Manage Tourist Destinations";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-destinations.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <!-- Add / Update Destination -->
+    <div class="card">
+        <div class="card-h">Add / Update Destination</div>
+        <div class="card-b">
+            <form class="grid3">
+                <label class="field">
+                    <span>Name</span>
+                    <input placeholder="Dubai" />
+                </label>
+
+                <label class="field">
+                    <span>Country</span>
+                    <input placeholder="UAE" />
+                </label>
+
+                <label class="field">
+                    <span>Featured</span>
+                    <select>
+                        <option>No</option>
+                        <option>Yes</option>
+                    </select>
+                </label>
+
+                <label class="field full">
+                    <span>Description</span>
+                    <textarea rows="4" placeholder="Highlights, attractions, etc."></textarea>
+                </label>
+
+                <div class="actions">
+                    <button class="btn">Reset</button>
+                    <button class="btn primary">Save Destination</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Destinations Table -->
+    <div class="card">
+        <div class="card-h">Destinations</div>
+        <div class="card-b">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>Featured</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dubai</td>
+                        <td>UAE</td>
+                        <td><span class="badge ok">Yes</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manama</td>
+                        <td>Bahrain</td>
+                        <td><span class="badge">No</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Doha</td>
+                        <td>Qatar</td>
+                        <td><span class="badge ok">Yes</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

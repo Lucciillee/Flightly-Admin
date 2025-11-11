@@ -1,0 +1,237 @@
+﻿:root {
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* Layout */
+.content {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    gap: 24px;
+}
+
+/* Cards */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-h {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 20px;
+}
+
+/* Stats */
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.card.stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: none;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+}
+
+    .card.stat:hover {
+        transform: translateY(-3px);
+    }
+
+    .card.stat.blue {
+        box-shadow: 0 8px 20px rgba(13, 139, 242, 0.25);
+    }
+
+    .card.stat.green {
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+    }
+
+    .card.stat.orange {
+        box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+    }
+
+    .card.stat .icon {
+        font-size: 1.5rem;
+        opacity: 0.8;
+    }
+
+    .card.stat .label {
+        color: var(--muted);
+        font-size: 0.85rem;
+    }
+
+    .card.stat .value {
+        font-weight: 700;
+        font-size: 1.4rem;
+    }
+
+/* Chart */
+.card.chart .card-b {
+    height: 220px;
+    padding: 20px;
+}
+
+.chart-wrapper {
+    height: 100%;
+    position: relative;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+    .search-bar.left {
+        justify-content: flex-start; /* 👈 Left-aligns it */
+    }
+
+    .search-bar input {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        width: 260px;
+        background: #fff;
+        transition: 0.2s ease;
+    }
+
+        .search-bar input:focus {
+            outline: 2px solid rgba(13,139,242,0.25);
+            border-color: var(--blue);
+        }
+
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+
+    .table th,
+    .table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+    }
+
+    .table thead th {
+        background: #f8fbff;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #fafbfc;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(13,139,242,0.05);
+    }
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #eef6ff;
+    color: #0b5394;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+    .badge.ok {
+        background: #ecfdf5;
+        border-color: #d1fae5;
+        color: #065f46;
+    }
+
+/* Buttons */
+.btn {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        background: rgba(13,139,242,0.08);
+    }
+
+    .btn.primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .btn.small {
+        font-size: 0.85rem;
+        padding: 6px 8px;
+    }
+
+    .btn.danger {
+        background: #ef4444;
+        color: #fff;
+        border-color: transparent;
+    }
+
+.right {
+    text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .tiles {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .content {
+        padding: 20px;
+    }
+
+    .tiles {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}

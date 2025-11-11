@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Backup & Restore";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-backup.css" asp-append-version="true" />
+}
+
+<div class="content">
+    <section class="stack">
+        <!-- Backup Section -->
+        <div class="card">
+            <div class="card-h">Create Backup</div>
+            <div class="card-b">
+                <p class="muted">Generate a secure backup of all system data and configurations.</p>
+
+                <div class="status">
+                    <span class="label">Last Backup:</span>
+                    <span class="value">2025-10-12 09:30</span>
+                </div>
+
+                <button class="btn primary full">Backup Now</button>
+            </div>
+        </div>
+
+        <!-- Restore Section -->
+        <div class="card">
+            <div class="card-h">Restore</div>
+            <div class="card-b">
+                <p class="muted">Restore from a previous backup file. Ensure the file is verified before applying.</p>
+
+                <label class="field">
+                    <span>Select Backup File</span>
+                    <input type="file" />
+                </label>
+
+                <div class="status muted small">No file selected.</div>
+
+                <div class="actions">
+                    <button class="btn">Validate</button>
+                    <button class="btn danger">Restore</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Reports";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-reports.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <!-- Export Reports -->
+    <div class="card">
+        <div class="card-h">Export Reports</div>
+        <div class="card-b">
+            <form class="grid3">
+                <label class="field">
+                    <span>Report Type</span>
+                    <select>
+                        <option>Bookings</option>
+                        <option>Revenue</option>
+                        <option>Flight Occupancy</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Date From</span>
+                    <input type="date" />
+                </label>
+
+                <label class="field">
+                    <span>Date To</span>
+                    <input type="date" />
+                </label>
+
+                <div class="actions">
+                    <button type="button" class="btn">Preview</button>
+                    <button type="submit" class="btn primary">Export CSV</button>
+                    <button type="button" class="btn outline">Export Excel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Section -->
+    <div class="card preview-card">
+        <div class="card-h">Report Preview</div>
+        <div class="card-b">
+            <p class="muted">
+                Select a report type and date range, then click <strong>Preview</strong> to visualize results here.
+            </p>
+            <div class="chart-wrapper">
+                <canvas id="reportChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('reportChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [45, 60, 40, 80, 55],
+                        backgroundColor: '#0d8bf2',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false, // 👈 lets CSS control chart height
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#6b7280' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            ticks: { color: '#6b7280' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}

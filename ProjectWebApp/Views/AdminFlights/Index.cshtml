@@ -1,0 +1,132 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Manage Flights";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-flights.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <!-- Create / Edit Flight -->
+    <div class="card">
+        <div class="card-h">Create / Edit Flight</div>
+        <div class="card-b">
+            <form class="grid3">
+                <label class="field">
+                    <span>Airline</span>
+                    <select>
+                        <option>Gulf Air</option>
+                        <option>Qatar Airways</option>
+                        <option>Emirates</option>
+                        <option>Saudia</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Flight No.</span>
+                    <input placeholder="GF 008" />
+                </label>
+
+                <label class="field">
+                    <span>Aircraft</span>
+                    <input placeholder="A320neo" />
+                </label>
+
+                <label class="field">
+                    <span>Origin</span>
+                    <input placeholder="BAH" />
+                </label>
+
+                <label class="field">
+                    <span>Destination</span>
+                    <input placeholder="DXB" />
+                </label>
+
+                <label class="field">
+                    <span>Departure</span>
+                    <input type="datetime-local" />
+                </label>
+
+                <label class="field">
+                    <span>Arrival</span>
+                    <input type="datetime-local" />
+                </label>
+
+                <label class="field">
+                    <span>Base Price</span>
+                    <input type="number" placeholder="120" />
+                </label>
+
+                <label class="field">
+                    <span>Status</span>
+                    <select>
+                        <option>Scheduled</option>
+                        <option>Cancelled</option>
+                        <option>Delayed</option>
+                    </select>
+                </label>
+
+                <div class="actions">
+                    <button type="reset" class="btn">Reset</button>
+                    <button type="submit" class="btn primary">Save Flight</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Flight Table -->
+    <div class="card">
+        <div class="card-h">Flights</div>
+        <div class="card-b">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Flight</th>
+                        <th>Airline</th>
+                        <th>Route</th>
+                        <th>Departure</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GF 008</td>
+                        <td>Gulf Air</td>
+                        <td>BAH → DXB</td>
+                        <td>2025-10-30 09:20</td>
+                        <td><span class="badge ok">Scheduled</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>QR 271</td>
+                        <td>Qatar Airways</td>
+                        <td>BAH → DOH</td>
+                        <td>2025-10-22 15:10</td>
+                        <td><span class="badge">Pending</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SV 112</td>
+                        <td>Saudia</td>
+                        <td>BAH → RUH</td>
+                        <td>2025-11-05 18:00</td>
+                        <td><span class="badge ok">Scheduled</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

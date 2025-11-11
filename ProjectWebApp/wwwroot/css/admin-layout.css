@@ -1,0 +1,74 @@
+﻿:root {
+    --sidebar-width: 240px;
+    --max-content-width: 1200px; /* controls how wide the main content can go */
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* Base structure */
+body {
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Sidebar stays fixed on the left */
+aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    box-shadow: 0 2px 12px rgba(2,6,23,.06);
+    z-index: 10;
+}
+
+/* Wrapper for everything on the right */
+.admin-wrapper {
+    margin-left: var(--sidebar-width); /* ✅ pushes content to the right of the sidebar */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg);
+}
+
+/* Topbar styling */
+.topbar {
+    position: sticky;
+    top: 0;
+    height: 64px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    z-index: 5;
+}
+
+    .topbar h1 {
+        font-size: 1.3rem;
+        font-weight: 500;
+        margin: 0;
+    }
+
+/* Main content area */
+.main {
+    flex: 1;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column; /* ✅ stacks everything vertically */
+    align-items: center; /* ✅ centers the stack horizontally */
+}
+

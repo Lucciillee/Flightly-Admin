@@ -1,0 +1,113 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "System Logs & Audit Trail";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-logs.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <!-- Logs Header & Actions -->
+    <div class="card">
+        <div class="card-h flex-between">
+            <span>Recent Activity</span>
+            <div class="actions">
+                <button class="btn outline">Export CSV</button>
+            </div>
+        </div>
+        <div class="card-b">
+
+            <!-- 🔍 Search and Filter -->
+            <div class="search-bar left">
+                <input type="text" id="logSearch" placeholder="Search admin, action, or resource..." />
+                <select id="actionFilter">
+                    <option value="">All Actions</option>
+                    <option value="CREATE">Create</option>
+                    <option value="UPDATE">Update</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="EXPORT">Export</option>
+                    <option value="RESTORE">Restore</option>
+                </select>
+                <button class="btn primary">Filter</button>
+            </div>
+
+            <!-- Logs Table -->
+            <div class="scroll">
+                <table class="table" id="logsTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Admin</th>
+                            <th>Action</th>
+                            <th>Resource</th>
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-10-12 09:21</td>
+                            <td>root</td>
+                            <td><span class="badge blue">UPDATE</span></td>
+                            <td>Flight GF008</td>
+                            <td>192.168.1.10</td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-12 09:10</td>
+                            <td>finance</td>
+                            <td><span class="badge orange">EXPORT</span></td>
+                            <td>Revenue CSV</td>
+                            <td>192.168.1.22</td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-11 19:30</td>
+                            <td>ops</td>
+                            <td><span class="badge red">DELETE</span></td>
+                            <td>Campaign #AD-221</td>
+                            <td>192.168.1.44</td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-10 12:00</td>
+                            <td>marketing</td>
+                            <td><span class="badge green">CREATE</span></td>
+                            <td>Campaign “Explore Muscat”</td>
+                            <td>192.168.1.55</td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-09 16:44</td>
+                            <td>root</td>
+                            <td><span class="badge purple">RESTORE</span></td>
+                            <td>Backup 2025-10-01</td>
+                            <td>192.168.1.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Simple client-side filtering
+        const searchInput = document.getElementById('logSearch');
+        const filterSelect = document.getElementById('actionFilter');
+        const rows = document.querySelectorAll('#logsTable tbody tr');
+
+        function filterLogs() {
+            const search = searchInput.value.toLowerCase();
+            const action = filterSelect.value.toLowerCase();
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const matchesSearch = text.includes(search);
+                const matchesAction = !action || text.includes(action);
+                row.style.display = matchesSearch && matchesAction ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('keyup', filterLogs);
+        filterSelect.addEventListener('change', filterLogs);
+    </script>
+}

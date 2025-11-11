@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Send Announcements";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-notifications.css" asp-append-version="true" />
+}
+
+<!-- Floating Stat (Top Right Under Header) -->
+<div class="top-bar">
+    <div class="notif-stat">
+        <span class="label">Total Announcements Sent:</span>
+        <span class="count">154</span>
+    </div>
+</div>
+
+<div class="content">
+    <!-- Main Content -->
+    <section class="grid2">
+
+        <!-- Create Notification -->
+        <div class="card">
+            <div class="card-h">Create Announcements</div>
+            <div class="card-b">
+                <form class="grid1">
+                    <label class="field">
+                        <span>Title</span>
+                        <input type="text" placeholder="New Feature Announcement" />
+                    </label>
+
+                    <label class="field">
+                        <span>Message</span>
+                        <textarea rows="4" placeholder="Write your Announcement here..."></textarea>
+                    </label>
+
+                    <label class="field">
+                        <span>Target Audience</span>
+                        <select>
+                            <option>All Users</option>
+                            <option>Active Users</option>
+                            <option>Inactive Users</option>
+                            <option>Premium Users</option>
+                        </select>
+                    </label>
+
+                    <div class="actions">
+                        <button type="reset" class="btn">Reset</button>
+                        <button type="submit" class="btn primary">Send Announcement</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recent Notifications -->
+        <div class="card">
+            <div class="card-h">Recent Announcements</div>
+            <div class="card-b scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Message</th>
+                            <th>Audience</th>
+                            <th>Sent On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Welcome to Flightly</td>
+                            <td>Thanks for joining! Explore exclusive flight deals.</td>
+                            <td>All Users</td>
+                            <td>2025-10-15</td>
+                        </tr>
+                        <tr>
+                            <td>Maintenance Alert</td>
+                            <td>System downtime scheduled for Oct 20, 3–4 AM.</td>
+                            <td>All Users</td>
+                            <td>2025-10-14</td>
+                        </tr>
+                        <tr>
+                            <td>Exclusive Discount</td>
+                            <td>Get 10% off flights to Dubai this week!</td>
+                            <td>Premium Users</td>
+                            <td>2025-10-13</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>

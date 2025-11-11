@@ -1,0 +1,170 @@
+﻿:root {
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* Layout */
+.content {
+    width: 100%;
+    max-width: 1600px; /* optional, keeps layout readable on ultra-wide screens */
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    gap: 24px; /* 👈 THIS adds space between cards */
+}
+
+/* Cards */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-h {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 20px;
+}
+
+/* Form Grid */
+.grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+input,
+select,
+textarea {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.95rem;
+}
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: 2px solid rgba(13,139,242,0.25);
+        border-color: var(--blue);
+    }
+
+/* Action Buttons */
+.actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        background: rgba(13,139,242,0.08);
+    }
+
+    .btn.primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .btn.small {
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn.danger {
+        background: #ef4444;
+        color: #fff;
+        border-color: transparent;
+    }
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+
+    .table th,
+    .table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+    }
+
+    .table thead th {
+        background: #f8fbff;
+        font-weight: 700;
+    }
+
+.right {
+    text-align: right;
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #eef6ff;
+    color: #0b5394;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+    .badge.ok {
+        background: #ecfdf5;
+        border-color: #d1fae5;
+        color: #065f46;
+    }
+
+/* Responsive */
+@media (max-width: 1000px) {
+    .grid3 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .grid3 {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        padding: 20px;
+    }
+}

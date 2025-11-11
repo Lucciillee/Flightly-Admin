@@ -1,0 +1,46 @@
+﻿@*
+  Admin Layout
+  Handles global admin structure: sidebar, topbar, and main content area.
+*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Flightly Admin</title>
+
+    <!-- Global Admin Styles -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />
+
+    <!-- Page-specific Styles -->
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <!-- ✅ Sidebar -->
+    <aside>
+        @await Html.PartialAsync("_Sidebar")
+    </aside>
+
+    <!-- ✅ Main Wrapper (Topbar + Page Content) -->
+    <div class="admin-wrapper">
+        <header class="topbar">
+            <h1>@ViewData["Title"]</h1>
+        </header>
+
+        <main class="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

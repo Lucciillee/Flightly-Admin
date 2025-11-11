@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Manage Users";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-users.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <!-- User Stats -->
+    <div class="tiles">
+        <div class="card stat blue">
+            <div class="icon">👥</div>
+            <div>
+                <div class="label">Total Users</div>
+                <div class="value">1,284</div>
+            </div>
+        </div>
+        <div class="card stat green">
+            <div class="icon">✅</div>
+            <div>
+                <div class="label">Active</div>
+                <div class="value">1,060</div>
+            </div>
+        </div>
+        <div class="card stat orange">
+            <div class="icon">🚫</div>
+            <div>
+                <div class="label">Inactive</div>
+                <div class="value">224</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+        <div class="card-h">Users</div>
+        <div class="card-b">
+
+            <!-- 🔍 Search Bar (left-aligned) -->
+            <div class="search-bar left">
+                <input type="text" id="userSearch" placeholder="Search by name or email..." />
+                <button class="btn primary">Search</button>
+            </div>
+
+            <table class="table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rana Ahmed</td>
+                        <td>rana@example.com</td>
+                        <td>2025-05-12</td>
+                        <td><span class="badge ok">Active</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small">Block</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ali Musa</td>
+                        <td>ali@example.com</td>
+                        <td>2025-03-02</td>
+                        <td><span class="badge">Inactive</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small">Unblock</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Laila Noor</td>
+                        <td>laila@example.com</td>
+                        <td>2025-01-20</td>
+                        <td><span class="badge ok">Active</span></td>
+                        <td class="right">
+                            <button class="btn small">Edit</button>
+                            <button class="btn small">Block</button>
+                            <button class="btn small danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- User Growth Chart -->
+    <div class="card chart">
+        <div class="card-h">User Growth</div>
+        <div class="card-b">
+            <div class="chart-wrapper">
+                <canvas id="usersChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Line chart for user growth
+        const ctx = document.getElementById('usersChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'New Users',
+                        data: [120, 180, 150, 220, 190, 250],
+                        fill: true,
+                        borderColor: '#0d8bf2',
+                        backgroundColor: 'rgba(13,139,242,0.08)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: '#6b7280' }, grid: { color: '#f1f5f9' } },
+                        x: { ticks: { color: '#6b7280' }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Client-side search filter
+        document.getElementById('userSearch').addEventListener('keyup', function () {
+            const search = this.value.toLowerCase();
+            document.querySelectorAll('#usersTable tbody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+    </script>
+}

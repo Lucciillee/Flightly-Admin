@@ -1,0 +1,159 @@
+﻿/* ============================
+   FLIGHTLY ADMIN – MANAGE AIRLINES
+   ============================ */
+
+:root {
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* ===== PAGE STRUCTURE ===== */
+.content {
+    width: 100%;
+    max-width: 1600px; /* optional, keeps layout readable on ultra-wide screens */
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    gap: 24px; /* 👈 THIS adds space between cards */
+}
+
+/* ===== FORM SECTION ===== */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-h {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 22px;
+}
+
+/* 3-column responsive grid */
+.grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .field span {
+        font-weight: 500;
+        color: var(--muted);
+    }
+
+input,
+select {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.95rem;
+}
+
+    input:focus,
+    select:focus {
+        outline: 2px solid rgba(13,139,242,.25);
+        border-color: var(--blue);
+    }
+
+/* Buttons */
+.actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn.primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .btn.danger {
+        background: #ef4444;
+        color: #fff;
+        border-color: transparent;
+    }
+
+/* ===== TABLE ===== */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .table th,
+    .table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+    }
+
+    .table thead th {
+        background: #f8fbff;
+        position: sticky;
+        top: 0;
+    }
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #eef6ff;
+    color: #0b5394;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+    .badge.ok {
+        background: #ecfdf5;
+        border-color: #d1fae5;
+        color: #065f46;
+    }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+    .grid3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .grid3 {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,151 @@
+﻿:root {
+    --blue: #0d8bf2;
+    --bg: #f7f9fc;
+    --panel: #fff;
+    --text: #0b1220;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
+}
+
+/* Layout & Spacing */
+.content {
+    width: 100%;
+    max-width: 1600px; /* optional, keeps layout readable on ultra-wide screens */
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    gap: 24px; /* 👈 THIS adds space between cards */
+}
+
+/* Cards */
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-h {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 700;
+}
+
+.card-b {
+    padding: 20px;
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+
+    .table th,
+    .table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+    }
+
+    .table thead th {
+        background: #f8fbff;
+        font-weight: 700;
+    }
+
+.right {
+    text-align: right;
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #dbeafe;
+    background: #eef6ff;
+    color: #0b5394;
+}
+
+    .badge.ok {
+        background: #ecfdf5;
+        border-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .badge.warn {
+        background: #fffbeb;
+        border-color: #fde68a;
+        color: #92400e;
+    }
+
+    .badge.bad {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #7f1d1d;
+    }
+
+/* Buttons */
+.btn {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        background: rgba(13,139,242,0.08);
+    }
+
+    .btn.small {
+        padding: 8px 12px;
+    }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .content {
+        padding: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================
+   Filter / Search Bar
+   ============================ */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+    .filter-bar input[type="text"],
+    .filter-bar input[type="date"],
+    .filter-bar select {
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        flex: 1;
+        min-width: 160px;
+    }
+
+    .filter-bar .btn.primary {
+        padding: 10px 16px;
+    }
+
