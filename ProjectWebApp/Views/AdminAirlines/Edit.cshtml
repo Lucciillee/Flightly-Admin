@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Edit Airlines";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-airlines.css" asp-append-version="true" />
+}
+
+<section class="content">
+
+    <div class="card">
+        <div class="card-h">Edit Airline</div>
+        <div class="card-b">
+
+            <form class="grid3">
+
+                <div class="field">
+                    <span>Airline Name</span>
+                    <input type="text" value="Emirates" />
+                </div>
+
+                <div class="field">
+                    <span>Country</span>
+                    <input type="text" value="UAE" />
+                </div>
+
+                <div class="field">
+                    <span>Code</span>
+                    <input type="text" value="EK" />
+                </div>
+
+                <div class="field">
+                    <span>Status</span>
+                    <select>
+                        <option selected>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <a href="/Airlines" class="btn">Cancel</a>
+                    <button class="btn primary">Save Changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</section>
+
+

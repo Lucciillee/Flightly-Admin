@@ -157,3 +157,11 @@ select {
         grid-template-columns: 1fr;
     }
 }
+
+.top-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: -10px;
+}
+

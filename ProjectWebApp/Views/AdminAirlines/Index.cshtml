@@ -1,51 +1,28 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Manage Airlines";
+
+    // FAKE DATA — no database, no model needed
+    var airlines = new List<dynamic>
+    {
+        new { Id = 1, Name = "Emirates", Code = "EK", Country = "UAE",   IsActive = true  },
+        new { Id = 2, Name = "Qatar Airways", Code = "QR", Country = "Qatar", IsActive = true  },
+        new { Id = 3, Name = "Saudia", Code = "SV", Country = "Saudi Arabia", IsActive = false }
+    };
 }
 
 <section class="content">
 
-    <!-- 🧩 Airline Form Section -->
-    <div class="card">
-        <div class="card-h">Add / Edit Airline</div>
-        <div class="card-b">
-            <form class="grid3">
-
-                <div class="field">
-                    <span>Airline Name</span>
-                    <input type="text" placeholder="Enter airline name" />
-                </div>
-
-                <div class="field">
-                    <span>Country</span>
-                    <input type="text" placeholder="Enter country" />
-                </div>
-
-                <div class="field">
-                    <span>Code</span>
-                    <input type="text" placeholder="e.g. EK, QR, SV" />
-                </div>
-
-                <div class="field">
-                    <span>Status</span>
-                    <select>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                </div>
-
-                <div class="actions">
-                    <button class="btn">Clear</button>
-                    <button class="btn primary">Save Airline</button>
-                </div>
-
-            </form>
-        </div>
+    <!-- Add + Refresh Buttons -->
+    <div class="actions top-actions">
+        <a href="/AdminAirlines/Create" class="btn primary">+ Add Airline</a>
+        <a href="/AdminAirlines/Index" class="btn">Refresh</a>
     </div>
 
-    <!-- 🧾 Airline Table Section -->
+    <!-- Airline Table -->
     <div class="card">
         <div class="card-h">Airline List</div>
+
         <div class="card-b">
             <table class="table">
                 <thead>
@@ -57,27 +34,25 @@
                         <th class="right">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <td>Emirates</td>
-                        <td>EK</td>
-                        <td>UAE</td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Edit</button>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Qatar Airways</td>
-                        <td>QR</td>
-                        <td>Qatar</td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Edit</button>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
+                    @foreach (var airline in airlines)
+                    {
+                        <tr>
+                            <td>@airline.Name</td>
+                            <td>@airline.Code</td>
+                            <td>@airline.Country</td>
+                            <td>
+                                <span class="badge @(airline.IsActive ? "ok" : "")">
+                                    @(airline.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td class="right">
+                                <a href="/AdminAirlines/Edit/@airline.Id" class="btn small">Edit</a>
+                                <a href="/AdminAirlines/Delete/@airline.Id" class="btn small danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
