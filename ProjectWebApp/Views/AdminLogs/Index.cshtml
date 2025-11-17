@@ -12,25 +12,28 @@
     <!-- Logs Header & Actions -->
     <div class="card">
         <div class="card-h flex-between">
-            <span>Recent Activity</span>
+            <span>System Logs</span>
             <div class="actions">
+                <a href="/AdminLogs" class="btn outline">Refresh</a>
                 <button class="btn outline">Export CSV</button>
             </div>
         </div>
+
         <div class="card-b">
 
-            <!-- 🔍 Search and Filter -->
+            <!-- 🔍 Search + Filter -->
             <div class="search-bar left">
-                <input type="text" id="logSearch" placeholder="Search admin, action, or resource..." />
+                <input type="text" id="logSearch" placeholder="Search by email or action..." />
+
                 <select id="actionFilter">
                     <option value="">All Actions</option>
                     <option value="CREATE">Create</option>
                     <option value="UPDATE">Update</option>
                     <option value="DELETE">Delete</option>
                     <option value="EXPORT">Export</option>
-                    <option value="RESTORE">Restore</option>
                 </select>
-                <button class="btn primary">Filter</button>
+
+                <button class="btn primary" onclick="filterLogs()">Filter</button>
             </div>
 
             <!-- Logs Table -->
@@ -38,59 +41,47 @@
                 <table class="table" id="logsTable">
                     <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Admin</th>
+                            <th>ID</th>
+                            <th>User Email</th>
                             <th>Action</th>
-                            <th>Resource</th>
-                            <th>IP</th>
+                            <th>Timestamp</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>2025-10-12 09:21</td>
-                            <td>root</td>
-                            <td><span class="badge blue">UPDATE</span></td>
-                            <td>Flight GF008</td>
-                            <td>192.168.1.10</td>
+                            <td>1</td>
+                            <td>admin@flightly.com</td>
+                            <td><span class="badge blue">CREATE</span></td>
+                            <td>2025-10-31 14:22</td>
                         </tr>
                         <tr>
-                            <td>2025-10-12 09:10</td>
-                            <td>finance</td>
-                            <td><span class="badge orange">EXPORT</span></td>
-                            <td>Revenue CSV</td>
-                            <td>192.168.1.22</td>
-                        </tr>
-                        <tr>
-                            <td>2025-10-11 19:30</td>
-                            <td>ops</td>
+                            <td>2</td>
+                            <td>ops@flightly.com</td>
                             <td><span class="badge red">DELETE</span></td>
-                            <td>Campaign #AD-221</td>
-                            <td>192.168.1.44</td>
+                            <td>2025-10-30 18:05</td>
                         </tr>
                         <tr>
-                            <td>2025-10-10 12:00</td>
-                            <td>marketing</td>
-                            <td><span class="badge green">CREATE</span></td>
-                            <td>Campaign “Explore Muscat”</td>
-                            <td>192.168.1.55</td>
+                            <td>3</td>
+                            <td>root@flightly.com</td>
+                            <td><span class="badge green">UPDATE</span></td>
+                            <td>2025-10-29 09:41</td>
                         </tr>
                         <tr>
-                            <td>2025-10-09 16:44</td>
-                            <td>root</td>
-                            <td><span class="badge purple">RESTORE</span></td>
-                            <td>Backup 2025-10-01</td>
-                            <td>192.168.1.10</td>
+                            <td>4</td>
+                            <td>support@flightly.com</td>
+                            <td><span class="badge orange">EXPORT</span></td>
+                            <td>2025-10-28 13:00</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Simple client-side filtering
         const searchInput = document.getElementById('logSearch');
         const filterSelect = document.getElementById('actionFilter');
         const rows = document.querySelectorAll('#logsTable tbody tr');

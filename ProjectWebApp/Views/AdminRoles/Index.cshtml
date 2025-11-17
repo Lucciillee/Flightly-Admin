@@ -9,21 +9,22 @@
 
 <div class="content stack">
 
-    <!-- Dashboard-style Stats -->
+    <!-- Stats -->
     <div class="tiles">
+
         <div class="card stat blue">
-            <div class="icon">👥</div>
+            <div class="icon">👑</div>
             <div>
-                <div class="label">Total Admins</div>
-                <div class="value">3</div>
+                <div class="label">Admins</div>
+                <div class="value">2</div>
             </div>
         </div>
 
         <div class="card stat green">
-            <div class="icon">✅</div>
+            <div class="icon">🧑‍💼</div>
             <div>
-                <div class="label">Active</div>
-                <div class="value">2</div>
+                <div class="label">Sub-Admins</div>
+                <div class="value">3</div>
             </div>
         </div>
 
@@ -34,46 +35,37 @@
                 <div class="value">1</div>
             </div>
         </div>
+
     </div>
 
-    <!-- Create Admin -->
-    <div class="card">
-        <div class="card-h">Create Sub-Admin</div>
-        <div class="card-b">
-            <form class="grid1">
-                <label class="field">
-                    <span>Name</span>
-                    <input placeholder="Finance Admin" />
-                </label>
-
-                <label class="field">
-                    <span>Email</span>
-                    <input type="email" placeholder="finance@domain.com" />
-                </label>
-
-                <label class="field">
-                    <span>Role</span>
-                    <select>
-                        <option>Finance</option>
-                        <option>Marketing</option>
-                        <option>Operations</option>
-                    </select>
-                </label>
-
-                <button class="btn primary full">Create Admin</button>
-            </form>
-        </div>
-    </div>
 
     <!-- Admins Table -->
     <div class="card">
-        <div class="card-h flex-between">
-            <span>Admins</span>
-            <div class="search-bar">
-                <input type="text" id="adminSearch" placeholder="Search by name or email..." />
+        <div class="card-h">
+
+            <div class="left-tools">
+                <!-- 🔍 Search -->
+                <div class="search-bar">
+                    <input type="text" id="adminSearch" placeholder="Search admins..." />
+                </div>
+
+                <!-- 🔽 Filter Dropdown -->
+                <select id="roleFilter" class="filter-select">
+                    <option value="">All</option>
+                    <option value="Admin">Admins</option>
+                    <option value="Sub-Admin">Sub-Admins</option>
+                </select>
             </div>
+
+            <!-- 🔄 Refresh Button (Right Side) -->
+            <button class="btn action-btn" onclick="location.reload()">🔄 Refresh</button>
+
         </div>
+
+        
+
         <div class="card-b">
+
             <table class="table" id="adminsTable">
                 <thead>
                     <tr>
@@ -81,48 +73,91 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Status</th>
-                        <th></th>
+                        <th class="right">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody>
+
+                    <!-- ADMIN -->
                     <tr>
                         <td>Fatima S.</td>
                         <td>fatima@domain.com</td>
-                        <td>Marketing</td>
+                        <td><span class="badge ok">Admin</span></td>
                         <td><span class="badge ok">Active</span></td>
-                        <td class="right"><button class="btn small">Disable</button></td>
+                        <td class="right">
+                            <button class="btn small">Make Sub-Admin</button>
+                            <button class="btn small danger">Disable</button>
+                        </td>
                     </tr>
+
+                    <!-- SUB-ADMIN -->
+                    <tr>
+                        <td>Yousef M.</td>
+                        <td>yousef@domain.com</td>
+                        <td><span class="badge">Sub-Admin</span></td>
+                        <td><span class="badge ok">Active</span></td>
+                        <td class="right">
+                            <button class="btn small">Make Admin</button>
+                            <button class="btn small danger">Disable</button>
+                        </td>
+                    </tr>
+
+                    <!-- SUB-ADMIN -->
                     <tr>
                         <td>Omar K.</td>
                         <td>omar@domain.com</td>
-                        <td>Finance</td>
+                        <td><span class="badge">Sub-Admin</span></td>
                         <td><span class="badge ok">Active</span></td>
-                        <td class="right"><button class="btn small">Disable</button></td>
+                        <td class="right">
+                            <button class="btn small">Make Admin</button>
+                            <button class="btn small danger">Disable</button>
+                        </td>
                     </tr>
+
+                    <!-- DISABLED ADMIN -->
                     <tr>
                         <td>Nora L.</td>
                         <td>nora@domain.com</td>
-                        <td>Operations</td>
+                        <td><span class="badge ok">Admin</span></td>
                         <td><span class="badge">Disabled</span></td>
-                        <td class="right"><button class="btn small">Enable</button></td>
+                        <td class="right">
+                            <button class="btn small">Enable</button>
+                            <button class="btn small">Make Sub-Admin</button>
+                        </td>
                     </tr>
+
                 </tbody>
             </table>
+
         </div>
     </div>
+
 </div>
 
 @section Scripts {
     <script>
-        // Simple client-side search
-        const searchInput = document.getElementById('adminSearch');
+               const searchInput = document.getElementById('adminSearch');
+        const filterSelect = document.getElementById('roleFilter');
         const rows = document.querySelectorAll('#adminsTable tbody tr');
 
-        searchInput.addEventListener('keyup', () => {
-            const val = searchInput.value.toLowerCase();
+        function filterTable() {
+            const text = searchInput.value.toLowerCase();
+            const role = filterSelect.value;
+
             rows.forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+                const rowText = row.textContent.toLowerCase();
+                const rowRole = row.children[2].textContent.trim(); // Role column
+
+                const matchesText = rowText.includes(text);
+                const matchesRole = role === "" || rowRole === role;
+
+                row.style.display = matchesText && matchesRole ? "" : "none";
             });
-        });
+        }
+
+        searchInput.addEventListener('keyup', filterTable);
+        filterSelect.addEventListener('change', filterTable);
+
     </script>
 }

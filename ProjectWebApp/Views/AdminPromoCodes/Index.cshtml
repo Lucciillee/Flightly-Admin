@@ -7,121 +7,105 @@
     <link rel="stylesheet" href="~/css/admin-promo.css" asp-append-version="true" />
 }
 
-<div class="content grid2">
+<div class="content">
 
-    <!-- Promo Code Editor -->
     <div class="card">
-        <div class="card-h">Promo Code Editor</div>
-        <div class="card-b">
-            <form class="grid2form">
-                <label class="field">
-                    <span>Code</span>
-                    <input placeholder="FLY10" />
-                </label>
-
-                <label class="field">
-                    <span>Status</span>
-                    <select>
-                        <option>Enabled</option>
-                        <option>Disabled</option>
-                    </select>
-                </label>
-
-                <label class="field">
-                    <span>Discount Type</span>
-                    <select>
-                        <option>Percentage</option>
-                        <option>Fixed Amount</option>
-                    </select>
-                </label>
-
-                <label class="field">
-                    <span>Value</span>
-                    <input type="number" placeholder="10" />
-                </label>
-
-                <label class="field">
-                    <span>Start Date</span>
-                    <input type="date" />
-                </label>
-
-                <label class="field">
-                    <span>End Date</span>
-                    <input type="date" />
-                </label>
-
-                <label class="field full">
-                    <span>Usage Limit</span>
-                    <input type="number" placeholder="100 (leave empty for unlimited)" />
-                </label>
-
-                <label class="field full">
-                    <span>Notes</span>
-                    <textarea rows="3" placeholder="Internal notes..."></textarea>
-                </label>
-
-                <div class="actions">
-                    <button class="btn">Reset</button>
-                    <button class="btn primary">Save Promo</button>
-                </div>
-            </form>
+        <div class="card-h" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Promo Codes</span>
+            <div class="actions">
+                <a href="/AdminPromoCodes/Create" class="btn primary">Add Promo</a>
+                <a href="/AdminPromoCodes" class="btn outline">Refresh</a>
+            </div>
         </div>
-    </div>
 
-    <!-- Existing Codes Table -->
-    <div class="card">
-        <div class="card-h">Existing Codes</div>
         <div class="card-b">
-            <table class="table">
+
+            <!-- Search + Filter -->
+            <div class="search-bar left">
+                <input type="text" id="promoSearch" placeholder="Search code or type..." />
+
+                
+
+                <button class="btn primary" onclick="filterPromo()">Filter</button>
+            </div>
+
+            <!-- Table -->
+            <table class="table" id="promoTable">
                 <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Type</th>
+                        
                         <th>Value</th>
                         <th>Valid</th>
                         <th>Status</th>
-                        <th></th>
+                        <th class="right">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>FLY10</td>
-                        <td>%</td>
-                        <td>10</td>
+                        
+                        <td>10%</td>
                         <td>2025-10-01 → 2025-12-31</td>
                         <td><span class="badge ok">Enabled</span></td>
                         <td class="right">
-                            <button class="btn small">Edit</button>
+                            <a href="/AdminPromoCodes/Edit/1" class="btn small">Edit</a>
                             <button class="btn small">Disable</button>
                             <button class="btn small danger">Delete</button>
                         </td>
                     </tr>
+
                     <tr>
                         <td>DXB25</td>
-                        <td>$</td>
-                        <td>25</td>
+                        
+                        <td>$25</td>
                         <td>2025-11-01 → 2026-01-15</td>
                         <td><span class="badge">Disabled</span></td>
                         <td class="right">
-                            <button class="btn small">Enable</button>
+                            <a href="/AdminPromoCodes/Edit/2" class="btn small">Enable</a>
                             <button class="btn small danger">Delete</button>
                         </td>
                     </tr>
+
                     <tr>
                         <td>WELCOME5</td>
-                        <td>%</td>
-                        <td>5</td>
+                        
+                        <td>5%</td>
                         <td>2025-09-01 → 2026-09-01</td>
                         <td><span class="badge ok">Enabled</span></td>
                         <td class="right">
-                            <button class="btn small">Edit</button>
+                            <a href="/AdminPromoCodes/Edit/3" class="btn small">Edit</a>
                             <button class="btn small">Disable</button>
                             <button class="btn small danger">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 
 </div>
+
+@section Scripts {
+    <script>
+        const search = document.getElementById("promoSearch");
+        const filter = document.getElementById("typeFilter");
+        const rows = document.querySelectorAll("#promoTable tbody tr");
+
+        function filterPromo() {
+            const s = search.value.toLowerCase();
+            const f = filter.value.toLowerCase();
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const matchSearch = text.includes(s);
+                const matchFilter = !f || text.includes(f);
+                row.style.display = matchSearch && matchFilter ? "" : "none";
+            });
+        }
+
+        search.addEventListener("keyup", filterPromo);
+        filter.addEventListener("change", filterPromo);
+    </script>
+}

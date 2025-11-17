@@ -162,3 +162,13 @@ select {
         padding: 20px;
     }
 }
+
+/* Top Action Bar */
+.actions-top {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: -10px; /* brings it closer to the card */
+    margin-top: -10px;
+}
+

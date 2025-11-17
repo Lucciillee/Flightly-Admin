@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Edit Promo Code";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-promo.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card">
+        <div class="card-h">Edit Promo Code</div>
+
+        <div class="card-b">
+            <form class="grid2form">
+
+                <label class="field">
+                    <span>Code</span>
+                    <input value="FLY10" />
+                </label>
+
+                <label class="field">
+                    <span>Status</span>
+                    <select>
+                        <option selected>Enabled</option>
+                        <option>Disabled</option>
+                    </select>
+                </label>
+
+                
+
+                <label class="field">
+                    <span>Value</span>
+                    <input type="number" value="10" />
+                </label>
+
+                <label class="field">
+                    <span>Start Date</span>
+                    <input type="date" value="2025-10-01" />
+                </label>
+
+                <label class="field">
+                    <span>End Date</span>
+                    <input type="date" value="2025-12-31" />
+                </label>
+
+                <label class="field full">
+                    <span>Usage Limit</span>
+                    <input type="number" value="100" />
+                </label>
+
+                <label class="field full">
+                    <span>Notes</span>
+                    <textarea rows="3">Seasonal discount for winter flights.</textarea>
+                </label>
+
+                <div class="actions">
+                    <a href="/PromoCodes" class="btn">Cancel</a>
+                    <button class="btn primary">Update Promo</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

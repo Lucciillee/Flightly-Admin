@@ -1,0 +1,80 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Edit Flight";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-flights.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card">
+        <div class="card-h">Edit Flight</div>
+        <div class="card-b">
+            <form class="grid3">
+
+                <label class="field">
+                    <span>Airline</span>
+                    <select>
+                        <option selected>Gulf Air</option>
+                        <option>Qatar Airways</option>
+                        <option>Emirates</option>
+                        <option>Saudia</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Flight No.</span>
+                    <input value="GF 008" />
+                </label>
+
+                <label class="field">
+                    <span>Aircraft</span>
+                    <input value="A320neo" />
+                </label>
+
+                <label class="field">
+                    <span>Origin</span>
+                    <input value="BAH" />
+                </label>
+
+                <label class="field">
+                    <span>Destination</span>
+                    <input value="DXB" />
+                </label>
+
+                <label class="field">
+                    <span>Departure</span>
+                    <input type="datetime-local" value="2025-10-30T09:20" />
+                </label>
+
+                <label class="field">
+                    <span>Arrival</span>
+                    <input type="datetime-local" value="2025-10-30T11:15" />
+                </label>
+
+                <label class="field">
+                    <span>Base Price</span>
+                    <input type="number" value="120" />
+                </label>
+
+                <label class="field">
+                    <span>Status</span>
+                    <select>
+                        <option selected>Scheduled</option>
+                        <option>Cancelled</option>
+                        <option>Delayed</option>
+                    </select>
+                </label>
+
+                <div class="actions">
+                    <a href="/AdminFlights" class="btn">Cancel</a>
+                    <button class="btn primary">Save Changes</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

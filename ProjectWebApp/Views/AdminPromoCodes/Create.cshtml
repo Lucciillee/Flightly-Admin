@@ -1,0 +1,67 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Create Promo Code";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-promo.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card">
+        <div class="card-h">Create Promo Code</div>
+
+        <div class="card-b">
+            <form class="grid2form">
+
+                <label class="field">
+                    <span>Code</span>
+                    <input placeholder="FLY10" />
+                </label>
+
+                <label class="field">
+                    <span>Status</span>
+                    <select>
+                        <option>Enabled</option>
+                        <option>Disabled</option>
+                    </select>
+                </label>
+
+               
+
+                <label class="field">
+                    <span>Value</span>
+                    <input type="number" placeholder="10" />
+                </label>
+
+                <label class="field">
+                    <span>Start Date</span>
+                    <input type="date" />
+                </label>
+
+                <label class="field">
+                    <span>End Date</span>
+                    <input type="date" />
+                </label>
+
+                <label class="field full">
+                    <span>Usage Limit</span>
+                    <input type="number" placeholder="100 (optional)" />
+                </label>
+
+                <label class="field full">
+                    <span>Notes</span>
+                    <textarea rows="3"></textarea>
+                </label>
+
+                <div class="actions">
+                    <a href="/PromoCodes" class="btn">Cancel</a>
+                    <button class="btn primary">Save Promo</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
