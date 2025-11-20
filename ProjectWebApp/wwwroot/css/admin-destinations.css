@@ -11,11 +11,11 @@
 /* Layout */
 .content {
     width: 100%;
-    max-width: 1600px; /* optional, keeps layout readable on ultra-wide screens */
+    max-width: 1600px;
     margin: 0 auto;
     padding: 30px 40px;
     display: grid;
-    gap: 24px; /* 👈 THIS adds space between cards */
+    gap: 24px;
 }
 
 /* Cards */
@@ -31,56 +31,74 @@
     padding: 16px 18px;
     border-bottom: 1px solid var(--line);
     font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .card-b {
     padding: 20px;
 }
 
-/* Form Grid */
-.grid3 {
+/* Featured Grid */
+.featured-admin-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px;
 }
 
-.field {
-    display: grid;
-    gap: 8px;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
-
-input,
-select,
-textarea {
-    padding: 12px;
+/* Destination Card */
+.featured-admin-card {
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: var(--shadow);
     background: #fff;
-    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-        outline: 2px solid rgba(13,139,242,0.25);
-        border-color: var(--blue);
+    /* Square Images — Bigger & Cleaner */
+    .featured-admin-card img {
+        width: 100%;
+        aspect-ratio: 1 / 1; /* 🌟 Makes image perfectly square */
+        object-fit: cover; /* Crop instead of stretch */
+        border-radius: 12px;
+        border: 1px solid var(--line);
     }
 
-/* Action Buttons */
-.actions {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+
+.name-input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    text-align: center;
+    font-size: 1rem;
 }
 
+.upload-btn {
+    border: 1px solid var(--blue);
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--blue);
+    font-weight: 600;
+    text-align: center;
+}
+
+.add-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+/* Buttons */
 .btn {
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 8px 12px;
+    border-radius: 10px;
     border: 1px solid var(--line);
     background: #fff;
     cursor: pointer;
@@ -98,69 +116,24 @@ textarea {
     }
 
     .btn.small {
-        padding: 8px 12px;
-        border-radius: 10px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        padding: 6px 8px;
     }
 
     .btn.danger {
         background: #ef4444;
         color: #fff;
-        border-color: transparent;
-    }
-
-/* Table */
-.table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 0.95rem;
-}
-
-    .table th,
-    .table td {
-        padding: 14px 16px;
-        border-bottom: 1px solid var(--line);
-        text-align: left;
-    }
-
-    .table thead th {
-        background: #f8fbff;
-        font-weight: 700;
-    }
-
-.right {
-    text-align: right;
-}
-
-/* Badges */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid #dbeafe;
-    background: #eef6ff;
-    color: #0b5394;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-
-    .badge.ok {
-        background: #ecfdf5;
-        border-color: #d1fae5;
-        color: #065f46;
     }
 
 /* Responsive */
 @media (max-width: 1000px) {
-    .grid3 {
-        grid-template-columns: 1fr 1fr;
+    .featured-admin-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 720px) {
-    .grid3 {
+@media (max-width: 680px) {
+    .featured-admin-grid {
         grid-template-columns: 1fr;
     }
 
@@ -168,3 +141,87 @@ textarea {
         padding: 20px;
     }
 }
+
+.image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+}
+
+    .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+.add-inside-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.btn.primary {
+    background: var(--blue);
+    color: #fff;
+    border-color: transparent;
+}
+
+
+/* Popup Admin Grid */
+.popup-admin-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+}
+
+/* Image */
+.popup-admin-image img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.popup-admin-image .upload-btn {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    font-weight: 600;
+}
+
+/* Fields */
+.popup-admin-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .popup-admin-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+

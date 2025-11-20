@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    ViewData["Title"] = "Manage Tourist Destinations";
+    ViewData["Title"] = "Manage Featured Destinations";
 }
 
 @section Styles {
@@ -9,86 +9,122 @@
 
 <div class="content">
 
-    <!-- Add / Update Destination -->
+    <!-- ================= FEATURED DESTINATIONS CONTROL ================= -->
     <div class="card">
-        <div class="card-h">Add / Update Destination</div>
+        <div class="card-h flex-between">
+            <span>Featured Destinations</span>
+            
+
+        </div>
+
         <div class="card-b">
-            <form class="grid3">
-                <label class="field">
-                    <span>Name</span>
-                    <input placeholder="Dubai" />
-                </label>
+            <div class="featured-admin-grid">
 
-                <label class="field">
-                    <span>Country</span>
-                    <input placeholder="UAE" />
-                </label>
+                <!-- === 1. Paris === -->
+                <div class="featured-admin-card">
+                    <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?w=800" alt="Paris" />
+                    </div>
+                    <input class="name-input" value="Paris" />
 
-                <label class="field">
-                    <span>Featured</span>
-                    <select>
-                        <option>No</option>
-                        <option>Yes</option>
-                    </select>
-                </label>
+                    <label class="upload-btn">
+                        <input type="file" hidden />
+                        Replace Image
+                    </label>
+                    <button class="btn primary add-inside-btn">+ Add Destination</button>
 
-                <label class="field full">
-                    <span>Description</span>
-                    <textarea rows="4" placeholder="Highlights, attractions, etc."></textarea>
-                </label>
-
-                <div class="actions">
-                    <button class="btn">Reset</button>
-                    <button class="btn primary">Save Destination</button>
+                    <button class="btn danger small">Remove</button>
                 </div>
-            </form>
+
+                <!-- === 2. Dubai === -->
+                <div class="featured-admin-card">
+                        <div class="image-wrapper">
+                    <img src="~/img/dubai.webp" alt="Dubai" />
+                        </div>
+                    <input class="name-input" value="Dubai" />
+
+                    <label class="upload-btn">
+                        <input type="file" hidden />
+                        Replace Image
+                    </label>
+                    <button class="btn primary add-inside-btn">+ Add Destination</button>
+
+                    <button class="btn danger small">Remove</button>
+                </div>
+
+                <!-- === 3. Oman === -->
+                <div class="featured-admin-card">
+                    <div class="image-wrapper">
+                    <img src="~/img/Oman.webp" alt="Oman" />
+                    </div>
+                    <input class="name-input" value="Oman" />
+
+                    <label class="upload-btn">
+                        <input type="file" hidden />
+                        Replace Image
+                    </label>
+                    <button class="btn primary add-inside-btn">+ Add Destination</button>
+
+                    <button class="btn danger small">Remove</button>
+                </div>
+
+                <!-- === 4. Russia === -->
+                <div class="featured-admin-card">
+                            <div class="image-wrapper">
+                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg" alt="Russia" />
+                            </div>
+                    <input class="name-input" value="Russia" />
+
+                    <label class="upload-btn">
+                        <input type="file" hidden />
+                        Replace Image
+                    </label>
+                    <button class="btn primary add-inside-btn">+ Add Destination</button>
+
+                    <button class="btn danger small">Remove</button>
+                </div>
+
+            </div>
+
         </div>
     </div>
 
-    <!-- Destinations Table -->
-    <div class="card">
-        <div class="card-h">Destinations</div>
+    <!-- ================= POPUP AD CONTROL ================= -->
+    <div class="card" style="margin-top: 30px;">
+        <div class="card-h flex-between">
+            <span>Tourism Popup Ad Control</span>
+        </div>
+
         <div class="card-b">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Country</th>
-                        <th>Featured</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Dubai</td>
-                        <td>UAE</td>
-                        <td><span class="badge ok">Yes</span></td>
-                        <td class="right">
-                            <button class="btn small">Edit</button>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Manama</td>
-                        <td>Bahrain</td>
-                        <td><span class="badge">No</span></td>
-                        <td class="right">
-                            <button class="btn small">Edit</button>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Doha</td>
-                        <td>Qatar</td>
-                        <td><span class="badge ok">Yes</span></td>
-                        <td class="right">
-                            <button class="btn small">Edit</button>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="popup-admin-grid">
+
+                <!-- Image Section -->
+                <div class="popup-admin-image">
+                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg" alt="Popup Image" />
+
+                    <label class="upload-btn">
+                        <input type="file" hidden />
+                        Replace Image
+                    </label>
+                </div>
+
+                <!-- Fields -->
+                <div class="popup-admin-fields">
+
+                    <label>Place Name</label>
+                    <input class="admin-input" placeholder="e.g. Russia" value="Russia" />
+
+                    <label>Popup Text</label>
+                    <textarea class="admin-input" rows="3">Experience breathtaking destinations, unique culture, and unforgettable adventures.</textarea>
+
+                 
+                    <button class="btn primary" style="margin-top:10px;">Update Popup</button>
+                </div>
+
+            </div>
         </div>
     </div>
+
+
 
 </div>
