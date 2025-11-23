@@ -11,7 +11,9 @@
     --shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* === GENERAL LAYOUT === */
+/* ===========================
+   GENERAL LAYOUT
+=========================== */
 .content {
     width: 100%;
     max-width: 1500px;
@@ -22,18 +24,14 @@
     background: var(--bg);
 }
 
-/* === GRID STRUCTURE === */
+/* ===========================
+   GRID SYSTEM
+=========================== */
 .tiles {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-bottom: 10px;
-}
-
-.row-2col {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
 }
 
 .row-3col {
@@ -42,7 +40,14 @@
     gap: 24px;
 }
 
-/* === CARD BASE === */
+.row-full {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+/* ===========================
+   CARD BASE
+=========================== */
 .card {
     background: var(--panel);
     border-radius: 18px;
@@ -58,9 +63,8 @@
 
 .card-h {
     padding: 20px 24px;
-    font-weight: 600;
-    font-size: 1rem;
     border-bottom: 1px solid var(--line);
+    font-weight: 600;
     color: var(--text);
 }
 
@@ -68,18 +72,18 @@
     padding: 22px;
 }
 
-/* === STAT CARDS === */
+/* ===========================
+   STAT TILES
+=========================== */
 .card.stat {
-    background: var(--panel);
-    border: none;
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 18px 20px;
     border-radius: 14px;
     min-height: 95px;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+    background: var(--panel);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.04);
 }
 
     .card.stat:hover {
@@ -87,24 +91,23 @@
     }
 
     .card.stat.blue {
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 8px 20px rgba(37,99,235,0.25);
     }
 
     .card.stat.purple {
-        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+        box-shadow: 0 8px 20px rgba(124,58,237,0.25);
     }
 
     .card.stat.green {
-        box-shadow: 0 8px 20px rgba(5, 150, 105, 0.25);
+        box-shadow: 0 8px 20px rgba(5,150,105,0.25);
     }
 
     .card.stat.orange {
-        box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+        box-shadow: 0 8px 20px rgba(249,115,22,0.25);
     }
 
     .card.stat .icon {
         font-size: 1.6rem;
-        opacity: 0.9;
         color: var(--muted);
     }
 
@@ -116,10 +119,11 @@
     .card.stat .value {
         font-size: 1.4rem;
         font-weight: 700;
-        color: var(--text);
     }
 
-/* === TABLE === */
+/* ===========================
+   TABLES
+=========================== */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -138,11 +142,9 @@
         font-size: 0.9rem;
     }
 
-    .table td {
-        color: var(--text);
-    }
-
-/* === BADGES === */
+/* ===========================
+   BADGES
+=========================== */
 .badge {
     padding: 4px 8px;
     border-radius: 6px;
@@ -165,7 +167,9 @@
         color: #b91c1c;
     }
 
-/* === CHART CARDS === */
+/* ===========================
+   CHART CARDS
+=========================== */
 .card.chart {
     height: 340px;
     display: flex;
@@ -175,11 +179,11 @@
     .card.chart .card-b {
         flex: 1;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
     }
 
+    /* Keep chart top borders */
     .card.chart.blue {
         border-top: 3px solid var(--blue);
     }
@@ -192,7 +196,9 @@
         border-top: 3px solid var(--orange);
     }
 
-/* === DONUT CHARTS (Flight + Top Routes) === */
+/* ===========================
+   DONUT CHARTS (KEEP AS IS)
+=========================== */
 #flightChart,
 #routesChart {
     width: 65% !important;
@@ -203,7 +209,6 @@
     display: block;
 }
 
-/* === TOP ROUTES FIX (Vertical Alignment) === */
 .card.chart.orange .card-b {
     align-items: center;
     justify-content: flex-start;
@@ -218,13 +223,14 @@
     margin-bottom: 2px;
 }
 
-/* === RESPONSIVE === */
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 1100px) {
     .tiles {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .row-2col,
     .row-3col {
         grid-template-columns: 1fr;
     }

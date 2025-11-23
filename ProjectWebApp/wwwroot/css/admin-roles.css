@@ -10,74 +10,22 @@
     --shadow: 0 10px 25px rgba(13,139,242,.12), 0 4px 8px rgba(2,6,23,.06);
 }
 
-/* Layout */
+/* ===========================================
+   PAGE LAYOUT
+=========================================== */
 .content {
     width: 100%;
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 26px;
 }
 
-/* Dashboard-style stat tiles (spread out) */
-.tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    align-items: stretch;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.card.stat {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--panel);
-    border-radius: 16px;
-    border: 1px solid var(--line);
-    box-shadow: var(--shadow);
-    padding: 18px 24px;
-    transition: 0.25s ease;
-}
-
-    .card.stat:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 16px 30px rgba(13,139,242,0.15);
-    }
-
-    .card.stat .icon {
-        font-size: 1.8rem;
-    }
-
-    .card.stat .label {
-        font-size: 0.9rem;
-        color: var(--muted);
-    }
-
-    .card.stat .value {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--text);
-    }
-
-    /* Colored borders */
-    .card.stat.blue {
-        border-left: 6px solid var(--blue);
-    }
-
-    .card.stat.green {
-        border-left: 6px solid var(--green);
-    }
-
-    .card.stat.orange {
-        border-left: 6px solid var(--orange);
-    }
-
-
-/* Cards */
+/* ===========================================
+   CARDS
+=========================================== */
 .card {
     background: var(--panel);
     border: 1px solid var(--line);
@@ -87,36 +35,50 @@
 }
 
 .card-h {
-    padding: 16px 18px;
+    padding: 14px 18px;
     border-bottom: 1px solid var(--line);
     font-weight: 700;
+    font-size: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+    .card-h h2 {
+        font-size: 1.15rem;
+        margin: 0;
+    }
+
 .card-b {
-    padding: 20px;
+    padding: 18px;
 }
 
-/* Form */
-.grid1 {
+/* ===========================================
+   CREATE EMPLOYEE FORM (smaller + tighter)
+=========================================== */
+.grid2.small-gap {
     display: grid;
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
 
 .field {
     display: grid;
-    gap: 8px;
+    gap: 6px;
 }
+
+    .field span {
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
 
 input,
 select {
-    padding: 12px;
+    padding: 10px 12px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 10px;
     background: #fff;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
     input:focus,
@@ -125,70 +87,15 @@ select {
         border-color: var(--blue);
     }
 
-.btn.full {
-    width: 100%;
+/* full row for submit button */
+.full-row {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
 }
 
-/* Search Bar */
-.search-bar input {
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    font-size: 0.9rem;
-    width: 220px;
-}
-
-/* Table */
-.table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 0.95rem;
-}
-
-    .table th,
-    .table td {
-        padding: 12px 14px;
-        border-bottom: 1px solid var(--line);
-        text-align: left;
-    }
-
-    .table thead th {
-        background: #f8fbff;
-        position: sticky;
-        top: 0;
-    }
-
-    .table tbody tr:nth-child(odd) {
-        background-color: #fafbfc;
-    }
-
-    .table tbody tr:hover {
-        background: rgba(13,139,242,0.05);
-    }
-
-/* Badges */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid #dbeafe;
-    background: #eef6ff;
-    color: #0b5394;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-
-    .badge.ok {
-        background: #ecfdf5;
-        border-color: #d1fae5;
-        color: #065f46;
-    }
-
-/* Buttons */
 .btn {
-    padding: 8px 10px;
+    padding: 8px 12px;
     border-radius: 10px;
     border: 1px solid var(--line);
     background: #fff;
@@ -204,6 +111,7 @@ select {
         background: var(--blue);
         color: #fff;
         border-color: transparent;
+        font-weight: 600;
     }
 
     .btn.small {
@@ -211,93 +119,123 @@ select {
         padding: 6px 8px;
     }
 
-.right {
-    text-align: right;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-    .content {
-        padding: 20px;
-    }
-
-    .tiles {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-/* Top actions bar */
-.top-actions {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-/* Bigger search bar */
-.search-bar input {
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    font-size: 1rem;
-    width: 300px; /* increased size */
-}
-
-/* Action buttons (Refresh + Filter) */
-.action-btn {
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    background: #fff;
-    border: 1px solid var(--line);
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-    .action-btn:hover {
-        background: rgba(13,139,242,0.08);
-    }
-
-
-
-/* Flex alignment for header tools */
+/* ===========================================
+   SEARCH + FILTER BAR
+=========================================== */
 .left-tools {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
-/* Bigger clean search bar */
 .search-bar input {
-    padding: 12px 16px;
-    border-radius: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
     border: 1px solid var(--line);
-    font-size: 1rem;
-    width: 300px;
+    width: 240px;
+    font-size: 0.9rem;
 }
 
-/* Filter dropdown */
 .filter-select {
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 8px 12px;
+    border-radius: 10px;
     border: 1px solid var(--line);
     background: #fff;
-    font-size: 0.95rem;
     cursor: pointer;
+    font-size: 0.9rem;
 }
 
-/* Refresh button */
 .action-btn {
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 8px 14px;
+    border-radius: 10px;
     font-size: 0.9rem;
     background: #fff;
     border: 1px solid var(--line);
     cursor: pointer;
-    transition: 0.2s ease;
 }
 
     .action-btn:hover {
         background: rgba(13,139,242,0.08);
     }
 
+/* ===========================================
+   TABLE (BETTER SPACING + CLEANER LOOK)
+=========================================== */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+}
+
+    .table th,
+    .table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .table thead th {
+        background: #f5f9ff;
+        font-weight: 600;
+    }
+
+    /* Row spacing */
+    .table tbody tr {
+        height: 52px;
+    }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #fafbfd;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(13,139,242,0.07);
+        }
+
+/* ===========================================
+   BADGES (roles/status)
+=========================================== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #eef6ff;
+    color: #0b5394;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+    .badge.ok {
+        background: #ecfdf5;
+        border-color: #d1fae5;
+        color: #065f46;
+    }
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+@media (max-width: 900px) {
+
+    .content {
+        padding: 20px;
+    }
+
+    .grid2.small-gap {
+        grid-template-columns: 1fr;
+    }
+
+    .full-row {
+        grid-column: span 1;
+    }
+
+    .left-tools {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+}

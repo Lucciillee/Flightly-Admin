@@ -44,34 +44,48 @@
         </div>
     </div>
 
-    <!-- Row 2 -->
-    <div class="row row-2col">
+    <!-- Row 2 — Recent Reviews (FULL WIDTH) -->
+    <div class="row row-full">
         <div class="card">
-            <div class="card-h">Recent Bookings</div>
+            <div class="card-h">Recent Reviews</div>
             <div class="card-b">
                 <table class="table">
                     <thead>
-                        <tr><th>Ref</th><th>User</th><th>Flight</th><th>Status</th><th>Total</th></tr>
+                        <tr>
+                            <th>User</th>
+                            <th>Rating</th>
+                            <th>Feedback</th>
+                            <th>Date</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr><td>#BK-10421</td><td>Rana A.</td><td>BAH→DXB (GF 008)</td><td><span class="badge ok">Confirmed</span></td><td>$420</td></tr>
-                        <tr><td>#BK-10420</td><td>Guest</td><td>BAH→DOH (QR 271)</td><td><span class="badge warn">Pending</span></td><td>$365</td></tr>
-                        <tr><td>#BK-10419</td><td>Ali M.</td><td>BAH→RUH (SV 112)</td><td><span class="badge bad">Cancelled</span></td><td>$0</td></tr>
+                        <tr>
+                            <td>Rana A.</td>
+                            <td>⭐⭐⭐⭐⭐</td>
+                            <td>Loved the booking experience!</td>
+                            <td>2025-11-20</td>
+                        </tr>
+                        <tr>
+                            <td>Guest</td>
+                            <td>⭐⭐⭐</td>
+                            <td>It was ok but could be smoother.</td>
+                            <td>2025-11-19</td>
+                        </tr>
+                        <tr>
+                            <td>Ali M.</td>
+                            <td>⭐⭐⭐⭐</td>
+                            <td>Clean UI and fast response time.</td>
+                            <td>2025-11-18</td>
+                        </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <div class="card center">
-            <div class="card-h">Booking Status</div>
-            <div class="card-b">
-                <canvas id="flightChart"></canvas>
             </div>
         </div>
     </div>
 
 
-    <!-- Row 3 -->
+
+    <!-- Row 3 — Three Charts -->
     <div class="row row-3col">
         <div class="card chart">
             <div class="card-h">Revenue Trend</div>
@@ -88,6 +102,7 @@
             <div class="card-b"><canvas id="routesChart"></canvas></div>
         </div>
     </div>
+
 
     <!-- Row 4 -->
     <div class="row row-full">

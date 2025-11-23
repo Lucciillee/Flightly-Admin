@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    ViewData["Title"] = "Admin Role Management";
+    ViewData["Title"] = "Role Management";
 }
 
 @section Styles {
@@ -9,60 +9,78 @@
 
 <div class="content stack">
 
-    <!-- Stats -->
-    <div class="tiles">
-
-        <div class="card stat blue">
-            <div class="icon">👑</div>
-            <div>
-                <div class="label">Admins</div>
-                <div class="value">2</div>
-            </div>
+    <!-- ================= CREATE EMPLOYEE FORM ================= -->
+    <div class="card">
+        <div class="card-h">
+            <h2>Create Employee Account</h2>
         </div>
 
-        <div class="card stat green">
-            <div class="icon">🧑‍💼</div>
-            <div>
-                <div class="label">Sub-Admins</div>
-                <div class="value">3</div>
-            </div>
-        </div>
+        <div class="card-b">
+            <form class="grid2 small-gap">
 
-        <div class="card stat orange">
-            <div class="icon">🚫</div>
-            <div>
-                <div class="label">Disabled</div>
-                <div class="value">1</div>
-            </div>
-        </div>
+                <label class="field">
+                    <span>First Name</span>
+                    <input type="text" placeholder="e.g., Ahmed" />
+                </label>
 
+                <label class="field">
+                    <span>Last Name</span>
+                    <input type="text" placeholder="e.g., Ali" />
+                </label>
+
+                <label class="field">
+                    <span>Email</span>
+                    <input type="email" placeholder="e.g., ahmed@domain.com" />
+                </label>
+
+                <label class="field">
+                    <span>Temporary Password</span>
+                    <input type="text" placeholder="At least 6 characters" />
+                </label>
+
+                <!-- Role now aligned left under Email -->
+                <label class="field">
+                    <span>Role</span>
+                    <select>
+                        <option value="Sub-Admin">Sub-Admin</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </label>
+
+                <div class="actions full-row">
+                    <button class="btn primary">Create Account</button>
+                </div>
+
+            </form>
+
+
+        </div>
     </div>
 
-
-    <!-- Admins Table -->
+    <!-- ================= USER LIST ================= -->
     <div class="card">
+
         <div class="card-h">
 
             <div class="left-tools">
-                <!-- 🔍 Search -->
+                <!-- Search -->
                 <div class="search-bar">
-                    <input type="text" id="adminSearch" placeholder="Search admins..." />
+                    <input type="text" id="adminSearch" placeholder="Search users..." />
                 </div>
 
-                <!-- 🔽 Filter Dropdown -->
+                <!-- Filter -->
                 <select id="roleFilter" class="filter-select">
-                    <option value="">All</option>
-                    <option value="Admin">Admins</option>
-                    <option value="Sub-Admin">Sub-Admins</option>
+                    <option value="">All Roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Sub-Admin">Sub-Admin</option>
+                    <option value="Disabled">Disabled</option>
                 </select>
             </div>
 
-            <!-- 🔄 Refresh Button (Right Side) -->
             <button class="btn action-btn" onclick="location.reload()">🔄 Refresh</button>
 
         </div>
 
-        
 
         <div class="card-b">
 
@@ -79,7 +97,7 @@
 
                 <tbody>
 
-                    <!-- ADMIN -->
+                    <!-- Example Row -->
                     <tr>
                         <td>Fatima S.</td>
                         <td>fatima@domain.com</td>
@@ -91,19 +109,6 @@
                         </td>
                     </tr>
 
-                    <!-- SUB-ADMIN -->
-                    <tr>
-                        <td>Yousef M.</td>
-                        <td>yousef@domain.com</td>
-                        <td><span class="badge">Sub-Admin</span></td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Make Admin</button>
-                            <button class="btn small danger">Disable</button>
-                        </td>
-                    </tr>
-
-                    <!-- SUB-ADMIN -->
                     <tr>
                         <td>Omar K.</td>
                         <td>omar@domain.com</td>
@@ -115,15 +120,14 @@
                         </td>
                     </tr>
 
-                    <!-- DISABLED ADMIN -->
                     <tr>
-                        <td>Nora L.</td>
-                        <td>nora@domain.com</td>
-                        <td><span class="badge ok">Admin</span></td>
-                        <td><span class="badge">Disabled</span></td>
+                        <td>Sara Q.</td>
+                        <td>sara@domain.com</td>
+                        <td><span class="badge">Employee</span></td>
+                        <td><span class="badge ok">Active</span></td>
                         <td class="right">
-                            <button class="btn small">Enable</button>
-                            <button class="btn small">Make Sub-Admin</button>
+                            <button class="btn small">Promote</button>
+                            <button class="btn small danger">Disable</button>
                         </td>
                     </tr>
 
@@ -137,7 +141,7 @@
 
 @section Scripts {
     <script>
-               const searchInput = document.getElementById('adminSearch');
+        const searchInput = document.getElementById('adminSearch');
         const filterSelect = document.getElementById('roleFilter');
         const rows = document.querySelectorAll('#adminsTable tbody tr');
 
@@ -147,7 +151,7 @@
 
             rows.forEach(row => {
                 const rowText = row.textContent.toLowerCase();
-                const rowRole = row.children[2].textContent.trim(); // Role column
+                const rowRole = row.children[2].textContent.trim();
 
                 const matchesText = rowText.includes(text);
                 const matchesRole = role === "" || rowRole === role;
@@ -158,6 +162,5 @@
 
         searchInput.addEventListener('keyup', filterTable);
         filterSelect.addEventListener('change', filterTable);
-
     </script>
 }
