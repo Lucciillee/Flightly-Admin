@@ -1,37 +1,52 @@
-﻿@{
+﻿@model ProjectWebApp.ViewModels.CreateAirlineVM
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Add Airline";
 }
 
 <section class="content">
-
     <div class="card">
         <div class="card-h">Add New Airline</div>
 
         <div class="card-b">
-            <form class="grid3">
+            <form asp-action="Create" asp-controller="AdminAirlines" method="post" enctype="multipart/form-data" class="grid3">
 
                 <div class="field">
                     <span>Airline Name</span>
-                    <input type="text" />
+                    <input type="text" name="AirlineName" required />
                 </div>
 
                 <div class="field">
                     <span>Country</span>
-                    <input type="text" />
+                    <select name="CountryId" required>
+                        <option value="">Select Country</option>
+                        @foreach (var c in Model.Countries)
+                        {
+                            <option value="@c.Value">@c.Text</option>
+                        }
+
+                    </select>
                 </div>
 
                 <div class="field">
                     <span>Code</span>
-                    <input type="text" />
+                    <input type="text" name="Code" required />
                 </div>
 
                 <div class="field">
                     <span>Status</span>
-                    <select>
-                        <option>Active</option>
-                        <option>Inactive</option>
+                    <select name="StatusId" required>
+                        @foreach (var s in Model.Statuses)
+                        {
+                            <option value="@s.Value">@s.Text</option>
+                        }
                     </select>
+                </div>
+
+                <div class="field">
+                    <span>Logo</span>
+                    <input type="file" name="LogoFile" accept="image/*" />
                 </div>
 
                 <div class="actions">
@@ -42,8 +57,9 @@
             </form>
         </div>
     </div>
-
 </section>
+
 @section Styles {
     <link rel="stylesheet" href="~/css/admin-airlines.css" asp-append-version="true" />
 }
+

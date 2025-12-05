@@ -1,47 +1,62 @@
-﻿
-@{
-    ViewData["Title"] = "Edit Airlines";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-}
+﻿@model ProjectWebApp.ViewModels.EditAirlineVM
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/admin-airlines.css" asp-append-version="true" />
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Edit Airline";
 }
 
 <section class="content">
 
     <div class="card">
         <div class="card-h">Edit Airline</div>
+
         <div class="card-b">
 
-            <form class="grid3">
+            <form asp-action="Edit" asp-controller="AdminAirlines" method="post" enctype="multipart/form-data" class="grid3">
+
+                <input type="hidden" asp-for="AirlineId" />
 
                 <div class="field">
                     <span>Airline Name</span>
-                    <input type="text" value="Emirates" />
+                    <input asp-for="AirlineName" required />
                 </div>
 
                 <div class="field">
                     <span>Country</span>
-                    <input type="text" value="UAE" />
+                    <select asp-for="CountryId" asp-items="Model.Countries" required></select>
                 </div>
 
                 <div class="field">
                     <span>Code</span>
-                    <input type="text" value="EK" />
+                    <input asp-for="Code" required />
                 </div>
 
                 <div class="field">
                     <span>Status</span>
-                    <select>
-                        <option selected>Active</option>
-                        <option>Inactive</option>
-                    </select>
+                    <select asp-for="StatusId" asp-items="Model.Statuses"></select>
                 </div>
 
-                <div class="actions">
-                    <a href="/Airlines" class="btn">Cancel</a>
-                    <button class="btn primary">Save Changes</button>
+                <div class="field">
+                    <span>Current Logo</span>
+
+                    @if (!string.IsNullOrEmpty(Model.ExistingLogoUrl))
+                    {
+                        <img src="@Model.ExistingLogoUrl" width="80" style="border-radius:5px; margin-bottom:10px;" />
+                    }
+                    else
+                    {
+                        <p>No logo uploaded</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <span>Upload New Logo</span>
+                    <input type="file" name="NewLogo" accept="image/*" />
+                </div>
+
+                <div class="actions full-row">
+                    <a href="/AdminAirlines" class="btn">Cancel</a>
+                    <button type="submit" class="btn primary">Save Changes</button>
                 </div>
 
             </form>
@@ -51,4 +66,6 @@
 
 </section>
 
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-airlines.css" asp-append-version="true" />
+}

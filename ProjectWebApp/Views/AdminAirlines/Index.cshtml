@@ -1,14 +1,8 @@
-﻿@{
+﻿@model List<ProjectWebApp.Model.Airline>
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Manage Airlines";
 
-    // FAKE DATA — no database, no model needed
-    var airlines = new List<dynamic>
-    {
-        new { Id = 1, Name = "Emirates", Code = "EK", Country = "UAE",   IsActive = true  },
-        new { Id = 2, Name = "Qatar Airways", Code = "QR", Country = "Qatar", IsActive = true  },
-        new { Id = 3, Name = "Saudia", Code = "SV", Country = "Saudi Arabia", IsActive = false }
-    };
 }
 
 <section class="content">
@@ -36,24 +30,47 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var airline in airlines)
+                    @foreach (var airline in Model)
                     {
                         <tr>
-                            <td>@airline.Name</td>
-                            <td>@airline.Code</td>
-                            <td>@airline.Country</td>
                             <td>
-                                <span class="badge @(airline.IsActive ? "ok" : "")">
-                                    @(airline.IsActive ? "Active" : "Inactive")
-                                </span>
+                                <img src="@airline.LogoUrl" width="40" height="40" style="border-radius:5px; margin-right:10px;" />
+                                @airline.AirlineName
                             </td>
+
+
+                            <td>@airline.Code</td>
+
+                            <td>@airline.Country.CountryName</td>
+
+                            <td>
+                                @if (airline.StatusId == 1)
+                                {
+                                    <span class="badge ok">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge danger">Inactive</span>
+                                }
+                            </td>
+
+
                             <td class="right">
-                                <a href="/AdminAirlines/Edit/@airline.Id" class="btn small">Edit</a>
-                                <a href="/AdminAirlines/Delete/@airline.Id" class="btn small danger">Delete</a>
+                                <a href="/AdminAirlines/Edit/@airline.AirlineId" class="btn small">Edit</a>
+                                @if (airline.StatusId == 1)
+                                {
+                                    <a href="/AdminAirlines/Deactivate/@airline.AirlineId" class="btn small danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="/AdminAirlines/Activate/@airline.AirlineId" class="btn small">Activate</a>
+                                }
                             </td>
                         </tr>
+
                     }
                 </tbody>
+
             </table>
         </div>
     </div>
