@@ -16,34 +16,33 @@
         </div>
 
         <div class="card-b">
-            <form class="grid2 small-gap">
+            <form asp-action="CreateEmployee" asp-controller="AdminRoles" method="post" class="grid2 small-gap">
 
                 <label class="field">
                     <span>First Name</span>
-                    <input type="text" placeholder="e.g., Ahmed" />
+                    <input type="text" name="FirstName" placeholder="e.g., Ahmed" required />
                 </label>
 
                 <label class="field">
                     <span>Last Name</span>
-                    <input type="text" placeholder="e.g., Ali" />
+                    <input type="text" name="LastName" placeholder="e.g., Ali" required />
                 </label>
 
                 <label class="field">
                     <span>Email</span>
-                    <input type="email" placeholder="e.g., ahmed@domain.com" />
+                    <input type="email" name="Email" placeholder="e.g., ahmed@domain.com" required />
                 </label>
 
                 <label class="field">
                     <span>Temporary Password</span>
-                    <input type="text" placeholder="At least 6 characters" />
+                    <input type="text" name="TempPassword" placeholder="At least 6 characters" required />
                 </label>
 
-                <!-- Role now aligned left under Email -->
                 <label class="field">
                     <span>Role</span>
-                    <select>
-                        <option value="Sub-Admin">Sub-Admin</option>
+                    <select name="Role">
                         <option value="Admin">Admin</option>
+                        <option value="Sub-Admin">Sub-Admin</option>
                     </select>
                 </label>
 
