@@ -35,13 +35,13 @@
             </div>
 
             <!-- Role -->
-            <div class="field">
-                <label asp-for="Input.Role"></label>
-                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList">
-                    <option disabled selected value="0">Select Role..</option>
-                </select>
-                <span asp-validation-for="Input.Role" class="text-danger"></span>
-            </div>
+            @*  <div class="field">
+      <label asp-for="Input.Role"></label>
+      <select asp-for="Input.Role" asp-items="@Model.Input.RoleList">
+          <option disabled selected value="0">Select Role..</option>
+      </select>
+      <span asp-validation-for="Input.Role" class="text-danger"></span>
+  </div> *@
 
             <!-- Register Button -->
             <button id="registerSubmit" type="submit" class="btn primary full">

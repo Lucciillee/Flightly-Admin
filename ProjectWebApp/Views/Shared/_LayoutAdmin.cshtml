@@ -2,6 +2,11 @@
   Admin Layout
   Handles global admin structure: sidebar, topbar, and main content area.
 *@
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +33,13 @@
     <div class="admin-wrapper">
         <header class="topbar">
             <h1>@ViewData["Title"]</h1>
+
+            <div class="topbar-user">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <span class="user-welcome">Welcome, @UserManager.GetUserName(User)</span>
+                }
+            </div>
         </header>
 
         <main class="main">

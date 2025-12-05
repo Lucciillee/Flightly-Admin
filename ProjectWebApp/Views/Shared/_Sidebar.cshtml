@@ -25,11 +25,16 @@
 
         <div class="sidebar-footer">
             <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
-            <a href="#" class="logout" onclick="document.getElementById('logoutForm').submit();">
-                Logout
-            </a>
+            <a href="#" class="logout" onclick="document.getElementById('logoutForm').submit();">Logout</a>
 
-            <form method="post" action="/Identity/Account/Logout" id="logoutForm"></form>
+            <form id="logoutForm"
+                  asp-area="Identity"
+                  asp-page="/Account/Logout"
+                  asp-route-returnUrl="/Identity/Account/Login"
+                  method="post">
+                @Html.AntiForgeryToken()
+            </form>
+
 
 
         </div>

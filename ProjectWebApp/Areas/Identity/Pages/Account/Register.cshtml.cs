@@ -20,10 +20,13 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectWebApp.Model;
 
 namespace ProjectWebApp.Areas.Identity.Pages.Account
 {
+
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -33,13 +36,15 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly FlightlyDBContext _context;
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            FlightlyDBContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,6 +53,7 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;    // <-- this is required
         }
 
         /// <summary>
@@ -217,7 +223,23 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
 
-                    if(Input.Role == null || Input.Role == "0") {
+                    // 🔄 Create admin profile and sync email
+                    var userProfile = new UserProfile
+                    {
+                        IdentityUserId = user.Id,
+                        Email = Input.Email,
+                        RoleId = 1 // ALWAYS ADMIN
+                    };
+
+                    _context.UserProfiles.Add(userProfile);
+                    await _context.SaveChangesAsync();
+
+                    // Assign Identity role (Admin)
+                    await _userManager.AddToRoleAsync(user, "Admin");
+
+
+
+                    if (Input.Role == null || Input.Role == "0") {
                         await _userManager.AddToRoleAsync(user, "User"); //if no role selected, add him as user
                     }
                     else
