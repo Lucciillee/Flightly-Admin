@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<ProjectWebApp.ViewModels.AdminUserVM>
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Role Management";
 }
@@ -69,10 +71,11 @@
 
                 <!-- Filter -->
                 <select id="roleFilter" class="filter-select">
-                    <option value="">All Rolesss</option>
+                    <option value="">All Roles</option>
                     <option value="Admin">Admin</option>
                     <option value="Sub-Admin">Sub-Admin</option>
-                    <option value="Disabled">Disabled</option>
+                    <option value="Active">Active</option>
+                    <option value="Blocked">Blocked</option>
                 </select>
             </div>
 
@@ -95,42 +98,42 @@
                 </thead>
 
                 <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <span class="badge @(user.Role == "Admin" ? "ok" : "")">@user.Role</span>
+                            </td>
 
-                    <!-- Example Row -->
-                    <tr>
-                        <td>Fatima S.</td>
-                        <td>fatima@domain.com</td>
-                        <td><span class="badge ok">Admin</span></td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Make Sub-Admin</button>
-                            <button class="btn small danger">Disable</button>
-                        </td>
-                    </tr>
+                            <td>
+                                <span class="badge @(user.IsDeleted ? "danger" : "ok")">
+                                    @(user.IsDeleted ? "Blocked" : "Active")
+                                </span>
+                            </td>
 
-                    <tr>
-                        <td>Omar K.</td>
-                        <td>omar@domain.com</td>
-                        <td><span class="badge">Sub-Admin</span></td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Make Admin</button>
-                            <button class="btn small danger">Disable</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Sara Q.</td>
-                        <td>sara@domain.com</td>
-                        <td><span class="badge">Employee</span></td>
-                        <td><span class="badge ok">Active</span></td>
-                        <td class="right">
-                            <button class="btn small">Promote</button>
-                            <button class="btn small danger">Disable</button>
-                        </td>
-                    </tr>
-
+                            <td class="right">
+                                @if (!user.IsDeleted)
+                                {
+                                    <form asp-action="DeleteEmployee" asp-controller="AdminRoles" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@user.IdentityUserId" />
+                                        <button class="btn small danger">Delete</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="RestoreEmployee" asp-controller="AdminRoles" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@user.IdentityUserId" />
+                                        <button class="btn small">Restore</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
                 </tbody>
+
+
             </table>
 
         </div>
@@ -144,18 +147,33 @@
         const filterSelect = document.getElementById('roleFilter');
         const rows = document.querySelectorAll('#adminsTable tbody tr');
 
-        function filterTable() {
+                function filterTable()  {
             const text = searchInput.value.toLowerCase();
-            const role = filterSelect.value;
+            const filter = filterSelect.value;
 
             rows.forEach(row => {
                 const rowText = row.textContent.toLowerCase();
                 const rowRole = row.children[2].textContent.trim();
+                const rowStatus = row.children[3].textContent.trim();
 
                 const matchesText = rowText.includes(text);
-                const matchesRole = role === "" || rowRole === role;
 
-                row.style.display = matchesText && matchesRole ? "" : "none";
+                let matchesFilter = false;
+
+                if (filter === "" || filter === "All") {
+                    matchesFilter = true;
+                }
+                else if (filter === "Admin" || filter === "Sub-Admin") {
+                    matchesFilter = rowRole === filter;
+                }
+                else if (filter === "Active") {          
+                    matchesFilter = rowStatus === "Active";
+                  }   
+                else if (filter === "Blocked") {
+                    matchesFilter = rowStatus === "Blocked";
+                }
+
+                row.style.display = (matchesText && matchesFilter) ? "" : "none";
             });
         }
 

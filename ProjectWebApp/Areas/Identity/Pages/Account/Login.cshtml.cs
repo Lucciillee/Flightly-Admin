@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
+using ProjectWebApp.Model;   // Your UserProfile + DB Context
 
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,23 @@ using Microsoft.Extensions.Logging;
 
 namespace ProjectWebApp.Areas.Identity.Pages.Account
 {
+
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly FlightlyDBContext _context;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+      SignInManager<IdentityUser> signInManager,
+      ILogger<LoginModel> logger,
+      FlightlyDBContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -114,9 +122,24 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // Check if deleted
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    var profile = _context.UserProfiles.FirstOrDefault(x => x.IdentityUserId == user.Id);
+
+                    if (profile != null && profile.IsDeleted)
+                    {
+                        await _signInManager.SignOutAsync();
+                        ModelState.AddModelError(string.Empty, "Your account has been disabled by an administrator.");
+                        return Page();
+                    }
+
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+
+                    // Correct redirect for MVC Controllers
+                    return RedirectToAction("Index", "AdminDashboard");
                 }
+
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

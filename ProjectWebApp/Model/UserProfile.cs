@@ -48,6 +48,8 @@ namespace ProjectWebApp.Model
         [StringLength(450)]
         public string IdentityUserId { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         [ForeignKey("RoleId")]
         [InverseProperty("UserProfiles")]
         public virtual Role Role { get; set; }
