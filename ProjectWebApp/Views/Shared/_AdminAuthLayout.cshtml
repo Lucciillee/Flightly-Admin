@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Flightly Admin</title>
+
+    <!-- Use the same font as client -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Your shared admin login styling -->
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+
+    <!-- Apply font globally -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
+</head>
+
+<body>
+
+    @RenderBody()
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
