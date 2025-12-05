@@ -1,6 +1,10 @@
-﻿@{
+﻿@model ProjectWebApp.ViewModels.EditFlightVM
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Edit Flight";
+
+    bool isCancelled = Model.StatusId == 3;  // 4 = Cancelled in your DB
 }
 
 @section Styles {
@@ -11,69 +15,90 @@
 
     <div class="card">
         <div class="card-h">Edit Flight</div>
+
         <div class="card-b">
-            <form class="grid3">
+
+            <!-- CANCELLED WARNING -->
+            @if (isCancelled)
+            {
+                <div style="background:#ffe5e5; padding:12px; border-left:5px solid #d11; margin-bottom:15px;">
+                    <strong style="color:#b00;">This flight has been CANCELLED and cannot be modified.</strong>
+                </div>
+            }
+
+            <form asp-action="Edit" method="post" class="grid3">
+                <input type="hidden" asp-for="FlightId" />
 
                 <label class="field">
                     <span>Airline</span>
-                    <select>
-                        <option selected>Gulf Air</option>
-                        <option>Qatar Airways</option>
-                        <option>Emirates</option>
-                        <option>Saudia</option>
-                    </select>
+                    <input value="@Model.AirlineName" disabled />
                 </label>
 
                 <label class="field">
                     <span>Flight No.</span>
-                    <input value="GF 008" />
+                    <input asp-for="FlightNumber" required disabled="@(isCancelled ? "disabled" : null)" />
+
                 </label>
 
                 <label class="field">
                     <span>Aircraft</span>
-                    <input value="A320neo" />
+                    <input asp-for="Aircraft" disabled="@(isCancelled ? "disabled" : null)" />
+
                 </label>
 
                 <label class="field">
                     <span>Origin</span>
-                    <input value="BAH" />
+                    <input value="@Model.OriginCode" disabled />
                 </label>
 
                 <label class="field">
                     <span>Destination</span>
-                    <input value="DXB" />
+                    <input value="@Model.DestinationCode" disabled />
                 </label>
 
                 <label class="field">
                     <span>Departure</span>
-                    <input type="datetime-local" value="2025-10-30T09:20" />
+                    <input asp-for="DepartureTime" type="datetime-local" required
+                           disabled="@(isCancelled ? "disabled" : null)" />
+
                 </label>
 
                 <label class="field">
                     <span>Arrival</span>
-                    <input type="datetime-local" value="2025-10-30T11:15" />
+                    <input asp-for="ArrivalTime" type="datetime-local" required
+                           disabled="@(isCancelled ? "disabled" : null)" />
+
                 </label>
 
                 <label class="field">
                     <span>Base Price</span>
-                    <input type="number" value="120" />
+                    <input asp-for="BasePrice" type="number" step="0.01" required
+                           disabled="@(isCancelled ? "disabled" : null)" />
+
                 </label>
 
                 <label class="field">
                     <span>Status</span>
-                    <select>
-                        <option selected>Scheduled</option>
-                        <option>Cancelled</option>
-                        <option>Delayed</option>
+                    <select asp-for="StatusId" asp-items="Model.Statuses"
+                            disabled="@(isCancelled ? "disabled" : null)">
                     </select>
+
                 </label>
 
                 <div class="actions">
                     <a href="/AdminFlights" class="btn">Cancel</a>
-                    <button class="btn primary">Save Changes</button>
+
+                    <!-- Disable Save button if flight is cancelled -->
+                    <button type="submit" class="btn primary"
+                            disabled="@(isCancelled ? "disabled" : null)"
+                            style="@(isCancelled ? "opacity:0.5; cursor:not-allowed;" : "")">
+                        Save Changes
+                    </button>
+
                 </div>
 
             </form>
+
         </div>
     </div>
 

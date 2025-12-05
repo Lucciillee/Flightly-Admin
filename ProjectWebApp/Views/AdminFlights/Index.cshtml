@@ -1,24 +1,20 @@
-﻿@{
+﻿@model List<ProjectWebApp.Model.Flight>
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Manage Flights";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/admin-flights.css" asp-append-version="true" />
-}
+<section class="content">
 
-<div class="content">
-
-    <!-- Top Action Bar -->
-    <div class="actions-top">
+    <div class="actions top-actions">
         <a href="/AdminFlights/Create" class="btn primary">+ Add Flight</a>
-        <a href="/AdminFlights" class="btn">⟳ Refresh</a>
+        <a href="/AdminFlights/Index" class="btn">Refresh</a>
     </div>
 
-
-    <!-- Flights Table -->
     <div class="card">
         <div class="card-h">Flights List</div>
+
         <div class="card-b">
             <table class="table">
                 <thead>
@@ -31,44 +27,66 @@
                         <th class="right">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <td>GF 008</td>
-                        <td>Gulf Air</td>
-                        <td>BAH → DXB</td>
-                        <td>2025-10-30 09:20</td>
-                        <td><span class="badge ok">Scheduled</span></td>
-                        <td class="right">
-                            <a href="/AdminFlights/Edit/1" class="btn small">Edit</a>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
+                    @foreach (var f in Model)
+                    {
+                        <tr>
+                            <td>@f.FlightNumber</td>
 
-                    <tr>
-                        <td>QR 271</td>
-                        <td>Qatar Airways</td>
-                        <td>BAH → DOH</td>
-                        <td>2025-10-22 15:10</td>
-                        <td><span class="badge">Pending</span></td>
-                        <td class="right">
-                            <a href="/AdminFlights/Edit/2" class="btn small">Edit</a>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
+                            <td>@f.Airline?.AirlineName</td>
 
-                    <tr>
-                        <td>SV 112</td>
-                        <td>Saudia</td>
-                        <td>BAH → RUH</td>
-                        <td>2025-11-05 18:00</td>
-                        <td><span class="badge ok">Scheduled</span></td>
-                        <td class="right">
-                            <a href="/AdminFlights/Edit/3" class="btn small">Edit</a>
-                            <button class="btn small danger">Delete</button>
-                        </td>
-                    </tr>
+                            <td>@f.OriginAirport.Code → @f.DestinationAirport.Code</td>
+
+                            <td>@f.DepartureTime.ToString("yyyy-MM-dd HH:mm")</td>
+
+                            <td>
+                                @if (f.Status.StatusName == "On Time")
+                                {
+                                    <span class="badge ok">On Time</span>
+                                }
+                                else if (f.Status.StatusName == "Delayed")
+                                {
+                                    <span class="badge info">Delayed</span>
+                                }
+                                else if (f.Status.StatusName == "Cancelled")
+                                {
+                                    <span class="badge danger">Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge">@f.Status.StatusName</span>
+                                }
+                            </td>
+
+                            <td class="right">
+
+                                <a href="/AdminFlights/Edit/@f.FlightId"
+                                   class="btn small @(f.Status.StatusName == "Cancelled" ? "disabled-link" : "")">
+                                    Edit
+                                </a>
+
+
+                                <!-- Cancel Button -->
+                                <form asp-action="Cancel" asp-controller="AdminFlights" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@f.FlightId" />
+                                    <button type="submit" class="btn small danger"
+                                            onclick="return confirm('Are you sure you want to cancel this flight?');">
+                                        Cancel
+                                    </button>
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
-</div>
+
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-flights.css" asp-append-version="true" />
+}
