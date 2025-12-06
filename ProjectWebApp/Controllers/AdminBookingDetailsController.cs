@@ -30,15 +30,21 @@ namespace ProjectWebApp.Controllers
             if (b == null)
                 return NotFound();
 
+            // 👇 NEW LOGIC: Always show passenger info if exists
             var vm = new BookingDetailsVM
             {
                 BookingId = b.BookingId,
-                UserName = b.User != null ? $"{b.User.FirstName} {b.User.LastName}" :
-                                            $"{b.Guest.FirstName} {b.Guest.LastName}",
-                Email = b.User?.Email ?? b.Guest.Email,
+
+                UserName = b.GuestId != null
+                    ? $"{b.Guest.FirstName} {b.Guest.LastName}"
+                    : $"{b.User.FirstName} {b.User.LastName}",
+
+                Email = b.GuestId != null ? b.Guest.Email : b.User.Email,
+
                 PaymentStatus = b.Payment.PaymentStatus.StatusName,
                 PaymentMethod = b.Payment.PaymentMethod.MethodName,
                 TotalAmount = b.TotalAmount,
+
                 FlightNumber = b.Flight.FlightNumber,
                 OriginCode = b.Flight.OriginAirport.Code,
                 DestinationCode = b.Flight.DestinationAirport.Code,
@@ -51,9 +57,7 @@ namespace ProjectWebApp.Controllers
             return View(vm);
         }
 
-        // ---------------------------------------------------------
         // 1) RESEND EMAIL
-        // ---------------------------------------------------------
         public async Task<IActionResult> ResendEmail(int id)
         {
             var booking = await _context.Bookings
@@ -64,7 +68,6 @@ namespace ProjectWebApp.Controllers
             if (booking == null)
                 return NotFound();
 
-            // Save to logs
             _context.Logs.Add(new Log
             {
                 UserId = booking.UserId,
@@ -77,12 +80,9 @@ namespace ProjectWebApp.Controllers
 
             TempData["Success"] = "Email has been resent (simulated).";
             return RedirectToAction("Index", new { id });
-
         }
 
-        // ---------------------------------------------------------
         // 2) REFUND BOOKING
-        // ---------------------------------------------------------
         public async Task<IActionResult> Refund(int id)
         {
             var booking = await _context.Bookings
@@ -93,10 +93,8 @@ namespace ProjectWebApp.Controllers
             if (booking == null)
                 return NotFound();
 
-            // PaymentStatusId = 2 → Refunded
-            booking.Payment.PaymentStatusId = 2;
+            booking.Payment.PaymentStatusId = 2; // Refunded
 
-            // Log action
             _context.Logs.Add(new Log
             {
                 UserId = booking.UserId,
@@ -109,12 +107,9 @@ namespace ProjectWebApp.Controllers
 
             TempData["Success"] = "Booking has been refunded.";
             return RedirectToAction("Index", new { id });
-
         }
 
-        // ---------------------------------------------------------
         // 3) CANCEL BOOKING
-        // ---------------------------------------------------------
         public async Task<IActionResult> CancelBooking(int id)
         {
             var booking = await _context.Bookings
@@ -124,10 +119,8 @@ namespace ProjectWebApp.Controllers
             if (booking == null)
                 return NotFound();
 
-            // BookingStatusId = 2 → Cancelled
-            booking.BookingStatusId = 2;
+            booking.BookingStatusId = 2; // Cancelled
 
-            // Log action
             _context.Logs.Add(new Log
             {
                 UserId = booking.UserId,
@@ -140,7 +133,6 @@ namespace ProjectWebApp.Controllers
 
             TempData["Success"] = "Booking has been cancelled.";
             return RedirectToAction("Index", new { id });
-
         }
     }
 }

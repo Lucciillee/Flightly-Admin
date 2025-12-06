@@ -24,41 +24,44 @@ namespace ProjectWebApp.Controllers
                 .Include(b => b.BookingStatus)
                 .AsQueryable();
 
-            //  Search by ref number or user name
+            // 🔍 Search
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.ToLower();
 
                 query = query.Where(b =>
                     b.BookingId.ToString().Contains(search) ||
-                    (b.User != null &&
-                        (b.User.FirstName + " " + b.User.LastName).ToLower().Contains(search)) ||
                     (b.Guest != null &&
-                        (b.Guest.FirstName + " " + b.Guest.LastName).ToLower().Contains(search))
+                      (b.Guest.FirstName + " " + b.Guest.LastName).ToLower().Contains(search)) ||
+                    (b.User != null &&
+                      (b.User.FirstName + " " + b.User.LastName).ToLower().Contains(search))
                 );
             }
 
-            //  Filter by status
+            // Filter by status
             if (statusId.HasValue)
             {
                 query = query.Where(b => b.BookingStatusId == statusId.Value);
             }
 
-            //  Filter by date
+            // Filter by date
             if (date.HasValue)
             {
                 query = query.Where(b => b.BookingDate.Date == date.Value.Date);
             }
 
-            // Map to ViewModel
+            // Map to VM
             var bookings = await query
                 .OrderByDescending(b => b.BookingDate)
                 .Select(b => new AdminBookingVM
                 {
                     BookingId = b.BookingId,
-                    UserName = b.User != null
-                        ? $"{b.User.FirstName} {b.User.LastName}"
-                        : $"{b.Guest.FirstName} {b.Guest.LastName}",
+
+                    // 👇 NEW LOGIC: Always show PASSENGER name
+                    UserName = b.GuestId != null
+                        ? $"{b.Guest.FirstName} {b.Guest.LastName}"
+                        : $"{b.User.FirstName} {b.User.LastName}",
+
                     FlightInfo = $"{b.Flight.OriginAirport.Code}→{b.Flight.DestinationAirport.Code} ({b.Flight.FlightNumber})",
                     BookingDate = b.BookingDate,
                     Status = b.BookingStatus.StatusName,
