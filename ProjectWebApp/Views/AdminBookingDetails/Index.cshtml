@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjectWebApp.ViewModels.BookingDetailsVM
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Booking Details";
 }
@@ -8,45 +10,96 @@
 }
 
 <div class="content">
+    @if (TempData["Success"] != null)
+    {
+        <div id="successAlert" style="
+    background:#d4f8d4;
+    color:#236423;
+    padding:12px 18px;
+    border:1px solid #a6e6a6;
+    border-radius:8px;
+    margin-bottom:18px;
+    font-size:15px;
+    font-weight:500;">
+            @TempData["Success"]
+        </div>
+
+    }
+
+    <div style="margin-bottom: 20px;">
+        <a href="/AdminBookings" class="btn" style="display:inline-flex; align-items:center; gap:6px;">
+            ← Back to All Bookings
+        </a>
+    </div>
     <section class="grid2">
 
         <!-- Booking Summary -->
         <div class="card">
             <div class="card-h">Summary</div>
             <div class="card-b">
+
+                <!-- User + Payment + Total -->
                 <div class="row">
                     <div>
                         <div class="muted small">User</div>
-                        <div class="big">Rana Ahmed</div>
+                        <div class="big">@Model.UserName</div>
                     </div>
+
                     <div>
                         <div class="muted small">Email</div>
-                        <div>rana@example.com</div>
+                        <div>@Model.Email</div>
                     </div>
+
                     <div>
                         <div class="muted small">Payment</div>
-                        <div><span class="badge ok">Paid</span> • Visa **** 5123</div>
+                        <div>
+                            <span class="badge ok">@Model.PaymentStatus</span>
+                            • @Model.PaymentMethod
+                        </div>
                     </div>
+
                     <div>
                         <div class="muted small">Total</div>
-                        <div class="big">$420</div>
+                        <div class="big">BHD @Model.TotalAmount.ToString("0.00")</div>
                     </div>
                 </div>
 
                 <hr class="line" />
 
+                <!-- Flight + Status -->
                 <div class="row">
                     <div>
                         <div class="muted small">Flight</div>
-                        <div class="big">GF 008 • BAH → DXB</div>
-                        <div class="muted">Dep: 2025-10-30 09:20 • Arr: 2025-10-30 11:10</div>
-                        <div class="muted">Economy</div>
+                        <div class="big">
+                            @Model.FlightNumber • @Model.OriginCode → @Model.DestinationCode
+                        </div>
+
+                        <div class="muted">
+                            Dep: @Model.DepartureTime.ToString("yyyy-MM-dd HH:mm")
+                            • Arr: @Model.ArrivalTime.ToString("yyyy-MM-dd HH:mm")
+                        </div>
+
+                        <div class="muted">@Model.CabinClass</div>
                     </div>
+
                     <div>
                         <div class="muted small">Status</div>
-                        <div><span class="badge ok">Confirmed</span></div>
+
+                        @if (Model.Status == "Confirmed")
+                        {
+                            <div><span class="badge ok">Confirmed</span></div>
+                        }
+                        else if (Model.Status == "Cancelled")
+                        {
+                            <div><span class="badge bad">Cancelled</span></div>
+                        }
+                        else
+                        {
+                            <div><span class="badge warn">@Model.Status</span></div>
+                        }
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -55,12 +108,30 @@
             <div class="card-h">Actions</div>
             <div class="card-b">
                 <div class="col">
-                    <button class="btn">Resend Email</button>
-                    <button class="btn">Refund</button>
-                    <button class="btn danger">Cancel Booking</button>
+                    <a class="btn" href="/AdminBookingDetails/ResendEmail/@Model.BookingId">Resend Email</a>
+
+                    <a class="btn" href="/AdminBookingDetails/Refund/@Model.BookingId">Refund</a>
+
+                    <a class="btn danger"
+                       onclick="return confirm('Are you sure you want to cancel this booking?');"
+                       href="/AdminBookingDetails/CancelBooking/@Model.BookingId">
+                        Cancel Booking
+                    </a>
                 </div>
+
             </div>
         </div>
 
     </section>
 </div>
+<script>
+    setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+        if (alert) {
+            alert.style.transition = "0.5s";
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-10px)";
+        }
+    }, 3000);
+</script>
+

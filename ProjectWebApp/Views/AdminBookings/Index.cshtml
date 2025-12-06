@@ -1,6 +1,12 @@
-﻿@{
+﻿@model List<ProjectWebApp.ViewModels.AdminBookingVM>
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "All Bookings";
+
+    var searchValue = Context.Request.Query["search"];
+    var statusValue = Context.Request.Query["statusId"];
+    var dateValue = Context.Request.Query["date"];
 }
 
 @section Styles {
@@ -12,20 +18,40 @@
         <div class="card-h">Bookings</div>
         <div class="card-b">
 
-            <!-- 🔍 Search & Filter Bar -->
-            <div class="filter-bar">
-                <input type="text" placeholder="Search by Ref # or User..." />
-                <select>
-                    <option value="">All Statuses</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="pending">Pending</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
-                <input type="date" />
-                <button class="btn primary">Search</button>
-            </div>
+            <!-- 🔍 Search & Filter Bar must be INSIDE the form -->
+            <form method="get">
+                <div class="filter-bar">
+                    <input type="text"
+                           name="search"
+                           placeholder="Search by Ref # or User..."
+                           value="@searchValue" />
 
-            <!-- 📋 Bookings Table -->
+                    <select name="statusId">
+                        <option value="">All Statuses</option>
+                        @foreach (var s in (List<ProjectWebApp.Model.BookingStatus>)ViewBag.Statuses)
+                        {
+                            <option value="@s.StatusId"
+                                    selected="@(statusValue == s.StatusId.ToString() ? "selected" : null)">
+                                @s.StatusName
+                            </option>
+                        }
+                    </select>
+
+
+                    <input type="date"
+                           name="date"
+                           value="@dateValue" />
+
+                    <button class="btn primary" type="submit">
+                        Search
+                    </button>
+                    <a href="/AdminBookings" class="btn" style="display:flex; align-items:center; gap:6px;">
+                        🔄 Refresh
+                    </a>
+                </div>
+            </form>
+
+            <!-- 📋 Bookings Table (UNCHANGED DESIGN) -->
             <table class="table">
                 <thead>
                     <tr>
@@ -38,42 +64,66 @@
                         <th></th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <td>#BK-10421</td>
-                        <td>Rana A.</td>
-                        <td>BAH→DXB (GF 008)</td>
-                        <td>2025-10-30</td>
-                        <td><span class="badge ok">Confirmed</span></td>
-                        <td>$420</td>
-                        <td class="right">
-                            <a class="btn small" asp-controller="AdminBookingDetails" asp-action="Index">Details</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#BK-10420</td>
-                        <td>Guest</td>
-                        <td>BAH→DOH (QR 271)</td>
-                        <td>2025-10-22</td>
-                        <td><span class="badge warn">Pending</span></td>
-                        <td>$365</td>
-                        <td class="right">
-                            <a class="btn small" asp-controller="AdminBookingDetails" asp-action="Index">Details</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#BK-10419</td>
-                        <td>Ali M.</td>
-                        <td>BAH→RUH (SV 112)</td>
-                        <td>2025-11-05</td>
-                        <td><span class="badge bad">Cancelled</span></td>
-                        <td>$0</td>
-                        <td class="right">
-                            <a class="btn small" asp-controller="AdminBookingDetails" asp-action="Index">Details</a>
-                        </td>
-                    </tr>
+                    @foreach (var b in Model)
+                    {
+                        <tr>
+                            <td>@b.RefNumber</td>
+                            <td>@b.UserName</td>
+                            <td>@b.FlightInfo</td>
+                            <td>@b.BookingDate.ToString("yyyy-MM-dd")</td>
+
+                            <td>
+                                @if (b.Status == "Confirmed")
+                                {
+                                    <span class="badge ok">Confirmed</span>
+                                }
+                                else if (b.Status == "Cancelled")
+                                {
+                                    <span class="badge bad">Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge">@b.Status</span>
+                                }
+                            </td>
+
+                            <td>BHD @b.TotalAmount.ToString("0.00")</td>
+
+                            <td class="right">
+                                <a class="btn small"
+                                   href="/AdminBookingDetails/Index/@b.BookingId">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("keydown", function (e) {
+
+            // ESC = Reset filters
+            if (e.key === "Escape") {
+                window.location.href = "/AdminBookings";
+            }
+
+            // ENTER = Trigger Search
+            if (e.key === "Enter") {
+                const searchButton = document.querySelector(".btn.primary");
+                if (searchButton) {
+                    e.preventDefault(); // avoid form auto-submit issues
+                    searchButton.click();
+                }
+            }
+
+        });
+    </script>
+}
+
