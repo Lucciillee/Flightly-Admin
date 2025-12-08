@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjectWebApp.Model.ViewModels.PromoCodeCreateViewModel
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Create Promo Code";
 }
@@ -13,54 +15,52 @@
         <div class="card-h">Create Promo Code</div>
 
         <div class="card-b">
-            <form class="grid2form">
+
+            <!-- IMPORTANT: the form now posts to Create action -->
+            <form asp-action="Create" method="post" class="grid2form">
 
                 <label class="field">
                     <span>Code</span>
-                    <input placeholder="FLY10" />
+                    <input asp-for="Code" placeholder="FLY10" />
                 </label>
 
                 <label class="field">
                     <span>Status</span>
-                    <select>
-                        <option>Enabled</option>
-                        <option>Disabled</option>
-                    </select>
+                    <select asp-for="StatusId" asp-items="ViewBag.StatusList"></select>
                 </label>
-
-               
 
                 <label class="field">
                     <span>Value</span>
-                    <input type="number" placeholder="10" />
+                    <input asp-for="Value" type="number" placeholder="10" />
                 </label>
 
                 <label class="field">
                     <span>Start Date</span>
-                    <input type="date" />
+                    <input asp-for="StartDate" type="date" />
                 </label>
 
                 <label class="field">
                     <span>End Date</span>
-                    <input type="date" />
+                    <input asp-for="EndDate" type="date" />
                 </label>
 
                 <label class="field full">
                     <span>Usage Limit</span>
-                    <input type="number" placeholder="100 (optional)" />
+                    <input asp-for="UsageLimit" type="number" placeholder="100 (optional)" />
                 </label>
 
                 <label class="field full">
                     <span>Notes</span>
-                    <textarea rows="3"></textarea>
+                    <textarea asp-for="Notes" rows="3"></textarea>
                 </label>
 
                 <div class="actions">
-                    <a href="/PromoCodes" class="btn">Cancel</a>
-                    <button class="btn primary">Save Promo</button>
+                    <a href="/AdminPromoCodes" class="btn">Cancel</a>
+                    <button class="btn primary" type="submit">Save Promo</button>
                 </div>
 
             </form>
+
         </div>
     </div>
 

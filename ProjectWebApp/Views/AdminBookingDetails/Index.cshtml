@@ -45,6 +45,10 @@
                         <div class="big">@Model.UserName</div>
                     </div>
 
+                   
+                </div>
+
+                <div class="row" style="margin-top:10px;">
                     <div>
                         <div class="muted small">Email</div>
                         <div>@Model.Email</div>
@@ -63,6 +67,8 @@
                         <div class="big">BHD @Model.TotalAmount.ToString("0.00")</div>
                     </div>
                 </div>
+
+
 
                 <hr class="line" />
 
@@ -107,7 +113,7 @@
         <div class="card actions">
             <div class="card-h">Actions</div>
             <div class="card-b">
-                <div class="col">
+                <div class="col"> 
                     <a class="btn" href="/AdminBookingDetails/ResendEmail/@Model.BookingId">Resend Email</a>
 
                     <a class="btn" href="/AdminBookingDetails/Refund/@Model.BookingId">Refund</a>

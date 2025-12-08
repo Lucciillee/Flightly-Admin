@@ -41,6 +41,8 @@ namespace ProjectWebApp.Controllers
 
                 Email = b.GuestId != null ? b.Guest.Email : b.User.Email,
 
+                // Booked by (account holder)
+                
                 PaymentStatus = b.Payment.PaymentStatus.StatusName,
                 PaymentMethod = b.Payment.PaymentMethod.MethodName,
                 TotalAmount = b.TotalAmount,

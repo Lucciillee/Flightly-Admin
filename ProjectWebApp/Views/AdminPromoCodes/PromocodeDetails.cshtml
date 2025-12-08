@@ -1,0 +1,67 @@
+﻿@model ProjectWebApp.Model.PromoCode
+
+@{
+    ViewData["Title"] = "Promo Code Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-promo.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card">
+
+        <div class="card-h">
+            Promo Code Details
+        </div>
+
+        <div class="card-b">
+
+            <div class="detail-row">
+                <label><strong>Code:</strong></label>
+                <span>@Model.Code</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Value:</strong></label>
+                <span>
+                    @(Model.Value % 1 == 0
+                        ? $"{Model.Value:0}%"
+                        : $"${Model.Value}")
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Status:</strong></label>
+                <span>@Model.Status.StatusName</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Valid:</strong></label>
+                <span>
+                    @Model.StartDate.ToString("yyyy-MM-dd")
+                    →
+                    @Model.EndDate.ToString("yyyy-MM-dd")
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Usage Limit:</strong></label>
+                <span>@Model.UsageLimit</span>
+            </div>
+
+            <div class="detail-row full">
+                <label><strong>Notes:</strong></label>
+                <span>@Model.Notes</span>
+            </div>
+
+            <div style="margin-top:20px;">
+                <a href="/AdminPromoCodes" class="btn">Back</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

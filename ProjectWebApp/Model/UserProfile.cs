@@ -39,16 +39,13 @@ namespace ProjectWebApp.Model
         public string Email { get; set; }
         [StringLength(20)]
         public string PhoneNumber { get; set; }
-        [StringLength(20)]
-        public string PassportNumber { get; set; }
         public int RoleId { get; set; }
         public int? LoyaltyPoints { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
         [StringLength(450)]
         public string IdentityUserId { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         [ForeignKey("RoleId")]
         [InverseProperty("UserProfiles")]

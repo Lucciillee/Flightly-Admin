@@ -15,6 +15,12 @@ namespace ProjectWebApp.Model
         public string PreferredCurrency { get; set; }
         public int? PreferredOriginAirportId { get; set; }
         public bool IsDarkMode { get; set; }
+        [StringLength(10)]
+        public string PreferredLanguage { get; set; }
+        [StringLength(4)]
+        public string PassportLast4 { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime? PassportExpiryDate { get; set; }
 
         [ForeignKey("PreferredOriginAirportId")]
         [InverseProperty("UserPreferences")]
