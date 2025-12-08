@@ -51,13 +51,6 @@
                                     <!-- User is active -->
                                     <a href="/AdminUsers/Block/@user.UserId" class="btn small">Block</a>
                                 }
-
-                                <!-- Delete button -->
-                                <a href="/AdminUsers/Delete/@user.UserId"
-                                   onclick="return confirm('Are you sure you want to delete this user?');"
-                                   class="btn small danger">
-                                    Delete
-                                </a>
                             </td>
                         </tr>
                     }
@@ -80,17 +73,22 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        // Line chart
+        // Convert server-side data to JS arrays
+        const monthLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthLabels));
+        const monthCounts = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthCounts));
+
         const ctx = document.getElementById('usersChart');
+
         if (ctx) {
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    labels: monthLabels,     // Dynamic month names
                     datasets: [{
                         label: 'New Users',
-                        data: [120, 180, 150, 220, 190, 250],
+                        data: monthCounts,    // Dynamic user count per month
                         fill: true,
                         borderColor: '#0d8bf2',
                         backgroundColor: 'rgba(13,139,242,0.08)',
@@ -102,8 +100,15 @@
                     responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, ticks: { color: '#6b7280' }, grid: { color: '#f1f5f9' } },
-                        x: { ticks: { color: '#6b7280' }, grid: { display: false } }
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#6b7280' },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            ticks: { color: '#6b7280' },
+                            grid: { display: false }
+                        }
                     }
                 }
             });

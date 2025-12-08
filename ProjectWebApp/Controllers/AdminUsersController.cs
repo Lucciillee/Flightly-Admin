@@ -19,7 +19,7 @@ namespace ProjectWebApp.Controllers
         public IActionResult Index(string search)
         {
             var users = _context.UserProfiles
-                .Where(u => u.RoleId == 3);  // Show both active + blocked
+                .Where(u => u.RoleId == 3); // Show ALL: active + blocked
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -30,9 +30,30 @@ namespace ProjectWebApp.Controllers
                     u.Email.ToLower().Contains(s));
             }
 
+            // --- Monthly Chart Data ---
+            var monthlyCounts = _context.UserProfiles
+                .Where(u => u.RoleId == 3)
+                .GroupBy(u => new { u.CreatedAt.Year, u.CreatedAt.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Count = g.Count()
+                })
+                .OrderBy(g => g.Year)
+                .ThenBy(g => g.Month)
+                .ToList();
+
+            ViewBag.MonthLabels = monthlyCounts
+                .Select(m => new DateTime(m.Year, m.Month, 1).ToString("MMM"))
+                .ToArray();
+
+            ViewBag.MonthCounts = monthlyCounts
+                .Select(m => m.Count)
+                .ToArray();
+
             return View(users.ToList());
         }
-
 
         // -----------------------------
         // BLOCK USER
@@ -57,20 +78,6 @@ namespace ProjectWebApp.Controllers
             if (user == null) return NotFound();
 
             user.IsDeleted = false;
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-        // -----------------------------
-        // DELETE USER (Soft Delete)
-        // -----------------------------
-        public IActionResult Delete(int id)
-        {
-            var user = _context.UserProfiles.Find(id);
-            if (user == null) return NotFound();
-
-            user.IsDeleted = true;
             _context.SaveChanges();
 
             return RedirectToAction("Index");
