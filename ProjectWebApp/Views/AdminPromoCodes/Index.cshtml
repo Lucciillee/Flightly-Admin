@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<ProjectWebApp.Model.PromoCode>
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Promo Codes";
 }
@@ -34,6 +36,7 @@
                         <th>Value</th>
                         <th>Valid</th>
                         <th>Status</th>
+                        <th>Usage</th>   <!-- NEW -->
                         <th class="right">Actions</th>
                     </tr>
                 </thead>
@@ -71,14 +74,27 @@
                                 {
                                     <span class="badge disabled">Disabled</span>
                                 }
+                                else if (promo.StatusId == 6)
+                                {
+                                    <span class="badge overlimit">Over Limit</span>
+                                }
                             </td>
-
+                            <td>
+                                @if (promo.UsageLimit.HasValue)
+                                {
+                                    @($"{promo.UsageCount}/{promo.UsageLimit}")
+                                }
+                                else
+                                {
+                                    @($"{promo.UsageCount} / ∞")
+                                }
+                            </td>
                             
                             <!-- ACTION BUTTONS -->
                             <td class="right">
 
                                 @* EXPIRED — ONLY VIEW + DELETE *@
-                                @if (promo.StatusId == 2)
+                                @if (promo.StatusId == 2 || promo.StatusId == 6)
                                 {
                                     <a href="/AdminPromoCodes/Details/@promo.PromoId" class="btn small">View</a>
                                     <span class="btn small disabled">Edit</span>

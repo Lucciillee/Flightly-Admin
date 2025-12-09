@@ -32,6 +32,7 @@ namespace ProjectWebApp.Model
         [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; }
         public int? UserId { get; set; }
+        public int UsageCount { get; set; }
 
         [ForeignKey("StatusId")]
         [InverseProperty("PromoCodes")]

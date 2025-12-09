@@ -23,6 +23,7 @@ namespace ProjectWebApp.Controllers
 
             AutoActivatePromos();   // Upcoming → Active
             AutoExpirePromos();     // Active → Expired
+            AutoOverLimitPromos();  // Active → OverLimit
 
             var promos = _context.PromoCodes
       .Include(p => p.Status)
@@ -93,10 +94,9 @@ namespace ProjectWebApp.Controllers
             if (promo == null)
                 return NotFound();
 
-            // Block editing if expired
-            if (promo.StatusId == 2) // 2 = Expired
+            if (promo.StatusId == 2 || promo.StatusId == 6) // Expired OR OverLimit
             {
-                TempData["Error"] = "Expired promo codes cannot be edited.";
+                TempData["Error"] = "Expired or OverLimit promo codes cannot be edited.";
                 return RedirectToAction("Index");
             }
 
@@ -254,6 +254,21 @@ namespace ProjectWebApp.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        private void AutoOverLimitPromos()
+        {
+            var overLimitPromos = _context.PromoCodes
+                .Where(p => p.StatusId == 1 && p.UsageLimit != null && p.UsageCount >= p.UsageLimit)
+                .ToList();
+
+            foreach (var promo in overLimitPromos)
+            {
+                promo.StatusId = 6; // OverLimit status
+            }
+
+            if (overLimitPromos.Any())
+                _context.SaveChanges();
         }
 
 
