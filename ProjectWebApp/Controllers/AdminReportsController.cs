@@ -196,6 +196,19 @@ namespace ProjectWebApp.Controllers
             _context.Reports.Add(report);
             await _context.SaveChangesAsync();
 
+            // ---- ADD LOG ENTRY ----
+            // ---- ADD LOG ENTRY ----
+            _context.Logs.Add(new Log
+            {
+                UserId = adminId,
+                ActionType = "Report Generated",
+                Description = $"Generated Report (Type={report.ReportTypeId}) " +
+                              $"Range: {report.DateFrom:yyyy-MM-dd} ➜ {report.DateTo:yyyy-MM-dd}",
+                Timestamp = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+
+
             // ---- HANDLE ACTIONS ----
             switch (action)
             {

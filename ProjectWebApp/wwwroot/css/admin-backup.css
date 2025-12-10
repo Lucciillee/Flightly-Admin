@@ -136,6 +136,27 @@ input[type="file"] {
     gap: 10px;
 }
 
+.alert {
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.alert-success {
+    background: #d4f8e8;
+    color: #1b7f4d;
+    border-left: 4px solid #1b7f4d;
+}
+
+.alert-error {
+    background: #fde2e2;
+    color: #b30000;
+    border-left: 4px solid #b30000;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .content {

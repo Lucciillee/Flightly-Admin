@@ -152,6 +152,32 @@
         background: #8b5cf6;
     }
 
+    .badge.teal {
+        background-color: #1abc9c;
+        color: white;
+    }
+    .badge.cyan {
+        background: #06b6d4;
+    }
+
+    .badge.dark-red {
+        background: #991b1b;
+        color: white;
+    }
+
+    .badge.gray {
+        background: #6b7280;
+    }
+
+    .badge.yellow {
+        background-color: #f4d03f;
+        color: #333;
+    }
+    .badge.indigo {
+        background-color: #4B5DFF;
+        color: white;
+    }
+
 /* Responsive */
 @media (max-width: 760px) {
     .search-bar {

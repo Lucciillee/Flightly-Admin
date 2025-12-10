@@ -8,6 +8,20 @@
 }
 
 <div class="content">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">
+            @TempData["Error"]
+        </div>
+    }
     <section class="stack">
         <!-- Backup Section -->
         <div class="card">
@@ -17,10 +31,14 @@
 
                 <div class="status">
                     <span class="label">Last Backup:</span>
-                    <span class="value">2025-10-12 09:30</span>
+                    <span class="value">@ViewBag.LastBackup</span>
                 </div>
 
-                <button class="btn primary full">Backup Now</button>
+                <form method="post" asp-action="BackupNow">
+                    <button class="btn primary full" type="submit">
+                        Backup Now
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -28,20 +46,37 @@
         <div class="card">
             <div class="card-h">Restore</div>
             <div class="card-b">
-                <p class="muted">Restore from a previous backup file. Ensure the file is verified before applying.</p>
+                <p class="muted">Select a backup entry below to restore the database.</p>
 
-                <label class="field">
-                    <span>Select Backup File</span>
-                    <input type="file" />
-                </label>
-
-                <div class="status muted small">No file selected.</div>
-
-                <div class="actions">
-                    <button class="btn">Validate</button>
-                    <button class="btn danger">Restore</button>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Restore</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.Backups)
+                        {
+                            <tr>
+                                <td>@item.FileName</td>
+                                <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@item.BackupStatus</td>
+                                <td>
+                                    <form method="post" asp-action="Restore">
+                                        <input type="hidden" name="backupId" value="@item.BackupId" />
+                                        <button class="btn danger small">Restore</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
+
+
     </section>
 </div>

@@ -133,7 +133,17 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                         return Page();
                     }
 
-                    _logger.LogInformation("User logged in.");
+                    // _logger.LogInformation("User logged in."); OLD CODE
+                    // NEW CODE LOG LOGIN EVENT
+                    _context.Logs.Add(new Log
+                    {
+                        UserId = profile?.UserId,
+                        ActionType = "Login",
+                        Description = $"User {Input.Email} logged in.",
+                        Timestamp = DateTime.Now
+                    });
+
+                    await _context.SaveChangesAsync();
 
                     // Correct redirect for MVC Controllers
                     return RedirectToAction("Index", "AdminDashboard");

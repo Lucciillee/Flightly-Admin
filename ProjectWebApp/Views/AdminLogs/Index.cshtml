@@ -9,96 +9,120 @@
 
 <div class="content">
 
-    <!-- Logs Header & Actions -->
     <div class="card">
         <div class="card-h flex-between">
             <span>System Logs</span>
+
             <div class="actions">
                 <a href="/AdminLogs" class="btn outline">Refresh</a>
-                <button class="btn outline">Export CSV</button>
+                <a href="/AdminLogs/ExportCsv" class="btn outline">Export CSV</a>
             </div>
         </div>
 
         <div class="card-b">
 
-            <!-- 🔍 Search + Filter -->
+            <!-- Search + Filter -->
             <div class="search-bar left">
-                <input type="text" id="logSearch" placeholder="Search by email or action..." />
+                <form method="get" asp-action="Index" class="flex">
 
-                <select id="actionFilter">
-                    <option value="">All Actions</option>
-                    <option value="CREATE">Create</option>
-                    <option value="UPDATE">Update</option>
-                    <option value="DELETE">Delete</option>
-                    <option value="EXPORT">Export</option>
-                </select>
+                    <input type="text"
+                           name="search"
+                           placeholder="Search…"
+                           value="@Context.Request.Query["search"]" />
 
-                <button class="btn primary" onclick="filterLogs()">Filter</button>
+                    <select name="actionType">
+                        @{
+                            string selectedType = Context.Request.Query["actionType"];
+                            string[] actions = new[]
+                            {
+                        "",
+                        "Login",
+                        "Resend Email",
+                        "Refund",
+                        "Cancel Booking",
+                        "Report Generated",
+                        "Backup",
+                        "Backup Failed",
+                        "Restore",
+                        "Restore Failed",
+                        "Logs Exported"
+                        };
+                        }
+
+                        @foreach (var action in actions)
+                        {
+                            var isSelected = string.Equals(selectedType, action, StringComparison.OrdinalIgnoreCase);
+
+                            if (isSelected)
+                            {
+                                <option value="@action" selected="selected">
+                                    @(string.IsNullOrEmpty(action) ? "All Actions" : action)
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@action">
+                                    @(string.IsNullOrEmpty(action) ? "All Actions" : action)
+                                </option>
+                            }
+                        }
+                    </select>
+
+
+                    <button class="btn primary" type="submit">Filter</button>
+                </form>
             </div>
 
             <!-- Logs Table -->
             <div class="scroll">
-                <table class="table" id="logsTable">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>User Email</th>
                             <th>Action</th>
+                            <th>Description</th>
                             <th>Timestamp</th>
                         </tr>
                     </thead>
+
                     <tbody>
+                        @foreach (var log in Model)
+                        {
+                            string action = log.ActionType ?? "";
+
+                            string badgeClass = action switch
+                            {
+                                "Login" => "blue",
+                                "Resend Email" => "orange",
+                                "Refund" => "green",
+                                "Cancel Booking" => "red",
+                                "Report Generated" => "purple",
+                                "Backup" => "teal",
+                                "Backup Failed" => "dark-red",
+                                "Restore" => "yellow",
+                                "Restore Failed" => "dark-red",
+                                "Logs Exported" => "indigo",
+                                _ => "gray"
+                            };
                         <tr>
-                            <td>1</td>
-                            <td>admin@flightly.com</td>
-                            <td><span class="badge blue">CREATE</span></td>
-                            <td>2025-10-31 14:22</td>
+                            <td>@log.LogId</td>
+                            <td>@log.User?.Email</td>
+
+                            <td>
+                                <span class="badge @badgeClass">@action</span>
+                            </td>
+
+                            <td>@log.Description</td>
+
+                            <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>ops@flightly.com</td>
-                            <td><span class="badge red">DELETE</span></td>
-                            <td>2025-10-30 18:05</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>root@flightly.com</td>
-                            <td><span class="badge green">UPDATE</span></td>
-                            <td>2025-10-29 09:41</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>support@flightly.com</td>
-                            <td><span class="badge orange">EXPORT</span></td>
-                            <td>2025-10-28 13:00</td>
-                        </tr>
+                        }
                     </tbody>
                 </table>
             </div>
 
         </div>
     </div>
+
 </div>
-
-@section Scripts {
-    <script>
-        const searchInput = document.getElementById('logSearch');
-        const filterSelect = document.getElementById('actionFilter');
-        const rows = document.querySelectorAll('#logsTable tbody tr');
-
-        function filterLogs() {
-            const search = searchInput.value.toLowerCase();
-            const action = filterSelect.value.toLowerCase();
-
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                const matchesSearch = text.includes(search);
-                const matchesAction = !action || text.includes(action);
-                row.style.display = matchesSearch && matchesAction ? '' : 'none';
-            });
-        }
-
-        searchInput.addEventListener('keyup', filterLogs);
-        filterSelect.addEventListener('change', filterLogs);
-    </script>
-}
