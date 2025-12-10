@@ -40,9 +40,11 @@ namespace ProjectWebApp.Controllers
                     : $"{b.User.FirstName} {b.User.LastName}",
 
                 Email = b.GuestId != null ? b.Guest.Email : b.User.Email,
+                IsRegisteredUser = b.UserId != null,//NEW
+                AccountEmail = b.UserId != null ? b.User.Email : null,   // NEW
 
                 // Booked by (account holder)
-                
+
                 PaymentStatus = b.Payment.PaymentStatus.StatusName,
                 PaymentMethod = b.Payment.PaymentMethod.MethodName,
                 TotalAmount = b.TotalAmount,

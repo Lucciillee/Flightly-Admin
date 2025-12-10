@@ -9,7 +9,10 @@
         public string Email { get; set; }
 
         // Booker info (new)
-      
+
+        public bool IsRegisteredUser { get; set; }
+        public string AccountEmail { get; set; }  // Email of logged-in user who made the booking
+
 
 
         // Payment

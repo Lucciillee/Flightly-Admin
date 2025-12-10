@@ -93,7 +93,7 @@ namespace ProjectWebApp.Model
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Announcements)
+                    .WithMany(p => p.AnnouncementUsers)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Announcements_UserProfile");
             });

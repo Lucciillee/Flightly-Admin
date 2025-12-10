@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjectWebApp.ViewModels.AnnouncementVM
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Send Announcements";
 }
@@ -11,11 +13,22 @@
 <div class="top-bar">
     <div class="notif-stat">
         <span class="label">Total Announcements Sent:</span>
-        <span class="count">154</span>
+        <span class="count">@Model.TotalAnnouncements</span>
     </div>
 </div>
 
 <div class="content">
+
+    <!-- Success / Error Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert error">@TempData["Error"]</div>
+    }
+
     <!-- Main Content -->
     <section class="grid2">
 
@@ -23,18 +36,17 @@
         <div class="card">
             <div class="card-h">Create Announcements</div>
             <div class="card-b">
-                <form class="grid1">
+                <form class="grid1" method="post" asp-action="Send">
+
                     <label class="field">
                         <span>Title</span>
-                        <input type="text" placeholder="New Feature Announcement" />
+                        <input type="text" asp-for="Title" placeholder="New Feature Announcement" />
                     </label>
 
                     <label class="field">
                         <span>Message</span>
-                        <textarea rows="4" placeholder="Write your Announcement here..."></textarea>
+                        <textarea rows="4" asp-for="Message" placeholder="Write your Announcement here..."></textarea>
                     </label>
-
-                   
 
                     <div class="actions">
                         <button type="reset" class="btn">Reset</button>
@@ -53,29 +65,29 @@
                         <tr>
                             <th>Title</th>
                             <th>Message</th>
-                            
                             <th>Sent On</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Welcome to Flightly</td>
-                            <td>Thanks for joining! Explore exclusive flight deals.</td>
-                            
-                            <td>2025-10-15</td>
-                        </tr>
-                        <tr>
-                            <td>Maintenance Alert</td>
-                            <td>System downtime scheduled for Oct 20, 3–4 AM.</td>
-                            
-                            <td>2025-10-14</td>
-                        </tr>
-                        <tr>
-                            <td>Exclusive Discount</td>
-                            <td>Get 10% off flights to Dubai this week!</td>
-                            
-                            <td>2025-10-13</td>
-                        </tr>
+                        @if (Model.RecentAnnouncements != null && Model.RecentAnnouncements.Any())
+                        {
+                            foreach (var item in Model.RecentAnnouncements)
+                            {
+                                <tr>
+                                    <td>@item.Title</td>
+                                    <td>@item.Message</td>
+                                    <td>@item.CreatedAt.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" style="text-align:center; padding:20px; color:#888;">
+                                    No announcements found.
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

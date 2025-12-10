@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjectWebApp.ViewModels.ReportVM
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Reports";
 }
@@ -9,34 +11,44 @@
 
 <div class="content">
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert error">@TempData["Error"]</div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert success">@TempData["Success"]</div>
+    }
+
     <!-- Export Reports -->
     <div class="card">
         <div class="card-h">Export Reports</div>
         <div class="card-b">
-            <form class="grid3">
+            <form asp-action="Generate" method="post" class="grid3">
+
                 <label class="field">
                     <span>Report Type</span>
-                    <select>
-                        <option>Bookings</option>
-                        <option>Revenue</option>
-                        <option>Flight Occupancy</option>
+                    <select asp-for="ReportTypeId"
+                            asp-items="@(new SelectList(Model.ReportTypes, "ReportTypeId", "TypeName"))">
+                        <option value="">-- Select Report Type --</option>
                     </select>
                 </label>
 
                 <label class="field">
                     <span>Date From</span>
-                    <input type="date" />
+                    <input asp-for="DateFrom" type="date" />
                 </label>
 
                 <label class="field">
                     <span>Date To</span>
-                    <input type="date" />
+                    <input asp-for="DateTo" type="date" />
                 </label>
 
                 <div class="actions">
-                    <button type="button" class="btn">Preview</button>
-                    <button type="submit" class="btn primary">Export CSV</button>
-                    <button type="button" class="btn outline">Export Excel</button>
+                    <button type="submit" name="action" value="preview" class="btn primary">Preview</button>
+                    <button type="submit" name="action" value="csv" class="btn">Export CSV</button>
+                    <button type="submit" name="action" value="excel" class="btn outline">Export Excel</button>
                 </div>
             </form>
         </div>
@@ -46,52 +58,151 @@
     <div class="card preview-card">
         <div class="card-h">Report Preview</div>
         <div class="card-b">
-            <p class="muted">
-                Select a report type and date range, then click <strong>Preview</strong> to visualize results here.
-            </p>
-            <div class="chart-wrapper">
-                <canvas id="reportChart"></canvas>
-            </div>
+
+            @if (string.IsNullOrEmpty(Model.SelectedReportCode))
+            {
+                <p class="muted">
+                    Select a report type and date range, then click <strong>Preview</strong> to visualize results here.
+                </p>
+            }
+            else if (Model.SelectedReportCode == "TIME_RANGE" && Model.BookingRows != null)
+            {
+                <p class="muted">
+                    Showing @Model.BookingRows.Count booking(s) in the selected range.
+                </p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Booking #</th>
+                            <th>Date</th>
+                            <th>Passenger</th>
+                            <th>Flight</th>
+                            <th>Route</th>
+                            <th>Status</th>
+                            <th>Total (BHD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.BookingRows)
+                        {
+                            <tr>
+                                <td>@r.BookingId</td>
+                                <td>@r.BookingDate.ToString("yyyy-MM-dd")</td>
+                                <td>@r.PassengerName</td>
+                                <td>@r.FlightNumber</td>
+                                <td>@r.Route</td>
+                                <td>@r.Status</td>
+                                <td>@r.TotalAmount.ToString("0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else if (Model.SelectedReportCode == "AIRLINE" && Model.AirlineRows != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Airline</th>
+                            <th>Code</th>
+                            <th>Flights</th>
+                            <th>Total Bookings</th>
+                            <th>Total Revenue (BHD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.AirlineRows)
+                        {
+                            <tr>
+                                <td>@r.AirlineName</td>
+                                <td>@r.AirlineCode</td>
+                                <td>@r.FlightCount</td>
+                                <td>@r.TotalBookings</td>
+                                <td>@r.TotalRevenue.ToString("0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else if (Model.SelectedReportCode == "ORIGIN" && Model.OriginRows != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Origin Airport</th>
+                            <th>Code</th>
+                            <th>Total Bookings</th>
+                            <th>Total Revenue (BHD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.OriginRows)
+                        {
+                            <tr>
+                                <td>@r.AirportName</td>
+                                <td>@r.AirportCode</td>
+                                <td>@r.TotalBookings</td>
+                                <td>@r.TotalRevenue.ToString("0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else if (Model.SelectedReportCode == "DESTINATION" && Model.DestinationRows != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Destination Airport</th>
+                            <th>Code</th>
+                            <th>Total Bookings</th>
+                            <th>Total Revenue (BHD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.DestinationRows)
+                        {
+                            <tr>
+                                <td>@r.AirportName</td>
+                                <td>@r.AirportCode</td>
+                                <td>@r.TotalBookings</td>
+                                <td>@r.TotalRevenue.ToString("0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else if (Model.SelectedReportCode == "CUSTOMER" && Model.CustomerRows != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Total Bookings</th>
+                            <th>Total Revenue (BHD)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.CustomerRows)
+                        {
+                            <tr>
+                                <td>@r.CustomerName</td>
+                                <td>@r.Email</td>
+                                <td>@r.TotalBookings</td>
+                                <td>@r.TotalRevenue.ToString("0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="muted">No data found for this report.</p>
+            }
+
         </div>
     </div>
 
 </div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('reportChart');
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-                    datasets: [{
-                        label: 'Bookings',
-                        data: [45, 60, 40, 80, 55],
-                        backgroundColor: '#0d8bf2',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false, // 👈 lets CSS control chart height
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: '#6b7280' },
-                            grid: { color: '#f1f5f9' }
-                        },
-                        x: {
-                            ticks: { color: '#6b7280' },
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-    </script>
-}

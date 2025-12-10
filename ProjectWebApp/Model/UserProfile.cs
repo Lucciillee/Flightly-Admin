@@ -13,7 +13,8 @@ namespace ProjectWebApp.Model
         public UserProfile()
         {
             Airlines = new HashSet<Airline>();
-            Announcements = new HashSet<Announcement>();
+            AnnouncementCreatedByNavigations = new HashSet<Announcement>();
+            AnnouncementUsers = new HashSet<Announcement>();
             BackupHistories = new HashSet<BackupHistory>();
             Bookings = new HashSet<Booking>();
             FeaturedDestinations = new HashSet<FeaturedDestination>();
@@ -52,8 +53,10 @@ namespace ProjectWebApp.Model
         public virtual Role Role { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<Airline> Airlines { get; set; }
+        [InverseProperty("CreatedByNavigation")]
+        public virtual ICollection<Announcement> AnnouncementCreatedByNavigations { get; set; }
         [InverseProperty("User")]
-        public virtual ICollection<Announcement> Announcements { get; set; }
+        public virtual ICollection<Announcement> AnnouncementUsers { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<BackupHistory> BackupHistories { get; set; }
         [InverseProperty("User")]

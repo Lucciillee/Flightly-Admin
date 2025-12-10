@@ -44,29 +44,63 @@
                         <div class="muted small">Passenger</div>
                         <div class="big">@Model.UserName</div>
                     </div>
-
+                   
                    
                 </div>
 
-                <div class="row" style="margin-top:10px;">
+                <div class="row"
+                     style="
+        margin-top:10px;
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:30px;
+">
+                    <!-- LEFT COLUMN -->
                     <div>
                         <div class="muted small">Email</div>
                         <div>@Model.Email</div>
+
+                        <div style="margin-top:15px;">
+                            <div class="muted small">Payment</div>
+                            <div>
+                                <span class="badge ok">@Model.PaymentStatus</span>
+                                • @Model.PaymentMethod
+                            </div>
+                        </div>
+
+                        @if (Model.IsRegisteredUser)
+                        {
+                            <div style="margin-top:15px;">
+                                <div class="muted small">Booked By (Account Email)</div>
+                                <div>@Model.AccountEmail</div>
+                            </div>
+                        }
                     </div>
 
+                    <!-- RIGHT COLUMN -->
                     <div>
-                        <div class="muted small">Payment</div>
-                        <div>
-                            <span class="badge ok">@Model.PaymentStatus</span>
-                            • @Model.PaymentMethod
+                        <div class="muted small">Account Type</div>
+                        @if (Model.IsRegisteredUser)
+                        {
+                            <span class="badge ok">Registered User</span>
+                        }
+                        else
+                        {
+                            <span class="badge warn">Guest Booking</span>
+                        }
+
+                        <div style="margin-top:15px;">
+                            <div class="muted small">Total</div>
+                            <div class="big">BHD @Model.TotalAmount.ToString("0.00")</div>
                         </div>
                     </div>
-
-                    <div>
-                        <div class="muted small">Total</div>
-                        <div class="big">BHD @Model.TotalAmount.ToString("0.00")</div>
-                    </div>
                 </div>
+
+
+
+
+
+
 
 
 

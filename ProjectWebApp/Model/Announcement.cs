@@ -18,9 +18,13 @@ namespace ProjectWebApp.Model
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
         public int? UserId { get; set; }
+        public int? CreatedBy { get; set; }
 
+        [ForeignKey("CreatedBy")]
+        [InverseProperty("AnnouncementCreatedByNavigations")]
+        public virtual UserProfile CreatedByNavigation { get; set; }
         [ForeignKey("UserId")]
-        [InverseProperty("Announcements")]
+        [InverseProperty("AnnouncementUsers")]
         public virtual UserProfile User { get; set; }
     }
 }
