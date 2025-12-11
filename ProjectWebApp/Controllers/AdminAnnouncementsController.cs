@@ -38,7 +38,7 @@ namespace ProjectWebApp.Controllers
         }
 
         // POST: SEND ANNOUNCEMENT
-        [HttpPost]
+       
         [HttpPost]
         public async Task<IActionResult> Send(AnnouncementVM model)
         {
