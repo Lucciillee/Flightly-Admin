@@ -30,5 +30,13 @@
 
         // Booking
         public string Status { get; set; }
+
+        // Return Flight (optional)
+        public bool HasReturnFlight { get; set; }
+        public string? ReturnFlightNumber { get; set; }
+        public string? ReturnOriginCode { get; set; }
+        public string? ReturnDestinationCode { get; set; }
+        public DateTime? ReturnDepartureTime { get; set; }
+        public DateTime? ReturnArrivalTime { get; set; }
     }
 }

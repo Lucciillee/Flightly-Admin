@@ -1,0 +1,62 @@
+﻿@model ProjectWebApp.Model.UserProfile
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-users.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card">
+
+        <div class="card-h">
+            User Details
+        </div>
+
+        <div class="card-b">
+
+            <div class="detail-row">
+                <label><strong>Full Name:</strong></label>
+                <span>@Model.FirstName @Model.LastName</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Email:</strong></label>
+                <span>@Model.Email</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Phone:</strong></label>
+                <span>@(Model.PhoneNumber ?? "—")</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Loyalty Points:</strong></label>
+                <span>@(Model.LoyaltyPoints ?? 0)</span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Status:</strong></label>
+                <span class="badge @(Model.IsDeleted ? "red" : "green")">
+                    @(Model.IsDeleted ? "Blocked" : "Active")
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <label><strong>Joined:</strong></label>
+                <span>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</span>
+            </div>
+
+            <div style="margin-top:20px;">
+                <a href="/AdminUsers" class="btn">Back</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

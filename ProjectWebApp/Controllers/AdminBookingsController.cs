@@ -21,6 +21,8 @@ namespace ProjectWebApp.Controllers
                 .Include(b => b.Guest)
                 .Include(b => b.Flight).ThenInclude(f => f.OriginAirport)
                 .Include(b => b.Flight).ThenInclude(f => f.DestinationAirport)
+                .Include(b => b.ReturnFlight).ThenInclude(f => f.OriginAirport)
+                .Include(b => b.ReturnFlight).ThenInclude(f => f.DestinationAirport)
                 .Include(b => b.BookingStatus)
                 .AsQueryable();
 
@@ -62,7 +64,10 @@ namespace ProjectWebApp.Controllers
                         ? $"{b.Guest.FirstName} {b.Guest.LastName}"
                         : $"{b.User.FirstName} {b.User.LastName}",
 
-                    FlightInfo = $"{b.Flight.OriginAirport.Code}→{b.Flight.DestinationAirport.Code} ({b.Flight.FlightNumber})",
+                    FlightInfo = b.ReturnFlightId == null
+                    ? $"{b.Flight.OriginAirport.Code}→{b.Flight.DestinationAirport.Code} ({b.Flight.FlightNumber})"
+                    : $"{b.Flight.OriginAirport.Code}→{b.Flight.DestinationAirport.Code} ({b.Flight.FlightNumber}) ↔ " +
+                      $"{b.ReturnFlight.OriginAirport.Code}→{b.ReturnFlight.DestinationAirport.Code} ({b.ReturnFlight.FlightNumber})",
                     BookingDate = b.BookingDate,
                     Status = b.BookingStatus.StatusName,
                     TotalAmount = b.TotalAmount

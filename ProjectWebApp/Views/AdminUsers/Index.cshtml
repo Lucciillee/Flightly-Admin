@@ -41,6 +41,10 @@
                             <td>@user.CreatedAt.ToString("yyyy-MM-dd")</td>
 
                             <td class="right">
+                                <a href="/AdminUsers/Details/@user.UserId" class="btn small outline">
+                                    View Details
+                                </a>
+
                                 @if (user.IsDeleted)
                                 {
                                     <!-- User is blocked -->

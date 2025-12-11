@@ -82,5 +82,31 @@ namespace ProjectWebApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // -----------------------------
+        // USER DETAILS
+        // -----------------------------
+        public IActionResult Details(int id)
+        {
+            var user = _context.UserProfiles
+                .Include(u => u.Role)
+                .FirstOrDefault(u => u.UserId == id);
+
+            if (user == null)
+                return NotFound();
+
+            // Optional: log view details
+            _context.Logs.Add(new Log
+            {
+                UserId = null, // admin id optional
+                ActionType = "Viewed User Details",
+                Description = $"Viewed details for user {user.Email}",
+                Timestamp = DateTime.Now
+            });
+
+            _context.SaveChanges();
+
+            return View(user);
+        }
     }
 }

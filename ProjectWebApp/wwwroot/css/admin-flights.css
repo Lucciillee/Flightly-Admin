@@ -171,4 +171,14 @@ select {
     margin-bottom: -10px; /* brings it closer to the card */
     margin-top: -10px;
 }
+.error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
 
+.validation-summary {
+    color: #dc2626;
+    margin-bottom: 12px;
+    font-weight: 500;
+}

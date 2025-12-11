@@ -54,7 +54,7 @@
     gap: 8px;
 }
 
-    .field span {
+    .field > span:first-child {
         font-weight: 500;
         color: var(--muted);
     }
@@ -163,5 +163,17 @@ select {
     justify-content: flex-end;
     gap: 10px;
     margin-bottom: -10px;
+}
+.error,
+.field-validation-error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.validation-summary {
+    color: #dc2626;
+    margin-bottom: 12px;
+    font-weight: 500;
 }
 

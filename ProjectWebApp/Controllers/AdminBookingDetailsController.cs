@@ -8,10 +8,11 @@ namespace ProjectWebApp.Controllers
     public class AdminBookingDetailsController : Controller
     {
         private readonly FlightlyDBContext _context;
-
+        
         public AdminBookingDetailsController(FlightlyDBContext context)
         {
             _context = context;
+            
         }
 
         public async Task<IActionResult> Index(int id)
@@ -23,6 +24,8 @@ namespace ProjectWebApp.Controllers
                 .Include(b => b.Payment).ThenInclude(p => p.PaymentMethod)
                 .Include(b => b.Flight).ThenInclude(f => f.OriginAirport)
                 .Include(b => b.Flight).ThenInclude(f => f.DestinationAirport)
+                .Include(b => b.ReturnFlight).ThenInclude(f => f.OriginAirport)
+                .Include(b => b.ReturnFlight).ThenInclude(f => f.DestinationAirport)
                 .Include(b => b.BookingStatus)
                 .Include(b => b.ClassType)
                 .FirstOrDefaultAsync(b => b.BookingId == id);
@@ -55,7 +58,16 @@ namespace ProjectWebApp.Controllers
                 DepartureTime = b.Flight.DepartureTime,
                 ArrivalTime = b.Flight.ArrivalTime,
                 CabinClass = b.ClassType.ClassName,
-                Status = b.BookingStatus.StatusName
+                Status = b.BookingStatus.StatusName,
+
+                HasReturnFlight = b.ReturnFlightId != null,
+
+                ReturnFlightNumber = b.ReturnFlightId != null ? b.ReturnFlight.FlightNumber : null,
+                ReturnOriginCode = b.ReturnFlightId != null ? b.ReturnFlight.OriginAirport.Code : null,
+                ReturnDestinationCode = b.ReturnFlightId != null ? b.ReturnFlight.DestinationAirport.Code : null,
+                ReturnDepartureTime = b.ReturnFlightId != null ? b.ReturnFlight.DepartureTime : null,
+                ReturnArrivalTime = b.ReturnFlightId != null ? b.ReturnFlight.ArrivalTime : null,
+
             };
 
             return View(vm);

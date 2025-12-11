@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using ProjectWebApp.ViewModels;
+using System.Security.Claims;
+
 
 namespace ProjectWebApp.Controllers
 {
@@ -62,6 +64,19 @@ namespace ProjectWebApp.Controllers
                 return View(model);
             }
 
+            // ✅ Get logged-in admin
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            int? adminId = null;
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                var admin = await _context.UserProfiles
+                    .FirstOrDefaultAsync(u => u.Email == email);
+
+                if (admin != null)
+                    adminId = admin.UserId;
+            }
             var flight = new Flight
             {
                 AirlineId = model.AirlineId,
@@ -73,6 +88,7 @@ namespace ProjectWebApp.Controllers
                 ArrivalTime = model.ArrivalTime,
                 BasePrice = model.BasePrice,
                 StatusId = model.StatusId,
+                UserId = adminId,
                 CreatedAt = DateTime.Now
             };
 
@@ -125,11 +141,25 @@ namespace ProjectWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditFlightVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                // Reload allowed statuses
+                model.Statuses = _context.FlightStatuses
+                    .Where(s => s.StatusName != "Cancelled")
+                    .Select(s => new SelectListItem
+                    {
+                        Text = s.StatusName,
+                        Value = s.StatusId.ToString()
+                    })
+                    .ToList();
+
+                return View(model);
+            }
+
             var flight = await _context.Flights.FindAsync(model.FlightId);
             if (flight == null)
                 return NotFound();
 
-            // Update allowed fields only
             flight.FlightNumber = model.FlightNumber;
             flight.Aircraft = model.Aircraft;
             flight.DepartureTime = model.DepartureTime;
@@ -141,6 +171,7 @@ namespace ProjectWebApp.Controllers
 
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Cancel(int id)

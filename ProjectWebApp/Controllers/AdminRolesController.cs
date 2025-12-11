@@ -17,12 +17,15 @@ namespace ProjectWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee(CreateEmployeeVM model)
+        public async Task<IActionResult> CreateEmployee(
+     [Bind(Prefix = "CreateEmployee")] CreateEmployeeVM model)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Index");
+            {
+                var vm = await BuildIndexVM(model);
+                return View("Index", vm);
+            }
 
-            // 1️⃣ Create identity user
             var user = new IdentityUser
             {
                 Email = model.Email,
@@ -34,14 +37,13 @@ namespace ProjectWebApp.Controllers
 
             if (!result.Succeeded)
             {
-                TempData["Error"] = string.Join("<br>", result.Errors.Select(e => e.Description));
-                return RedirectToAction("Index");
+                ModelState.AddModelError("", string.Join(" ", result.Errors.Select(e => e.Description)));
+                var vm = await BuildIndexVM(model);
+                return View("Index", vm);
             }
 
-            // 2️⃣ Assign Identity Role
             await _userManager.AddToRoleAsync(user, model.Role);
 
-            // 3️⃣ Save to FlightlyDB UserProfiles
             var profile = new UserProfile
             {
                 IdentityUserId = user.Id,
@@ -49,10 +51,9 @@ namespace ProjectWebApp.Controllers
                 LastName = model.LastName,
                 Email = model.Email,
                 RoleId = model.Role == "Admin" ? 1 : 2,
-                CreatedAt = DateTime.Now,  // REQUIRED!
-                IsDeleted = false          // Ensures active account
+                CreatedAt = DateTime.Now,
+                IsDeleted = false
             };
-
 
             _context.UserProfiles.Add(profile);
             await _context.SaveChangesAsync();
@@ -61,6 +62,20 @@ namespace ProjectWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        private async Task<List<AdminUserVM>> GetUsers()
+        {
+            return await _context.UserProfiles
+                .Where(u => u.RoleId == 1 || u.RoleId == 2)
+                .Select(u => new AdminUserVM
+                {
+                    IdentityUserId = u.IdentityUserId,
+                    FullName = u.FirstName + " " + u.LastName,
+                    Email = u.Email,
+                    Role = u.RoleId == 1 ? "Admin" : "Sub-Admin",
+                    IsDeleted = u.IsDeleted
+                })
+                .ToListAsync();
+        }
         public async Task<IActionResult> DeleteEmployee(string id)
         {
             var profile = _context.UserProfiles.FirstOrDefault(x => x.IdentityUserId == id);
@@ -98,21 +113,18 @@ namespace ProjectWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        private async Task<AdminRolesIndexVM> BuildIndexVM(CreateEmployeeVM? form = null)
+        {
+            return new AdminRolesIndexVM
+            {
+                CreateEmployee = form ?? new CreateEmployeeVM(),
+                Users = await GetUsers()
+            };
+        }
         public async Task<IActionResult> Index()
         {
-            var users = await _context.UserProfiles
-                .Where(u => u.RoleId == 1 || u.RoleId == 2) // 1 = Admin, 2 = Sub-Admin
-                .Select(u => new AdminUserVM
-                {
-                    IdentityUserId = u.IdentityUserId,
-                    FullName = u.FirstName + " " + u.LastName,
-                    Email = u.Email,
-                    Role = u.RoleId == 1 ? "Admin" : "Sub-Admin",
-                    IsDeleted = u.IsDeleted
-                })
-                .ToListAsync();
-
-            return View(users);
+            var vm = await BuildIndexVM();
+            return View(vm);
         }
 
     }

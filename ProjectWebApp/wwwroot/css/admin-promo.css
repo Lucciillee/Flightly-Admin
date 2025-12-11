@@ -180,3 +180,29 @@ textarea {
         padding: 20px;
     }
 }
+
+/*VALIDATION (CONSISTENT)
+========================= */
+
+.field-validation-error,
+.error {
+    color: #dc2626; /* red */
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.validation-summary-errors {
+    color: #dc2626;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .validation-summary-errors li {
+        list-style: disc;
+    }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using ProjectWebApp.Model.ViewModels;
+using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
@@ -62,7 +64,15 @@ namespace ProjectWebApp.Controllers
                 ViewBag.StatusList = new SelectList(allowedStatuses, "StatusId", "StatusName");
                 return View(model);
             }
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            int? userId = null;
 
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.UserProfiles.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                    userId = user.UserId;
+            }
             var promo = new PromoCode
             {
                 Code = model.Code.ToUpper(),
@@ -72,7 +82,8 @@ namespace ProjectWebApp.Controllers
                 UsageLimit = model.UsageLimit,
                 Notes = model.Notes,
                 StatusId = model.StatusId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                UserId = userId // ✅ THIS IS THE FIX
             };
 
             _context.PromoCodes.Add(promo);

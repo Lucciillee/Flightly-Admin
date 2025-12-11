@@ -10,38 +10,37 @@
         <div class="card-h">Add New Airline</div>
 
         <div class="card-b">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
             <form asp-action="Create" asp-controller="AdminAirlines" method="post" enctype="multipart/form-data" class="grid3">
 
                 <div class="field">
                     <span>Airline Name</span>
-                    <input type="text" name="AirlineName" required />
+                    <input asp-for="AirlineName" />
+
+                    <span asp-validation-for="AirlineName" class="error"></span>
                 </div>
 
                 <div class="field">
                     <span>Country</span>
-                    <select name="CountryId" required>
+                    <select asp-for="CountryId" asp-items="Model.Countries">
                         <option value="">Select Country</option>
-                        @foreach (var c in Model.Countries)
-                        {
-                            <option value="@c.Value">@c.Text</option>
-                        }
-
                     </select>
+                    <span asp-validation-for="CountryId" class="error"></span>
                 </div>
 
                 <div class="field">
                     <span>Code</span>
-                    <input type="text" name="Code" required />
+                    <input asp-for="Code" />
+                    <span asp-validation-for="Code" class="error"></span>
+
                 </div>
 
                 <div class="field">
                     <span>Status</span>
-                    <select name="StatusId" required>
-                        @foreach (var s in Model.Statuses)
-                        {
-                            <option value="@s.Value">@s.Text</option>
-                        }
+                    <select asp-for="StatusId" asp-items="Model.Statuses">
+                        <option value="">Select Status</option>
                     </select>
+                    <span asp-validation-for="StatusId" class="error"></span>
                 </div>
 
                 <div class="field">
@@ -62,4 +61,6 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/admin-airlines.css" asp-append-version="true" />
 }
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

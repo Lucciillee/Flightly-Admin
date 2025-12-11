@@ -130,7 +130,7 @@ namespace ProjectWebApp.Model
                     .HasConstraintName("FK_Bookings_ClassType");
 
                 entity.HasOne(d => d.Flight)
-                    .WithMany(p => p.Bookings)
+                    .WithMany(p => p.BookingFlights)
                     .HasForeignKey(d => d.FlightId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bookings__Flight__7B5B524B");
@@ -145,6 +145,11 @@ namespace ProjectWebApp.Model
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.PromoId)
                     .HasConstraintName("FK_Bookings_PromoCodes");
+
+                entity.HasOne(d => d.ReturnFlight)
+                    .WithMany(p => p.BookingReturnFlights)
+                    .HasForeignKey(d => d.ReturnFlightId)
+                    .HasConstraintName("FK_Bookings_ReturnFlight");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Bookings)

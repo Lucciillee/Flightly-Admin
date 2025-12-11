@@ -12,28 +12,43 @@
 
         <div class="card-b">
 
-            <form asp-action="Edit" asp-controller="AdminAirlines" method="post" enctype="multipart/form-data" class="grid3">
+            <!-- 🔴 VALIDATION SUMMARY -->
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <form asp-action="Edit"
+                  asp-controller="AdminAirlines"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="grid3">
 
                 <input type="hidden" asp-for="AirlineId" />
 
                 <div class="field">
                     <span>Airline Name</span>
-                    <input asp-for="AirlineName" required />
+                    <input asp-for="AirlineName" />
+                    <span asp-validation-for="AirlineName" class="error"></span>
                 </div>
 
                 <div class="field">
                     <span>Country</span>
-                    <select asp-for="CountryId" asp-items="Model.Countries" required></select>
+                    <select asp-for="CountryId" asp-items="Model.Countries">
+                        <option value="">Select Country</option>
+                    </select>
+                    <span asp-validation-for="CountryId" class="error"></span>
                 </div>
 
                 <div class="field">
                     <span>Code</span>
-                    <input asp-for="Code" required />
+                    <input asp-for="Code" />
+                    <span asp-validation-for="Code" class="error"></span>
                 </div>
 
                 <div class="field">
                     <span>Status</span>
-                    <select asp-for="StatusId" asp-items="Model.Statuses"></select>
+                    <select asp-for="StatusId" asp-items="Model.Statuses">
+                        <option value="">Select Status</option>
+                    </select>
+                    <span asp-validation-for="StatusId" class="error"></span>
                 </div>
 
                 <div class="field">
@@ -41,7 +56,9 @@
 
                     @if (!string.IsNullOrEmpty(Model.ExistingLogoUrl))
                     {
-                        <img src="@Model.ExistingLogoUrl" width="80" style="border-radius:5px; margin-bottom:10px;" />
+                        <img src="@Model.ExistingLogoUrl"
+                             width="80"
+                             style="border-radius:5px; margin-bottom:10px;" />
                     }
                     else
                     {
@@ -62,6 +79,7 @@
             </form>
 
         </div>
+
     </div>
 
 </section>

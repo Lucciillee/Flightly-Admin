@@ -11,7 +11,8 @@ namespace ProjectWebApp.Model
     {
         public Flight()
         {
-            Bookings = new HashSet<Booking>();
+            BookingFlights = new HashSet<Booking>();
+            BookingReturnFlights = new HashSet<Booking>();
         }
 
         [Key]
@@ -51,6 +52,8 @@ namespace ProjectWebApp.Model
         [InverseProperty("Flights")]
         public virtual UserProfile User { get; set; }
         [InverseProperty("Flight")]
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Booking> BookingFlights { get; set; }
+        [InverseProperty("ReturnFlight")]
+        public virtual ICollection<Booking> BookingReturnFlights { get; set; }
     }
 }

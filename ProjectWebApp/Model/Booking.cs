@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectWebApp.Model
 {
+    [Index("ReturnFlightId", Name = "IX_Bookings_ReturnFlightId")]
     public partial class Booking
     {
         public Booking()
@@ -27,6 +28,7 @@ namespace ProjectWebApp.Model
         public int? PromoId { get; set; }
         public int? GuestId { get; set; }
         public int ClassTypeId { get; set; }
+        public int? ReturnFlightId { get; set; }
 
         [ForeignKey("BookingStatusId")]
         [InverseProperty("Bookings")]
@@ -35,7 +37,7 @@ namespace ProjectWebApp.Model
         [InverseProperty("Bookings")]
         public virtual ClassType ClassType { get; set; }
         [ForeignKey("FlightId")]
-        [InverseProperty("Bookings")]
+        [InverseProperty("BookingFlights")]
         public virtual Flight Flight { get; set; }
         [ForeignKey("GuestId")]
         [InverseProperty("Bookings")]
@@ -46,6 +48,9 @@ namespace ProjectWebApp.Model
         [ForeignKey("PromoId")]
         [InverseProperty("Bookings")]
         public virtual PromoCode Promo { get; set; }
+        [ForeignKey("ReturnFlightId")]
+        [InverseProperty("BookingReturnFlights")]
+        public virtual Flight ReturnFlight { get; set; }
         [ForeignKey("UserId")]
         [InverseProperty("Bookings")]
         public virtual UserProfile User { get; set; }

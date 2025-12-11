@@ -18,6 +18,9 @@
 
         <div class="card-b">
 
+            <!-- 🔴 FORM-LEVEL VALIDATION SUMMARY -->
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
             <!-- CANCELLED WARNING -->
             @if (isCancelled)
             {
@@ -36,14 +39,14 @@
 
                 <label class="field">
                     <span>Flight No.</span>
-                    <input asp-for="FlightNumber" required disabled="@(isCancelled ? "disabled" : null)" />
-
+                    <input asp-for="FlightNumber" disabled="@(isCancelled ? "disabled" : null)" />
+                    <span asp-validation-for="FlightNumber" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Aircraft</span>
                     <input asp-for="Aircraft" disabled="@(isCancelled ? "disabled" : null)" />
-
+                    <span asp-validation-for="Aircraft" class="error"></span>
                 </label>
 
                 <label class="field">
@@ -58,23 +61,23 @@
 
                 <label class="field">
                     <span>Departure</span>
-                    <input asp-for="DepartureTime" type="datetime-local" required
+                    <input asp-for="DepartureTime" type="datetime-local"
                            disabled="@(isCancelled ? "disabled" : null)" />
-
+                    <span asp-validation-for="DepartureTime" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Arrival</span>
-                    <input asp-for="ArrivalTime" type="datetime-local" required
+                    <input asp-for="ArrivalTime" type="datetime-local"
                            disabled="@(isCancelled ? "disabled" : null)" />
-
+                    <span asp-validation-for="ArrivalTime" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Base Price</span>
-                    <input asp-for="BasePrice" type="number" step="0.01" required
+                    <input asp-for="BasePrice" type="number" step="0.01"
                            disabled="@(isCancelled ? "disabled" : null)" />
-
+                    <span asp-validation-for="BasePrice" class="error"></span>
                 </label>
 
                 <label class="field">
@@ -82,24 +85,24 @@
                     <select asp-for="StatusId" asp-items="Model.Statuses"
                             disabled="@(isCancelled ? "disabled" : null)">
                     </select>
-
+                    <span asp-validation-for="StatusId" class="error"></span>
                 </label>
 
                 <div class="actions">
                     <a href="/AdminFlights" class="btn">Cancel</a>
 
-                    <!-- Disable Save button if flight is cancelled -->
                     <button type="submit" class="btn primary"
                             disabled="@(isCancelled ? "disabled" : null)"
                             style="@(isCancelled ? "opacity:0.5; cursor:not-allowed;" : "")">
                         Save Changes
                     </button>
-
                 </div>
-
             </form>
-
         </div>
+
     </div>
 
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

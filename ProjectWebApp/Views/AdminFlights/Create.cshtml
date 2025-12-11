@@ -14,51 +14,72 @@
     <div class="card">
         <div class="card-h">Create Flight</div>
         <div class="card-b">
+
+            <!-- 🔴 FORM-LEVEL VALIDATION SUMMARY -->
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
             <form asp-action="Create" asp-controller="AdminFlights" method="post" class="grid3">
 
                 <label class="field">
                     <span>Airline</span>
-                    <select asp-for="AirlineId" asp-items="Model.Airlines"></select>
+                    <select asp-for="AirlineId" asp-items="Model.Airlines">
+                        <option value="">-- Select Airline --</option>
+                    </select>
+                    <span asp-validation-for="AirlineId" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Flight No.</span>
                     <input asp-for="FlightNumber" placeholder="GF 008" />
+                    <span asp-validation-for="FlightNumber" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Aircraft</span>
                     <input asp-for="Aircraft" placeholder="A320neo" />
+                    <span asp-validation-for="Aircraft" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Origin</span>
-                    <select asp-for="OriginAirportId" asp-items="Model.Airports"></select>
+                    <select asp-for="OriginAirportId" asp-items="Model.Airports">
+                        <option value="">-- Select Origin --</option>
+                    </select>
+                    <span asp-validation-for="OriginAirportId" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Destination</span>
-                    <select asp-for="DestinationAirportId" asp-items="Model.Airports"></select>
+                    <select asp-for="DestinationAirportId" asp-items="Model.Airports">
+                        <option value="">-- Select Destination --</option>
+                    </select>
+                    <span asp-validation-for="DestinationAirportId" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Departure</span>
                     <input asp-for="DepartureTime" type="datetime-local" />
+                    <span asp-validation-for="DepartureTime" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Arrival</span>
                     <input asp-for="ArrivalTime" type="datetime-local" />
+                    <span asp-validation-for="ArrivalTime" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Base Price</span>
                     <input asp-for="BasePrice" type="number" step="0.01" />
+                    <span asp-validation-for="BasePrice" class="error"></span>
                 </label>
 
                 <label class="field">
                     <span>Status</span>
-                    <select asp-for="StatusId" asp-items="Model.Statuses"></select>
+                    <select asp-for="StatusId" asp-items="Model.Statuses">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="StatusId" class="error"></span>
                 </label>
 
                 <div class="actions">

@@ -1,4 +1,4 @@
-﻿@model List<ProjectWebApp.ViewModels.AdminUserVM>
+﻿@model ProjectWebApp.ViewModels.AdminRolesIndexVM
 
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -18,43 +18,53 @@
         </div>
 
         <div class="card-b">
-            <form asp-action="CreateEmployee" asp-controller="AdminRoles" method="post" class="grid2 small-gap">
 
-                <label class="field">
-                    <span>First Name</span>
-                    <input type="text" name="FirstName" placeholder="e.g., Ahmed" required />
-                </label>
+            <!-- 🔴 FORM VALIDATION SUMMARY -->
+            <div asp-validation-summary="All" class="validation-summary"></div>
+            <form asp-action="CreateEmployee"
+                  asp-controller="AdminRoles"
+                  method="post"
+                  class="grid2 small-gap">
 
-                <label class="field">
-                    <span>Last Name</span>
-                    <input type="text" name="LastName" placeholder="e.g., Ali" required />
-                </label>
+                <div class="field">
+                    <span class="label">First Name</span>
+                    <input asp-for="CreateEmployee.FirstName" />
+                    <span asp-validation-for="CreateEmployee.FirstName" class="error"></span>
+                </div>
 
-                <label class="field">
-                    <span>Email</span>
-                    <input type="email" name="Email" placeholder="e.g., ahmed@domain.com" required />
-                </label>
+                <div class="field">
+                    <span class="label">Last Name</span>
+                    <input asp-for="CreateEmployee.LastName" />
+                    <span asp-validation-for="CreateEmployee.LastName" class="error"></span>
+                </div>
 
-                <label class="field">
-                    <span>Temporary Password</span>
-                    <input type="text" name="TempPassword" placeholder="At least 6 characters" required />
-                </label>
+                <div class="field">
+                    <span class="label">Email</span>
+                    <input asp-for="CreateEmployee.Email" />
+                    <span asp-validation-for="CreateEmployee.Email" class="error"></span>
+                </div>
 
-                <label class="field">
-                    <span>Role</span>
-                    <select name="Role">
+                <div class="field">
+                    <span class="label">Temporary Password</span>
+                    <input asp-for="CreateEmployee.TempPassword" />
+                    <span asp-validation-for="CreateEmployee.TempPassword" class="error"></span>
+                </div>
+
+                <div class="field">
+                    <span class="label">Role</span>
+                    <select asp-for="CreateEmployee.Role">
+                        <option value="">Select Role</option>
                         <option value="Admin">Admin</option>
                         <option value="Sub-Admin">Sub-Admin</option>
                     </select>
-                </label>
+                    <span asp-validation-for="CreateEmployee.Role" class="error"></span>
+                </div>
 
                 <div class="actions full-row">
                     <button class="btn primary">Create Account</button>
                 </div>
 
             </form>
-
-
         </div>
     </div>
 
@@ -64,12 +74,10 @@
         <div class="card-h">
 
             <div class="left-tools">
-                <!-- Search -->
                 <div class="search-bar">
                     <input type="text" id="adminSearch" placeholder="Search users..." />
                 </div>
 
-                <!-- Filter -->
                 <select id="roleFilter" class="filter-select">
                     <option value="">All Roles</option>
                     <option value="Admin">Admin</option>
@@ -82,7 +90,6 @@
             <button class="btn action-btn" onclick="location.reload()">🔄 Refresh</button>
 
         </div>
-
 
         <div class="card-b">
 
@@ -98,13 +105,15 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var user in Model)
+                    @foreach (var user in Model.Users)
                     {
                         <tr>
                             <td>@user.FullName</td>
                             <td>@user.Email</td>
                             <td>
-                                <span class="badge @(user.Role == "Admin" ? "ok" : "")">@user.Role</span>
+                                <span class="badge @(user.Role == "Admin" ? "ok" : "")">
+                                    @user.Role
+                                </span>
                             </td>
 
                             <td>
@@ -116,14 +125,20 @@
                             <td class="right">
                                 @if (!user.IsDeleted)
                                 {
-                                    <form asp-action="DeleteEmployee" asp-controller="AdminRoles" method="post" style="display:inline;">
+                                    <form asp-action="DeleteEmployee"
+                                          asp-controller="AdminRoles"
+                                          method="post"
+                                          style="display:inline;">
                                         <input type="hidden" name="id" value="@user.IdentityUserId" />
                                         <button class="btn small danger">Delete</button>
                                     </form>
                                 }
                                 else
                                 {
-                                    <form asp-action="RestoreEmployee" asp-controller="AdminRoles" method="post" style="display:inline;">
+                                    <form asp-action="RestoreEmployee"
+                                          asp-controller="AdminRoles"
+                                          method="post"
+                                          style="display:inline;">
                                         <input type="hidden" name="id" value="@user.IdentityUserId" />
                                         <button class="btn small">Restore</button>
                                     </form>
@@ -132,8 +147,6 @@
                         </tr>
                     }
                 </tbody>
-
-
             </table>
 
         </div>
@@ -142,38 +155,30 @@
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
         const searchInput = document.getElementById('adminSearch');
         const filterSelect = document.getElementById('roleFilter');
         const rows = document.querySelectorAll('#adminsTable tbody tr');
 
-                function filterTable()  {
+        function filterTable() {
             const text = searchInput.value.toLowerCase();
             const filter = filterSelect.value;
 
             rows.forEach(row => {
                 const rowText = row.textContent.toLowerCase();
-                const rowRole = row.children[2].textContent.trim();
-                const rowStatus = row.children[3].textContent.trim();
+                const role = row.children[2].textContent.trim();
+                const status = row.children[3].textContent.trim();
 
-                const matchesText = rowText.includes(text);
+                let matchesFilter =
+                    filter === "" ||
+                    role === filter ||
+                    (filter === "Active" && status === "Active") ||
+                    (filter === "Blocked" && status === "Blocked");
 
-                let matchesFilter = false;
-
-                if (filter === "" || filter === "All") {
-                    matchesFilter = true;
-                }
-                else if (filter === "Admin" || filter === "Sub-Admin") {
-                    matchesFilter = rowRole === filter;
-                }
-                else if (filter === "Active") {          
-                    matchesFilter = rowStatus === "Active";
-                  }   
-                else if (filter === "Blocked") {
-                    matchesFilter = rowStatus === "Blocked";
-                }
-
-                row.style.display = (matchesText && matchesFilter) ? "" : "none";
+                row.style.display =
+                    rowText.includes(text) && matchesFilter ? "" : "none";
             });
         }
 

@@ -15,7 +15,8 @@
             <div class="icon">🧾</div>
             <div class="text">
                 <div class="label">Total Bookings</div>
-                <div class="value">12,438</div>
+                <div class="value">@ViewBag.TotalBookings</div>
+
             </div>
         </div>
 
@@ -23,7 +24,7 @@
             <div class="icon">✈️</div>
             <div class="text">
                 <div class="label">Active Flights</div>
-                <div class="value">324</div>
+                <div class="value">@ViewBag.ActiveFlights</div>
             </div>
         </div>
 
@@ -31,7 +32,9 @@
             <div class="icon">💰</div>
             <div class="text">
                 <div class="label">Revenue (MTD)</div>
-                <div class="value">$842k</div>
+                <div class="value">
+                    BHD @ViewBag.RevenueMTD.ToString("0.00")
+                </div>
             </div>
         </div>
 
@@ -39,7 +42,8 @@
             <div class="icon">👥</div>
             <div class="text">
                 <div class="label">Registered Users</div>
-                <div class="value">58,120</div>
+                <div class="value">@ViewBag.RegisteredUsers</div>
+
             </div>
         </div>
     </div>
@@ -59,24 +63,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Rana A.</td>
-                            <td>⭐⭐⭐⭐⭐</td>
-                            <td>Loved the booking experience!</td>
-                            <td>2025-11-20</td>
-                        </tr>
-                        <tr>
-                            <td>Guest</td>
-                            <td>⭐⭐⭐</td>
-                            <td>It was ok but could be smoother.</td>
-                            <td>2025-11-19</td>
-                        </tr>
-                        <tr>
-                            <td>Ali M.</td>
-                            <td>⭐⭐⭐⭐</td>
-                            <td>Clean UI and fast response time.</td>
-                            <td>2025-11-18</td>
-                        </tr>
+                        @foreach (var r in ViewBag.RecentReviews)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@r.FullName</strong><br />
+                                    <small class="text-muted">@r.Email</small>
+                                </td>
+                                <td>
+                                    @{
+                                        var stars = new string('★', r.Rating);
+                                    }
+                                    @stars
+                                </td>
+                                <td>@r.Comment</td>
+                                <td>@r.Date.ToString("yyyy-MM-dd")</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -110,13 +113,34 @@
             <div class="card-h">Top Performing Airlines</div>
             <div class="card-b">
                 <table class="table">
-                    <thead><tr><th>Airline</th><th>Flights This Month</th><th>Average Load (%)</th><th>Revenue</th><th>Trend</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Airline</th>
+                            <th>Bookings This Month</th>
+                            <th>Revenue (BHD)</th>
+                            <th>Avg / Booking</th>
+                            <th>Revenue Share</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td>Gulf Air</td><td>142</td><td>91%</td><td>$1.2M</td><td><span class="badge ok">+8%</span></td></tr>
-                        <tr><td>Qatar Airways</td><td>128</td><td>88%</td><td>$1.05M</td><td><span class="badge ok">+5%</span></td></tr>
-                        <tr><td>Emirates</td><td>116</td><td>86%</td><td>$990K</td><td><span class="badge warn">+2%</span></td></tr>
-                        <tr><td>Saudia</td><td>104</td><td>79%</td><td>$850K</td><td><span class="badge bad">-3%</span></td></tr>
+                        @foreach (var a in ViewBag.TopAirlines)
+                        {
+                            <tr>
+                                <td>@a.Airline</td>
+                                <td>@a.BookingsThisMonth</td>
+                                <td>BHD @a.Revenue.ToString("0.00")</td>
+                                <td>
+                                    BHD @(a.BookingsThisMonth == 0
+                                    ? "0.00"
+                                    : (a.Revenue / a.BookingsThisMonth).ToString("0.00"))
+                                </td>
+                                <td>
+                                    @a.RevenueShare.ToString("0.0")%
+                                </td>
+                            </tr>
+                        }
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -135,70 +159,79 @@
         scales: { x: { grid: { display: false } }, y: { grid: { color: '#f3f4f6' } } }
     };
 
-    // Line Chart - Revenue
-    new Chart(document.getElementById('revenueChart'), {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Revenue ($K)',
-                data: [420, 560, 720, 690, 800, 940],
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37,99,235,0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: baseOpts
-    });
+      const revenueLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueLabels));
+      const revenueData   = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData));
+      const routeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesLabels));
+      const routeData   = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesData));
 
-    // Bar Chart - Users
-    new Chart(document.getElementById('userChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Users',
-                data: [1200, 1500, 1800, 2500, 3000, 3500],
-                backgroundColor: '#7c3aed',
-                borderRadius: 6
-            }]
-        },
-        options: baseOpts
-    });
+        // Line Chart - Revenue (REAL DATA)
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: revenueLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: revenueData,
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37,99,235,0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: baseOpts
+        });
+
+         // =====================
+        // USER GROWTH (REAL DATA)
+        // =====================
+        const userGrowthLabels = @Html.Raw(
+            System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthLabels)
+        );
+
+        const userGrowthData = @Html.Raw(
+            System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthData)
+        );
+
+        new Chart(document.getElementById('userChart'), {
+            type: 'bar',
+            data: {
+                labels: userGrowthLabels,
+                datasets: [{
+                    data: userGrowthData,
+                    backgroundColor: '#7c3aed',
+                    borderRadius: 6
+                }]
+            },
+            options: baseOpts
+        });
 
     // Doughnut - Top Routes
-    new Chart(document.getElementById('routesChart'), {
+     new Chart(document.getElementById('routesChart'), {
         type: 'doughnut',
         data: {
-            labels: ['BAH→DXB', 'BAH→DOH', 'BAH→RUH'],
+            labels: routeLabels,
             datasets: [{
-                data: [45, 30, 25],
-                backgroundColor: ['#2563eb', '#7c3aed', '#f97316'],
+                data: routeData,
+                backgroundColor: [
+                    '#2563eb',
+                    '#7c3aed',
+                    '#f97316',
+                    '#22c55e',
+                    '#ef4444'
+                ],
                 borderWidth: 0
             }]
         },
-            options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        cutout: '70%',
-        radius: '90%',
-        layout: {
-            padding: { bottom: 10 }
-        },
-        plugins: {
-            legend: {
-                position: 'bottom',
-                align: 'center',
-                labels: {
-                    boxWidth: 14,
-                    padding: 6,
-                    font: { size: 12 }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    position: 'bottom'
                 }
             }
         }
-    }
-
     });
 
       // Booking Status - Donut

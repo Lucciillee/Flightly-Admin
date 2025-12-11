@@ -109,7 +109,13 @@
                 <!-- Flight + Status -->
                 <div class="row">
                     <div>
-                        <div class="muted small">Flight</div>
+                        <div class="muted small">
+                            Outbound Flight
+                            @if (Model.HasReturnFlight)
+                            {
+                                <span class="badge info" style="margin-left:8px;">Round Trip</span>
+                            }
+                            </div>
                         <div class="big">
                             @Model.FlightNumber • @Model.OriginCode → @Model.DestinationCode
                         </div>
@@ -121,6 +127,9 @@
 
                         <div class="muted">@Model.CabinClass</div>
                     </div>
+
+
+
 
                     <div>
                         <div class="muted small">Status</div>
@@ -139,6 +148,25 @@
                         }
                     </div>
                 </div>
+
+                @if (Model.HasReturnFlight)
+                {
+                    <hr class="line" />
+
+                    <div class="row">
+                        <div>
+                            <div class="muted small">Return Flight</div>
+                            <div class="big">
+                                @Model.ReturnFlightNumber • @Model.ReturnOriginCode → @Model.ReturnDestinationCode
+                            </div>
+
+                            <div class="muted">
+                                Dep: @Model.ReturnDepartureTime?.ToString("yyyy-MM-dd HH:mm")
+                                • Arr: @Model.ReturnArrivalTime?.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                        </div>
+                    </div>
+                }
 
             </div>
         </div>

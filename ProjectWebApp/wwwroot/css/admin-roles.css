@@ -67,7 +67,8 @@
     gap: 6px;
 }
 
-    .field span {
+    /* Field labels only */
+    .field .label {
         font-size: 0.85rem;
         color: var(--muted);
     }
@@ -239,3 +240,41 @@ select {
         width: 100%;
     }
 }
+
+/* ===========================================
+   VALIDATION (CONSISTENT WITH AIRLINES / FLIGHTS)
+=========================================== */
+
+.field .error,
+.field-validation-error {
+    color: #dc2626; /* red */
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Validation summary (top of form) */
+.validation-summary,
+.validation-summary-errors {
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+    .validation-summary ul,
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .validation-summary li,
+    .validation-summary-errors li {
+        list-style: disc;
+    }
+/* FORCE validation text to match Flights / Airlines */
+.field span.field-validation-error,
+.field span.text-danger {
+    color: #dc2626;
+}
+
+
+
