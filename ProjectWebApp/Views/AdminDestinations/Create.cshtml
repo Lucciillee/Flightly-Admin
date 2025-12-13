@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Add Featured Destination";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-destinations.css" asp-append-version="true" />
+}
+
+<div class="content">
+
+    <div class="card" style="max-width:420px; margin:40px auto;">
+        <div class="card-h">
+            <span>Add Featured Destination</span>
+        </div>
+
+        <div class="card-b">
+
+            <form asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="featured-admin-card">
+
+                <!-- Image Preview Placeholder -->
+                <div class="image-wrapper preview-box">
+                    <span id="previewPlaceholder">Image Preview</span>
+
+                    <img id="previewImage"
+                         alt="Preview"
+                         style="display:none;" />
+                </div>
+
+
+                <!-- City Name -->
+                <input class="name-input"
+                       name="CityName"
+                       placeholder="Enter city name"
+                       required />
+
+                <!-- Upload -->
+                <label class="upload-btn">
+                    <input type="file"
+                           name="ImageFile"
+                           hidden
+                           required
+                           onchange="previewDestinationImage(this)" />
+                    Upload Image
+                </label>
+
+                <!-- Submit -->
+                <button type="submit"
+                        class="btn primary full">
+                    + Add Destination
+                </button>
+
+                <!-- Cancel -->
+                <a asp-action="Index"
+                   class="btn full">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    function previewDestinationImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.getElementById('previewImage');
+                const placeholder = document.getElementById('previewPlaceholder');
+
+                img.src = e.target.result;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

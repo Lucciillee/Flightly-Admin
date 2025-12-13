@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<ProjectWebApp.Model.FeaturedDestination>
+
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Manage Featured Destinations";
 }
@@ -9,88 +11,8 @@
 
 <div class="content">
 
-    <!-- ================= FEATURED DESTINATIONS CONTROL ================= -->
-    <div class="card">
-        <div class="card-h flex-between">
-            <span>Featured Destinations</span>
-            
-
-        </div>
-
-        <div class="card-b">
-            <div class="featured-admin-grid">
-
-                <!-- === 1. Paris === -->
-                <div class="featured-admin-card">
-                    <div class="image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?w=800" alt="Paris" />
-                    </div>
-                    <input class="name-input" value="Paris" />
-
-                    <label class="upload-btn">
-                        <input type="file" hidden />
-                        Replace Image
-                    </label>
-                    <button class="btn primary add-inside-btn">+ Add Destination</button>
-
-                    <button class="btn danger small">Remove</button>
-                </div>
-
-                <!-- === 2. Dubai === -->
-                <div class="featured-admin-card">
-                        <div class="image-wrapper">
-                    <img src="~/img/dubai.webp" alt="Dubai" />
-                        </div>
-                    <input class="name-input" value="Dubai" />
-
-                    <label class="upload-btn">
-                        <input type="file" hidden />
-                        Replace Image
-                    </label>
-                    <button class="btn primary add-inside-btn">+ Add Destination</button>
-
-                    <button class="btn danger small">Remove</button>
-                </div>
-
-                <!-- === 3. Oman === -->
-                <div class="featured-admin-card">
-                    <div class="image-wrapper">
-                    <img src="~/img/Oman.webp" alt="Oman" />
-                    </div>
-                    <input class="name-input" value="Oman" />
-
-                    <label class="upload-btn">
-                        <input type="file" hidden />
-                        Replace Image
-                    </label>
-                    <button class="btn primary add-inside-btn">+ Add Destination</button>
-
-                    <button class="btn danger small">Remove</button>
-                </div>
-
-                <!-- === 4. Russia === -->
-                <div class="featured-admin-card">
-                            <div class="image-wrapper">
-                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg" alt="Russia" />
-                            </div>
-                    <input class="name-input" value="Russia" />
-
-                    <label class="upload-btn">
-                        <input type="file" hidden />
-                        Replace Image
-                    </label>
-                    <button class="btn primary add-inside-btn">+ Add Destination</button>
-
-                    <button class="btn danger small">Remove</button>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
     <!-- ================= POPUP AD CONTROL ================= -->
-    <div class="card" style="margin-top: 30px;">
+    <div class="card" style="margin-top:30px;">
         <div class="card-h flex-between">
             <span>Tourism Popup Ad Control</span>
         </div>
@@ -98,9 +20,9 @@
         <div class="card-b">
             <div class="popup-admin-grid">
 
-                <!-- Image Section -->
                 <div class="popup-admin-image">
-                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg" alt="Popup Image" />
+                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg"
+                         alt="Popup Image" />
 
                     <label class="upload-btn">
                         <input type="file" hidden />
@@ -108,23 +30,135 @@
                     </label>
                 </div>
 
-                <!-- Fields -->
                 <div class="popup-admin-fields">
-
                     <label>Place Name</label>
-                    <input class="admin-input" placeholder="e.g. Russia" value="Russia" />
+                    <input class="admin-input"
+                           placeholder="e.g. Russia"
+                           value="Russia" />
 
                     <label>Popup Text</label>
-                    <textarea class="admin-input" rows="3">Experience breathtaking destinations, unique culture, and unforgettable adventures.</textarea>
+                    <textarea class="admin-input"
+                              rows="3">
+Experience breathtaking destinations, unique culture, and unforgettable adventures.
+                    </textarea>
 
-                 
-                    <button class="btn primary" style="margin-top:10px;">Update Popup</button>
+                    <button class="btn primary"
+                            style="margin-top:10px;">
+                        Update Popup
+                    </button>
                 </div>
 
             </div>
         </div>
     </div>
 
+    <!-- ================= FEATURED DESTINATIONS CONTROL ================= -->
+    <div class="card">
+        <div class="card-h flex-between">
+            <span>Featured Destinations</span>
+            <a asp-action="Create" class="btn primary">
+                + Add Destination
+            </a>
+        </div>
 
+        <div class="card-b">
+            <div class="featured-admin-grid">
+
+                @foreach (var destination in Model)
+                {
+                    <div class="featured-admin-card">
+
+                        <form asp-action="Update"
+                              method="post"
+                              enctype="multipart/form-data">
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@destination.DestinationId" />
+
+                            <div class="image-wrapper">
+                                <img src="@destination.ImageUrl"
+                                     alt="@destination.CityName" />
+                            </div>
+
+                            <input class="name-input"
+                                   name="CityName"
+                                   value="@destination.CityName"
+                                   required />
+
+                            <label class="upload-btn">
+                                <input type="file"
+                                       name="ImageFile"
+                                       hidden />
+                                Replace Image
+                            </label>
+
+                            <button type="submit" class="btn primary full">
+                                Save Changes
+                            </button>
+
+                        </form>
+
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden"
+                                   name="id"
+                                   value="@destination.DestinationId" />
+
+                            <button type="submit" class="btn danger full">
+                                Remove
+                            </button>
+                        </form>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DELETED DESTINATIONS ================= -->
+    @if (ViewBag.DeletedDestinations != null && ViewBag.DeletedDestinations.Count > 0)
+    {
+        <div class="card" style="margin-top:30px;">
+            <div class="card-h">
+                <span>Deleted Destinations</span>
+            </div>
+
+            <div class="card-b">
+                <div class="featured-admin-grid">
+
+                    @foreach (var destination in ViewBag.DeletedDestinations)
+                    {
+                        <div class="featured-admin-card deleted">
+
+                            <div class="image-wrapper">
+                                <img src="@destination.ImageUrl"
+                                     alt="@destination.CityName" />
+                            </div>
+
+                            <input class="name-input"
+                                   value="@destination.CityName"
+                                   disabled />
+
+                            <form asp-action="Restore" method="post">
+                                <input type="hidden"
+                                       name="id"
+                                       value="@destination.DestinationId" />
+
+                                <button type="submit"
+                                        class="btn success full">
+                                    Restore
+                                </button>
+                            </form>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+
+   
 
 </div>

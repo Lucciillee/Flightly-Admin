@@ -40,12 +40,24 @@
     padding: 20px;
 }
 
-/* Featured Grid */
 .featured-admin-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
     gap: 26px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
 }
+
+    /* Hide ugly scrollbar but keep scroll */
+    .featured-admin-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .featured-admin-grid::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.2);
+        border-radius: 10px;
+    }
+
 
 /* Destination Card */
 .featured-admin-card {
@@ -58,7 +70,11 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
+    min-width: 320px;
+    max-width: 320px;
+    flex-shrink: 0;
 }
+
 
     /* Square Images — Bigger & Cleaner */
     .featured-admin-card img {
@@ -221,7 +237,82 @@
     }
 }
 
+.btn.full {
+    width: 100%;
+    display: block;
+}
+/* Make city name input full width */
+.featured-admin-card .name-input {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Make upload button full width */
+.featured-admin-card .upload-btn {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+/* Make upload button behave like a real button */
+.featured-admin-card .upload-btn {
+    padding: 12px;
+    border-radius: 10px;
+}
 
 
+
+/* Consistent vertical spacing inside cards */
+.featured-admin-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    /* Reduce gap before Remove button */
+    .featured-admin-card form + form {
+        margin-top: 4px;
+    }
+
+
+.featured-admin-card.deleted {
+    min-width: 320px;
+    max-width: 320px;
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+/* Placeholder image style for Create page */
+.image-wrapper.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: 2px dashed var(--line);
+}
+.image-wrapper img {
+    display: block;
+}
+.preview-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-weight: 600;
+    background: #f3f4f6;
+}
+
+    .preview-box span {
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .preview-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+    }
 
 
