@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
@@ -29,6 +31,11 @@ namespace ProjectWebApp.Controllers
                 .OrderByDescending(d => d.DeletedAt)
                 .ToList();
 
+           var popup = _context.TourismPopups
+            .OrderByDescending(p => p.CreatedAt)
+            .FirstOrDefault();
+
+            ViewBag.TourismPopup = popup;
             ViewBag.DeletedDestinations = deletedDestinations;
 
             return View(activeDestinations);
@@ -68,11 +75,15 @@ namespace ProjectWebApp.Controllers
                 ImageFile.CopyTo(stream);
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var destination = new FeaturedDestination
             {
                 CityName = CityName,
                 ImageUrl = "/uploads/destinations/" + fileName,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+               
+
             };
 
             _context.FeaturedDestinations.Add(destination);
@@ -164,6 +175,51 @@ namespace ProjectWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult UpdateTourismPopup(string CityName, string PopupText, IFormFile? ImageFile)
+        {
+            // Always get the SAME popup (the first one ever created)
+            var popup = _context.TourismPopups
+                .OrderBy(p => p.CreatedAt)
+                .FirstOrDefault();
+
+            if (popup == null)
+            {
+                popup = new TourismPopup
+                {
+                    CreatedAt = DateTime.Now
+                };
+                _context.TourismPopups.Add(popup);
+            }
+
+            popup.PlaceName = CityName;
+            popup.PopupText = PopupText;
+            popup.UpdatedAt = DateTime.Now;
+
+            if (ImageFile != null)
+            {
+                var uploadsFolder = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/uploads/popup"
+                );
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    ImageFile.CopyTo(stream);
+                }
+
+                popup.ImageUrl = "/uploads/popup/" + fileName;
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
 
 

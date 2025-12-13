@@ -18,29 +18,36 @@
         </div>
 
         <div class="card-b">
-            <div class="popup-admin-grid">
+            <form asp-action="UpdateTourismPopup"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="popup-admin-grid">
 
                 <div class="popup-admin-image">
-                    <img src="~/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg"
-                         alt="Popup Image" />
+                    <img src="@(ViewBag.TourismPopup?.ImageUrl
+                            ?? "/img/Moscow-Russia-St.-Basils-Cathedral_1_0.jpg")"
+                         alt="Popup Image"
+                         id="popupPreview" />
 
                     <label class="upload-btn">
-                        <input type="file" hidden />
+                        <input type="file"
+                               name="ImageFile"
+                               hidden
+                               onchange="previewPopupImage(this)" />
                         Replace Image
                     </label>
                 </div>
 
                 <div class="popup-admin-fields">
-                    <label>Place Name</label>
+                    <label>City Name</label>
                     <input class="admin-input"
-                           placeholder="e.g. Russia"
-                           value="Russia" />
-
+                           name="CityName"
+                           value="@ViewBag.TourismPopup?.PlaceName"
+                           required />
                     <label>Popup Text</label>
-                    <textarea class="admin-input"
-                              rows="3">
-Experience breathtaking destinations, unique culture, and unforgettable adventures.
-                    </textarea>
+                    <textarea required class="admin-input"
+                              name="PopupText"
+                              rows="3">@ViewBag.TourismPopup?.PopupText</textarea>
 
                     <button class="btn primary"
                             style="margin-top:10px;">
@@ -48,9 +55,10 @@ Experience breathtaking destinations, unique culture, and unforgettable adventur
                     </button>
                 </div>
 
-            </div>
+            </form>
         </div>
     </div>
+
 
     <!-- ================= FEATURED DESTINATIONS CONTROL ================= -->
     <div class="card">
@@ -162,3 +170,14 @@ Experience breathtaking destinations, unique culture, and unforgettable adventur
    
 
 </div>
+<script>
+    function previewPopupImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('popupPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
