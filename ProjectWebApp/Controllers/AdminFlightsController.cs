@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminFlightsController : Controller
     {
 
@@ -24,6 +26,7 @@ namespace ProjectWebApp.Controllers
                 .Include(f => f.OriginAirport)
                 .Include(f => f.DestinationAirport)
                 .Include(f => f.Status)
+                .OrderByDescending(f => f.CreatedAt) // 👈 THIS LINE
                 .ToListAsync();
 
             return View(flights);
@@ -50,23 +53,49 @@ namespace ProjectWebApp.Controllers
             return View(vm);
         }
 
+       
         // POST: Create Flight
         [HttpPost]
         public async Task<IActionResult> Create(CreateFlightVM model)
         {
+            // Normalize flight number
+            model.FlightNumber = model.FlightNumber?.Trim().ToUpper();
+
             if (!ModelState.IsValid)
             {
-                // Reload dropdowns
-                model.Airlines = _context.Airlines.Select(a => new SelectListItem { Value = a.AirlineId.ToString(), Text = a.AirlineName }).ToList();
-                model.Airports = _context.Airports.Select(a => new SelectListItem { Value = a.AirportId.ToString(), Text = a.Code }).ToList();
-                model.Statuses = _context.FlightStatuses.Select(s => new SelectListItem { Value = s.StatusId.ToString(), Text = s.StatusName }).ToList();
+                ReloadDropdowns(model);
+                return View(model);
+            }
 
+            // 🔴 NEW CHECK: Origin and Destination cannot be the same
+            if (model.OriginAirportId == model.DestinationAirportId)
+            {
+                ModelState.AddModelError(
+                    "DestinationAirportId",
+                    "Origin and destination airports must be different."
+                );
+
+                ReloadDropdowns(model);
+                return View(model);
+            }
+
+            // 🔴 CHECK: Flight number already exists
+            bool flightExists = await _context.Flights
+                .AnyAsync(f => f.FlightNumber == model.FlightNumber);
+
+            if (flightExists)
+            {
+                ModelState.AddModelError(
+                    "FlightNumber",
+                    "This flight number is already taken."
+                );
+
+                ReloadDropdowns(model);
                 return View(model);
             }
 
             // ✅ Get logged-in admin
             var email = User.FindFirstValue(ClaimTypes.Email);
-
             int? adminId = null;
 
             if (!string.IsNullOrEmpty(email))
@@ -77,6 +106,7 @@ namespace ProjectWebApp.Controllers
                 if (admin != null)
                     adminId = admin.UserId;
             }
+
             var flight = new Flight
             {
                 AirlineId = model.AirlineId,
@@ -95,7 +125,32 @@ namespace ProjectWebApp.Controllers
             _context.Flights.Add(flight);
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "Flight added successfully.";
             return RedirectToAction("Index");
+        }
+
+        private void ReloadDropdowns(CreateFlightVM model)
+        {
+            model.Airlines = _context.Airlines
+                .Select(a => new SelectListItem
+                {
+                    Value = a.AirlineId.ToString(),
+                    Text = a.AirlineName
+                }).ToList();
+
+            model.Airports = _context.Airports
+                .Select(a => new SelectListItem
+                {
+                    Value = a.AirportId.ToString(),
+                    Text = a.Code
+                }).ToList();
+
+            model.Statuses = _context.FlightStatuses
+                .Select(s => new SelectListItem
+                {
+                    Value = s.StatusId.ToString(),
+                    Text = s.StatusName
+                }).ToList();
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -141,9 +196,12 @@ namespace ProjectWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditFlightVM model)
         {
+            // Normalize
+            model.FlightNumber = model.FlightNumber?.Trim().ToUpper();
+
             if (!ModelState.IsValid)
             {
-                // Reload allowed statuses
+                // 🔁 Reload statuses
                 model.Statuses = _context.FlightStatuses
                     .Where(s => s.StatusName != "Cancelled")
                     .Select(s => new SelectListItem
@@ -153,24 +211,76 @@ namespace ProjectWebApp.Controllers
                     })
                     .ToList();
 
+                // 🔁 RELOAD NON-POSTED DATA
+                var flight = await _context.Flights
+                    .Include(f => f.Airline)
+                    .Include(f => f.OriginAirport)
+                    .Include(f => f.DestinationAirport)
+                    .FirstOrDefaultAsync(f => f.FlightId == model.FlightId);
+
+                if (flight != null)
+                {
+                    model.AirlineName = flight.Airline.AirlineName;
+                    model.OriginCode = flight.OriginAirport.Code;
+                    model.DestinationCode = flight.DestinationAirport.Code;
+                }
+
                 return View(model);
             }
 
-            var flight = await _context.Flights.FindAsync(model.FlightId);
-            if (flight == null)
+            // 🔴 Duplicate flight number check
+            bool exists = await _context.Flights.AnyAsync(f =>
+                f.FlightNumber == model.FlightNumber &&
+                f.FlightId != model.FlightId
+            );
+
+            if (exists)
+            {
+                ModelState.AddModelError("FlightNumber", "This flight number already exists.");
+
+                model.Statuses = _context.FlightStatuses
+                    .Where(s => s.StatusName != "Cancelled")
+                    .Select(s => new SelectListItem
+                    {
+                        Text = s.StatusName,
+                        Value = s.StatusId.ToString()
+                    })
+                    .ToList();
+
+                // 🔁 RELOAD NON-POSTED DATA AGAIN
+                var flight = await _context.Flights
+                    .Include(f => f.Airline)
+                    .Include(f => f.OriginAirport)
+                    .Include(f => f.DestinationAirport)
+                    .FirstOrDefaultAsync(f => f.FlightId == model.FlightId);
+
+                if (flight != null)
+                {
+                    model.AirlineName = flight.Airline.AirlineName;
+                    model.OriginCode = flight.OriginAirport.Code;
+                    model.DestinationCode = flight.DestinationAirport.Code;
+                }
+
+                return View(model);
+            }
+
+            var entity = await _context.Flights.FindAsync(model.FlightId);
+            if (entity == null)
                 return NotFound();
 
-            flight.FlightNumber = model.FlightNumber;
-            flight.Aircraft = model.Aircraft;
-            flight.DepartureTime = model.DepartureTime;
-            flight.ArrivalTime = model.ArrivalTime;
-            flight.BasePrice = model.BasePrice;
-            flight.StatusId = model.StatusId;
+            entity.FlightNumber = model.FlightNumber;
+            entity.Aircraft = model.Aircraft;
+            entity.DepartureTime = model.DepartureTime;
+            entity.ArrivalTime = model.ArrivalTime;
+            entity.BasePrice = model.BasePrice;
+            entity.StatusId = model.StatusId;
 
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "Flight updated successfully.";
             return RedirectToAction("Index");
         }
+
 
 
         [HttpPost]

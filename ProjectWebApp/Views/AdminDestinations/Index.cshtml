@@ -10,7 +10,12 @@
 }
 
 <div class="content">
-
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
     <!-- ================= POPUP AD CONTROL ================= -->
     <div class="card" style="margin-top:30px;">
         <div class="card-h flex-between">
@@ -170,14 +175,6 @@
    
 
 </div>
-<script>
-    function previewPopupImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('popupPreview').src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
+@section Scripts {
+    <script src="~/js/admin-destinations.js" asp-append-version="true"></script>
+}

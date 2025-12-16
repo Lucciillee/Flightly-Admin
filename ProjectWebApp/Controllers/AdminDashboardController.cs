@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminDashboardController : Controller
     {
         private readonly FlightlyDBContext _context;

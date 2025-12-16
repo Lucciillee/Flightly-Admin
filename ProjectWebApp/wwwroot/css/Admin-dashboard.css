@@ -77,13 +77,11 @@
 =========================== */
 .card.stat {
     display: flex;
+    flex-direction: column; /* 👈 KEY CHANGE */
     align-items: center;
-    gap: 14px;
-    padding: 18px 20px;
-    border-radius: 14px;
-    min-height: 95px;
-    background: var(--panel);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
 }
 
     .card.stat:hover {
@@ -239,4 +237,33 @@
         color: #6b7280;
         font-size: 12px;
     }
+}
+.table-scroll {
+    max-height: 520px; /* adjust height if needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+/* Sticky table header */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+/* ============================
+   RATING STARS
+============================ */
+.rating-stars {
+    display: inline-flex;
+    gap: 2px;
+    font-size: 1rem;
+}
+.rating-stars .star {
+   color: #e5e7eb; /* light gray (empty) */
+  }
+
+.rating-stars .star.filled {
+ color: #facc15; /* ⭐ yellow */
+
 }

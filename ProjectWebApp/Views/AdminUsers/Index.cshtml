@@ -10,6 +10,12 @@
 }
 
 <div class="content">
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
 
     <!-- Users Table -->
     <div class="card">
@@ -21,7 +27,7 @@
                 <input type="text" id="userSearch" placeholder="Search by name or email..." />
                 <button class="btn primary">Search</button>
             </div>
-
+            <div class="table-scroll">
             <table class="table" id="usersTable">
                 <thead>
                     <tr>
@@ -61,6 +67,7 @@
                 </tbody>
 
             </table>
+            </div>
         </div>
     </div>
 
@@ -79,52 +86,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Convert server-side data to JS arrays
-        const monthLabels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthLabels));
-        const monthCounts = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthCounts));
-
-        const ctx = document.getElementById('usersChart');
-
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: monthLabels,     // Dynamic month names
-                    datasets: [{
-                        label: 'New Users',
-                        data: monthCounts,    // Dynamic user count per month
-                        fill: true,
-                        borderColor: '#0d8bf2',
-                        backgroundColor: 'rgba(13,139,242,0.08)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: '#6b7280' },
-                            grid: { color: '#f1f5f9' }
-                        },
-                        x: {
-                            ticks: { color: '#6b7280' },
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Search filter
-        document.getElementById('userSearch').addEventListener('keyup', function () {
-            const s = this.value.toLowerCase();
-            document.querySelectorAll('#usersTable tbody tr').forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(s) ? "" : "none";
-            });
-        });
+        window.usersChartData = {
+            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthLabels)),
+            counts: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MonthCounts))
+        };
     </script>
+
+    <script src="~/js/admin-users-index.js" asp-append-version="true"></script>
 }
+

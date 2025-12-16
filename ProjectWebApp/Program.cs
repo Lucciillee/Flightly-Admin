@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<FlightlyDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FlightlyDB")));
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
@@ -37,6 +38,8 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

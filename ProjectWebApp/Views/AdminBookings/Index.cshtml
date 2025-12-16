@@ -52,6 +52,7 @@
             </form>
 
             <!-- 📋 Bookings Table (UNCHANGED DESIGN) -->
+            <div class="table-scroll">
             <table class="table">
                 <thead>
                     <tr>
@@ -101,29 +102,13 @@
                     }
                 </tbody>
             </table>
+            </div>
 
         </div>
     </div>
 </div>
 @section Scripts {
-    <script>
-        document.addEventListener("keydown", function (e) {
-
-            // ESC = Reset filters
-            if (e.key === "Escape") {
-                window.location.href = "/AdminBookings";
-            }
-
-            // ENTER = Trigger Search
-            if (e.key === "Enter") {
-                const searchButton = document.querySelector(".btn.primary");
-                if (searchButton) {
-                    e.preventDefault(); // avoid form auto-submit issues
-                    searchButton.click();
-                }
-            }
-
-        });
-    </script>
+    <script src="~/js/admin-bookings.js" asp-append-version="true"></script>
 }
+
 

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
@@ -8,6 +9,7 @@ using ProjectWebApp.ViewModels;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminReportsController : Controller
     {
         private readonly FlightlyDBContext _context;

@@ -10,7 +10,12 @@
 }
 
 <div class="content stack">
-
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
     <!-- ================= CREATE EMPLOYEE FORM ================= -->
     <div class="card">
         <div class="card-h">
@@ -92,7 +97,7 @@
         </div>
 
         <div class="card-b">
-
+            <div class="table-scroll">
             <table class="table" id="adminsTable">
                 <thead>
                     <tr>
@@ -110,17 +115,17 @@
                         <tr>
                             <td>@user.FullName</td>
                             <td>@user.Email</td>
-                            <td>
-                                <span class="badge @(user.Role == "Admin" ? "ok" : "")">
-                                    @user.Role
-                                </span>
-                            </td>
+                                <td>
+                                    <span class="badge role @(user.Role == "Admin" ? "admin" : "subadmin")">
+                                        @user.Role
+                                    </span>
+                                </td>
 
-                            <td>
-                                <span class="badge @(user.IsDeleted ? "danger" : "ok")">
-                                    @(user.IsDeleted ? "Blocked" : "Active")
-                                </span>
-                            </td>
+                                <td>
+                                    <span class="badge status @(user.IsDeleted ? "blocked" : "active")">
+                                        @(user.IsDeleted ? "Blocked" : "Active")
+                                    </span>
+                                </td>
 
                             <td class="right">
                                 @if (!user.IsDeleted)
@@ -148,7 +153,7 @@
                     }
                 </tbody>
             </table>
-
+            </div>
         </div>
     </div>
 
@@ -156,33 +161,6 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
-    <script>
-        const searchInput = document.getElementById('adminSearch');
-        const filterSelect = document.getElementById('roleFilter');
-        const rows = document.querySelectorAll('#adminsTable tbody tr');
-
-        function filterTable() {
-            const text = searchInput.value.toLowerCase();
-            const filter = filterSelect.value;
-
-            rows.forEach(row => {
-                const rowText = row.textContent.toLowerCase();
-                const role = row.children[2].textContent.trim();
-                const status = row.children[3].textContent.trim();
-
-                let matchesFilter =
-                    filter === "" ||
-                    role === filter ||
-                    (filter === "Active" && status === "Active") ||
-                    (filter === "Blocked" && status === "Blocked");
-
-                row.style.display =
-                    rowText.includes(text) && matchesFilter ? "" : "none";
-            });
-        }
-
-        searchInput.addEventListener('keyup', filterTable);
-        filterSelect.addEventListener('change', filterTable);
-    </script>
+    <script src="~/js/admin-roles-index.js" asp-append-version="true"></script>
 }
+

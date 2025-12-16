@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminBackupController : Controller
     {
         private readonly FlightlyDBContext _context;

@@ -182,3 +182,112 @@ select {
     margin-bottom: 12px;
     font-weight: 500;
 }
+/* ============================
+   Scrollable Flights Table
+   ============================ */
+.table-scroll {
+    max-height: 520px; /* adjust as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+/* Sticky table header */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+/* ============================
+   Success Alert
+   ============================ */
+.success-alert {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 12px 18px;
+    border: 1px solid #d1fae5;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+/* ============================
+   FLIGHT STATUS BADGES
+============================ */
+
+/* Cancelled - Red */
+.badge.danger {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Delayed - keep blue but slightly clearer (optional) */
+.badge.info {
+    background: #eef6ff;
+    border-color: #dbeafe;
+    color: #0b5394;
+}
+/* ===========================
+   MODAL OVERLAY
+=========================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+    z-index: 1000;
+}
+
+    .modal-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+/* ===========================
+   MODAL CARD
+=========================== */
+.modal-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: scaleIn 0.2s ease;
+}
+
+    .modal-card h3 {
+        margin: 0 0 8px;
+    }
+
+    .modal-card p {
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+/* ===========================
+   MODAL ACTIONS
+=========================== */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

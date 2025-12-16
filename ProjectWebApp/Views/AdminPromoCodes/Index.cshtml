@@ -10,6 +10,19 @@
 }
 
 <div class="content">
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="error-alert">
+            @TempData["Error"]
+        </div>
+    }
 
     <div class="card">
         <div class="card-h" style="display:flex; justify-content:space-between; align-items:center;">
@@ -29,6 +42,7 @@
             </div>
 
             <!-- Table -->
+            <div class="table-scroll">
             <table class="table" id="promoTable">
                 <thead>
                     <tr>
@@ -64,7 +78,7 @@
                                 }
                                 else if (promo.StatusId == 2)
                                 {
-                                    <span class="badge">Expired</span>
+                                        <span class="badge expired">Expired</span>
                                 }
                                 else if (promo.StatusId == 3)
                                 {
@@ -98,8 +112,11 @@
                                 {
                                     <a href="/AdminPromoCodes/Details/@promo.PromoId" class="btn small">View</a>
                                     <span class="btn small disabled">Edit</span>
-                                    <button class="btn small danger" onclick="deletePromo(@promo.PromoId)">Delete</button>
-                                }
+                                        <button class="btn small danger"
+                                                onclick="openDeletePromoModal(@promo.PromoId)">
+                                            Delete
+                                        </button>
+                                    }
                                 else
                                 {
                                     @* EDIT Button *@
@@ -120,7 +137,11 @@
                                     }
 
                                     @* DELETE BUTTON *@
-                                    <button class="btn small danger" onclick="deletePromo(@promo.PromoId)">Delete</button>
+                                        <span class="btn small disabled"
+                                              title="Only expired or over-limit promo codes can be deleted">
+                                            Delete
+                                        </span>
+
                                 }
                             </td>
 
@@ -130,34 +151,34 @@
                 </tbody>
 
             </table>
+            </div>
         </div>
     </div>
 
 </div>
+<!-- ===========================
+   DELETE PROMO MODAL
+=========================== -->
+<div id="deletePromoModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>Delete Promo Code</h3>
+        <p>
+            Are you sure you want to delete this promo code?<br />
+            <strong>This action cannot be undone.</strong>
+        </p>
 
+        <div class="modal-actions">
+            <button class="btn" onclick="closeDeletePromoModal()">No</button>
+
+            <a id="confirmDeletePromo"
+               class="btn danger">
+                Yes, Delete
+            </a>
+        </div>
+    </div>
+</div>
 @section Scripts {
-    <script>
-        const search = document.getElementById("promoSearch");
-        const rows = document.querySelectorAll("#promoTable tbody tr");
-
-        function filterPromo() {
-            const s = search.value.toLowerCase();
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(s) ? "" : "none";
-            });
-        }
-
-        search.addEventListener("keyup", filterPromo);
-
-        // -------------------------------
-        // DELETE PROMO CONFIRMATION
-        // -------------------------------
-        function deletePromo(id) {
-            if (confirm("Are you sure you want to delete this promo code?")) {
-                window.location.href = '/AdminPromoCodes/Delete/' + id;
-            }
-        }
-    </script>
+    <script src="~/js/admin-promocodes-index.js" asp-append-version="true"></script>
 }
+
 

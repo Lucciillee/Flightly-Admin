@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminLogsController : Controller
     {
         private readonly FlightlyDBContext _context;

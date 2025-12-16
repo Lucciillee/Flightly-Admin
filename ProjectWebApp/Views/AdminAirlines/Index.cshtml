@@ -6,7 +6,12 @@
 }
 
 <section class="content">
-
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
     <!-- Add + Refresh Buttons -->
     <div class="actions top-actions">
         <a href="/AdminAirlines/Create" class="btn primary">+ Add Airline</a>
@@ -18,6 +23,7 @@
         <div class="card-h">Airline List</div>
 
         <div class="card-b">
+            <div class="table-scroll">
             <table class="table">
                 <thead>
                     <tr>
@@ -72,6 +78,7 @@
                 </tbody>
 
             </table>
+            </div>
         </div>
     </div>
 

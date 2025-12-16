@@ -134,3 +134,97 @@
         padding: 20px;
     }
 }
+/* ============================
+   BOOKING STATUS BADGES
+============================ */
+
+/* Cancelled - Red */
+.badge.bad {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Optional: Warning / other states (yellow/orange) */
+.badge.warn {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+/* Optional: Info (blue tag like Round Trip) */
+.badge.info {
+    background: #eef6ff;
+    border-color: #dbeafe;
+    color: #0b5394;
+}
+/* Registered User - Pink */
+.badge.pink {
+    background: #fce7f3;
+    border-color: #fbcfe8;
+    color: #9d174d;
+}
+/* ===========================
+   MODAL OVERLAY
+=========================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+    z-index: 1000;
+}
+
+    .modal-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+/* ===========================
+   MODAL CARD
+=========================== */
+.modal-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: scaleIn 0.2s ease;
+}
+
+    .modal-card h3 {
+        margin: 0 0 8px;
+    }
+
+    .modal-card p {
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+/* ===========================
+   MODAL ACTIONS
+=========================== */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -53,6 +53,7 @@
         <div class="card">
             <div class="card-h">Recent Reviews</div>
             <div class="card-b">
+                <div class="table-scroll">
                 <table class="table">
                     <thead>
                         <tr>
@@ -70,18 +71,29 @@
                                     <strong>@r.FullName</strong><br />
                                     <small class="text-muted">@r.Email</small>
                                 </td>
-                                <td>
-                                    @{
-                                        var stars = new string('★', r.Rating);
-                                    }
-                                    @stars
-                                </td>
+                                    <td>
+                                        <span class="rating-stars">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= r.Rating)
+                                                {
+                                                    <span class="star filled">★</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="star">★</span>
+                                                }
+                                            }
+                                        </span>
+                                    </td>
+
                                 <td>@r.Comment</td>
                                 <td>@r.Date.ToString("yyyy-MM-dd")</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
@@ -148,123 +160,22 @@
 
 </section>
 
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const baseOpts = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { x: { grid: { display: false } }, y: { grid: { color: '#f3f4f6' } } }
+    window.dashboardData = {
+        revenueLabels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueLabels)),
+        revenueData: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData)),
+
+        userGrowthLabels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthLabels)),
+        userGrowthData: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthData)),
+
+        routeLabels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesLabels)),
+        routeData: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesData))
     };
-
-      const revenueLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueLabels));
-      const revenueData   = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData));
-      const routeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesLabels));
-      const routeData   = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.TopRoutesData));
-
-        // Line Chart - Revenue (REAL DATA)
-        new Chart(document.getElementById('revenueChart'), {
-            type: 'line',
-            data: {
-                labels: revenueLabels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: revenueData,
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37,99,235,0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: baseOpts
-        });
-
-         // =====================
-        // USER GROWTH (REAL DATA)
-        // =====================
-        const userGrowthLabels = @Html.Raw(
-            System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthLabels)
-        );
-
-        const userGrowthData = @Html.Raw(
-            System.Text.Json.JsonSerializer.Serialize(ViewBag.UserGrowthData)
-        );
-
-        new Chart(document.getElementById('userChart'), {
-            type: 'bar',
-            data: {
-                labels: userGrowthLabels,
-                datasets: [{
-                    data: userGrowthData,
-                    backgroundColor: '#7c3aed',
-                    borderRadius: 6
-                }]
-            },
-            options: baseOpts
-        });
-
-    // Doughnut - Top Routes
-     new Chart(document.getElementById('routesChart'), {
-        type: 'doughnut',
-        data: {
-            labels: routeLabels,
-            datasets: [{
-                data: routeData,
-                backgroundColor: [
-                    '#2563eb',
-                    '#7c3aed',
-                    '#f97316',
-                    '#22c55e',
-                    '#ef4444'
-                ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
-    });
-
-      // Booking Status - Donut
-new Chart(document.getElementById('flightChart'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Confirmed', 'Pending', 'Cancelled'],
-        datasets: [{
-            data: [65, 25, 10],
-            backgroundColor: ['#10b981', '#facc15', '#ef4444'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        cutout: '70%',
-        layout: {
-            padding: { bottom: 25 } // ⬅️ adds space below the donut
-        },
-        plugins: {
-            legend: {
-                position: 'bottom',
-                align: 'center',
-                labels: {
-                    boxWidth: 14,
-                    padding: 16, // ⬅️ adds more space between donut & labels
-                    font: { size: 12 }
-                }
-            }
-        }
-    }
-});
-
-
 </script>
+
+<!-- Chart.js CDN -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/admin-dashboard.js" asp-append-version="true"></script>
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
@@ -6,6 +7,7 @@ using ProjectWebApp.ViewModels;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminRolesController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;

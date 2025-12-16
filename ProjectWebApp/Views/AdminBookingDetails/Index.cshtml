@@ -82,7 +82,7 @@
                         <div class="muted small">Account Type</div>
                         @if (Model.IsRegisteredUser)
                         {
-                            <span class="badge ok">Registered User</span>
+                            <span class="badge pink">Registered User</span>
                         }
                         else
                         {
@@ -95,13 +95,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
 
 
                 <hr class="line" />
@@ -180,26 +173,50 @@
 
                     <a class="btn" href="/AdminBookingDetails/Refund/@Model.BookingId">Refund</a>
 
-                    <a class="btn danger"
-                       onclick="return confirm('Are you sure you want to cancel this booking?');"
-                       href="/AdminBookingDetails/CancelBooking/@Model.BookingId">
-                        Cancel Booking
-                    </a>
+                    @if (Model.Status == "Cancelled")
+                    {
+                        <button class="btn danger" disabled>
+                            Booking Cancelled
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn danger"
+                                onclick="openCancelBookingModal(@Model.BookingId)">
+                            Cancel Booking
+                        </button>
+                    }
+
                 </div>
 
+            </div>
+        </div>
+        <!-- ===========================
+           CANCEL BOOKING MODAL
+        =========================== -->
+        <div id="cancelBookingModal" class="modal-overlay">
+            <div class="modal-card">
+                <h3>Cancel Booking</h3>
+                <p>
+                    Are you sure you want to cancel this booking?<br />
+                    <strong>This action cannot be undone.</strong>
+                </p>
+
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeCancelBookingModal()">No</button>
+
+                    <a id="confirmCancelBooking"
+                       class="btn danger">
+                        Yes, Cancel
+                    </a>
+                </div>
             </div>
         </div>
 
     </section>
 </div>
-<script>
-    setTimeout(() => {
-        const alert = document.getElementById("successAlert");
-        if (alert) {
-            alert.style.transition = "0.5s";
-            alert.style.opacity = "0";
-            alert.style.transform = "translateY(-10px)";
-        }
-    }, 3000);
-</script>
+@section Scripts {
+    <script src="~/js/admin-booking-details.js" asp-append-version="true"></script>
+}
 

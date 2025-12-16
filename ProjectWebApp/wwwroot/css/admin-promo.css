@@ -206,3 +206,100 @@ textarea {
     .validation-summary-errors li {
         list-style: disc;
     }
+/* ============================
+   Scrollable Users Table
+   ============================ */
+.table-scroll {
+    max-height: 520px; /* adjust height if needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+/* Sticky table header */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+/* ============================
+   Success Alert
+   ============================ */
+.success-alert {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 12px 18px;
+    border: 1px solid #d1fae5;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+/* ============================
+   PROMO STATUS BADGES
+============================ */
+
+/* Expired - Red */
+.badge.expired {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Disabled - Orange */
+.badge.disabled {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #9a3412;
+}
+
+/* Over Limit - Pink */
+.badge.overlimit {
+    background: #fce7f3;
+    border-color: #fbcfe8;
+    color: #9d174d;
+}
+
+/* Upcoming - Blue (optional clarity) */
+.badge.upcoming {
+    background: #eef6ff;
+    border-color: #dbeafe;
+    color: #0b5394;
+}
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+    .modal-overlay.show {
+        display: flex;
+    }
+
+.modal-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+.error-alert {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 12px 18px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-weight: 500;
+}

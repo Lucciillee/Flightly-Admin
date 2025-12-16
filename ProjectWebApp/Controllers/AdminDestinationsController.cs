@@ -1,14 +1,17 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminDestinationsController : Controller
     {
         private readonly FlightlyDBContext _context;
@@ -52,8 +55,26 @@ namespace ProjectWebApp.Controllers
         [HttpPost]
         public IActionResult Create(string CityName, IFormFile ImageFile)
         {
+            // 🔵 Normalize city name
+            CityName = CityName?.Trim();
+
             if (string.IsNullOrWhiteSpace(CityName) || ImageFile == null)
             {
+                ModelState.AddModelError("", "City name and image are required.");
+                return View();
+            }
+            CityName = CultureInfo.CurrentCulture.TextInfo
+    .ToTitleCase(CityName.ToLower());
+            // 🔴 CHECK: City already exists (case-insensitive)
+            bool cityExists = _context.FeaturedDestinations
+                .Any(d => d.CityName.ToLower() == CityName.ToLower());
+
+            if (cityExists)
+            {
+                ModelState.AddModelError(
+                    "CityName",
+                    "This city already exists."
+                );
                 return View();
             }
 
@@ -89,6 +110,7 @@ namespace ProjectWebApp.Controllers
             _context.FeaturedDestinations.Add(destination);
             _context.SaveChanges();
 
+            TempData["Success"] = "Destination added successfully.";
             return RedirectToAction("Index");
         }
 

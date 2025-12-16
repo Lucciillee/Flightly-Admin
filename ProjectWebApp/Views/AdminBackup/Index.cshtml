@@ -47,7 +47,7 @@
             <div class="card-h">Restore</div>
             <div class="card-b">
                 <p class="muted">Select a backup entry below to restore the database.</p>
-
+                <div class="table-scroll">
                 <table class="table">
                     <thead>
                         <tr>
@@ -63,7 +63,11 @@
                             <tr>
                                 <td>@item.FileName</td>
                                 <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td>@item.BackupStatus</td>
+                                    <td>
+                                        <span class="status-badge @(item.BackupStatus == "Success" ? "success" : "error")">
+                                            @item.BackupStatus
+                                        </span>
+                                    </td>
                                 <td>
                                     <form method="post" asp-action="Restore">
                                         <input type="hidden" name="backupId" value="@item.BackupId" />
@@ -74,6 +78,7 @@
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 

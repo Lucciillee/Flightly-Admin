@@ -15,7 +15,8 @@
         </div>
 
         <div class="card-b">
-
+            <!-- 🔴 VALIDATION SUMMARY (PUT THIS HERE) -->
+            <div asp-validation-summary="All" class="validation-summary"></div>
             <form asp-action="Create"
                   method="post"
                   enctype="multipart/form-data"
@@ -42,7 +43,7 @@
                     <input type="file"
                            name="ImageFile"
                            hidden
-                           required
+                          
                            onchange="previewDestinationImage(this)" />
                     Upload Image
                 </label>
@@ -65,21 +66,7 @@
     </div>
 
 </div>
-<script>
-    function previewDestinationImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
+@section Scripts {
+    <script src="~/js/admin-destinations-create.js" asp-append-version="true"></script>
+}
 
-            reader.onload = function (e) {
-                const img = document.getElementById('previewImage');
-                const placeholder = document.getElementById('previewPlaceholder');
-
-                img.src = e.target.result;
-                img.style.display = 'block';
-                placeholder.style.display = 'none';
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>

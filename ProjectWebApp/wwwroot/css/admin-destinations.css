@@ -315,4 +315,20 @@
         border-radius: 12px;
     }
 
-
+.validation-summary {
+    color: #dc2626;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+/* ============================
+   Success Alert
+   ============================ */
+.success-alert {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 12px 18px;
+    border: 1px solid #d1fae5;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}

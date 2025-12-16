@@ -6,7 +6,12 @@
 }
 
 <section class="content">
-
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-alert">
+            @TempData["Success"]
+        </div>
+    }
     <div class="actions top-actions">
         <a href="/AdminFlights/Create" class="btn primary">+ Add Flight</a>
         <a href="/AdminFlights/Index" class="btn">Refresh</a>
@@ -16,6 +21,7 @@
         <div class="card-h">Flights List</div>
 
         <div class="card-b">
+            <div class="table-scroll">
             <table class="table">
                 <thead>
                     <tr>
@@ -70,10 +76,12 @@
                                 <!-- Cancel Button -->
                                 <form asp-action="Cancel" asp-controller="AdminFlights" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="@f.FlightId" />
-                                    <button type="submit" class="btn small danger"
-                                            onclick="return confirm('Are you sure you want to cancel this flight?');">
-                                        Cancel
-                                    </button>
+                                        <button type="button"
+                                                class="btn small danger"
+                                                onclick="openCancelModal(@f.FlightId)">
+                                            Cancel
+                                        </button>
+
                                 </form>
 
                             </td>
@@ -82,6 +90,24 @@
                     }
                 </tbody>
             </table>
+            </div>
+        </div>
+    </div>
+    <!-- ===========================
+       CANCEL FLIGHT MODAL
+    =========================== -->
+    <div id="cancelModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Cancel Flight</h3>
+            <p>Are you sure you want to cancel this flight?</p>
+
+            <div class="modal-actions">
+                <button class="btn" onclick="closeCancelModal()">No</button>
+                <form id="cancelForm" method="post" asp-action="Cancel" asp-controller="AdminFlights">
+                    <input type="hidden" name="id" id="cancelFlightId" />
+                    <button type="submit" class="btn danger">Yes, Cancel</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -89,4 +115,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/admin-flights.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/js/admin-flights-index.js" asp-append-version="true"></script>
 }

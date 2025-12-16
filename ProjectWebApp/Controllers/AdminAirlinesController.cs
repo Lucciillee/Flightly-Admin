@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminAirlinesController : Controller
     {
         private readonly FlightlyDBContext _context;
@@ -48,7 +50,13 @@ namespace ProjectWebApp.Controllers
        [HttpPost]
 public async Task<IActionResult> Create(CreateAirlineVM model)
 {
-    if (!ModelState.IsValid)
+            // Normalize airline code (prevents lh / LH duplicates)
+            model.Code = model.Code?.Trim().ToUpper();
+
+            // 🔵 ADDED: Normalize airline name
+            model.AirlineName = model.AirlineName?.Trim();
+
+            if (!ModelState.IsValid)
     {
         // Refill dropdowns (VERY IMPORTANT)
         model.Countries = _context.Countries
@@ -68,6 +76,61 @@ public async Task<IActionResult> Create(CreateAirlineVM model)
         return View(model);
 
     }
+            // 🔴 CHECK: Airline code already exists
+            bool codeExists = await _context.Airlines
+                .AnyAsync(a => a.Code == model.Code);
+
+            if (codeExists)
+            {
+                ModelState.AddModelError(
+                    "Code",
+                    "This airline code already exists."
+                );
+
+                model.Countries = _context.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CountryId.ToString(),
+                        Text = c.CountryName
+                    }).ToList();
+
+                model.Statuses = _context.AirlineStatuses
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList();
+
+                return View(model);
+            }
+            // 🔵 ADDED: Airline NAME duplicate check (soft uniqueness)
+            bool nameExists = await _context.Airlines
+                .AnyAsync(a => a.AirlineName.ToLower() == model.AirlineName.ToLower());
+
+            if (nameExists)
+            {
+                ModelState.AddModelError(
+                    "AirlineName",
+                    "An airline with this name already exists."
+                );
+
+                model.Countries = _context.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CountryId.ToString(),
+                        Text = c.CountryName
+                    }).ToList();
+
+                model.Statuses = _context.AirlineStatuses
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList();
+
+                return View(model);
+            }
+
             // ✅ ADD THIS BLOCK RIGHT HERE
             var email = User.FindFirstValue(ClaimTypes.Email);
 
@@ -114,7 +177,37 @@ public async Task<IActionResult> Create(CreateAirlineVM model)
             };
 
             _context.Airlines.Add(airline);
-    await _context.SaveChangesAsync();
+            //NEW
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                // 🔒 DB-level safety (unique constraint)
+                ModelState.AddModelError(
+                    "Code",
+                    "This airline code already exists."
+                );
+
+                model.Countries = _context.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CountryId.ToString(),
+                        Text = c.CountryName
+                    }).ToList();
+
+                model.Statuses = _context.AirlineStatuses
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList();
+
+                return View(model);
+            }
+
+            TempData["Success"] = "Airline added successfully.";
 
     return RedirectToAction("Index");
 }
@@ -149,9 +242,69 @@ public async Task<IActionResult> Create(CreateAirlineVM model)
         [HttpPost]
         public async Task<IActionResult> Edit(EditAirlineVM model, IFormFile NewLogo)
         {
+            // 🔵 Normalize inputs
+            model.Code = model.Code?.Trim().ToUpper();
+            model.AirlineName = model.AirlineName?.Trim();
+
             if (!ModelState.IsValid)
             {
-                // 🔁 Refill dropdowns
+                model.Countries = _context.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CountryId.ToString(),
+                        Text = c.CountryName
+                    }).ToList();
+
+                model.Statuses = _context.AirlineStatuses
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList();
+
+                return View(model);
+            }
+
+            // 🔴 CHECK: Duplicate airline CODE (exclude current airline)
+            bool codeExists = await _context.Airlines.AnyAsync(a =>
+                a.Code == model.Code &&
+                a.AirlineId != model.AirlineId
+            );
+
+            if (codeExists)
+            {
+                ModelState.AddModelError("Code", "This airline code already exists.");
+
+                model.Countries = _context.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CountryId.ToString(),
+                        Text = c.CountryName
+                    }).ToList();
+
+                model.Statuses = _context.AirlineStatuses
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList();
+
+                return View(model);
+            }
+
+            // 🔴 CHECK: Duplicate airline NAME (exclude current airline)
+            bool nameExists = await _context.Airlines.AnyAsync(a =>
+                a.AirlineName.ToLower() == model.AirlineName.ToLower() &&
+                a.AirlineId != model.AirlineId
+            );
+
+            if (nameExists)
+            {
+                ModelState.AddModelError(
+                    "AirlineName",
+                    "An airline with this name already exists."
+                );
+
                 model.Countries = _context.Countries
                     .Select(c => new SelectListItem
                     {
@@ -212,8 +365,10 @@ public async Task<IActionResult> Create(CreateAirlineVM model)
 
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "Airline updated successfully.";
             return RedirectToAction("Index");
         }
+
 
 
         public async Task<IActionResult> Deactivate(int id)

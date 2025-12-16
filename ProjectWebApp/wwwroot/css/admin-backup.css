@@ -163,3 +163,42 @@ input[type="file"] {
         padding: 20px;
     }
 }
+
+/* ============================
+   Scrollable Users Table
+   ============================ */
+.table-scroll {
+    max-height: 520px; /* adjust height if needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+/* Sticky table header */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+/* Backup status badge */
+.status-badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+    /* Success = Green */
+    .status-badge.success {
+        background-color: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #d1fae5;
+    }
+
+    /* Error / Failed = Red */
+    .status-badge.error {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }

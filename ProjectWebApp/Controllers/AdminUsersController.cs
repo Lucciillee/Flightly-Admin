@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 
 namespace ProjectWebApp.Controllers
 {
+    [Authorize(Roles = "Admin,Sub-Admin")]
     public class AdminUsersController : Controller
     {
         private readonly FlightlyDBContext _context;
@@ -66,6 +68,8 @@ namespace ProjectWebApp.Controllers
             user.IsDeleted = true;
             _context.SaveChanges();
 
+            TempData["Success"] = $"{user.FirstName} {user.LastName} has been blocked successfully.";
+
             return RedirectToAction("Index");
         }
 
@@ -79,6 +83,8 @@ namespace ProjectWebApp.Controllers
 
             user.IsDeleted = false;
             _context.SaveChanges();
+
+            TempData["Success"] = $"{user.FirstName} {user.LastName} has been unblocked successfully.";
 
             return RedirectToAction("Index");
         }
