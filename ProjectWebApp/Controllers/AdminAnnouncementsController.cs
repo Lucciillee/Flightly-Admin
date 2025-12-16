@@ -11,10 +11,11 @@ namespace ProjectWebApp.Controllers
     public class AdminAnnouncementsController : Controller
     {
         private readonly FlightlyDBContext _context;
-
-        public AdminAnnouncementsController(FlightlyDBContext context)
+        private readonly EmailService _emailService;
+        public AdminAnnouncementsController(FlightlyDBContext context, EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // LOAD PAGE
@@ -40,7 +41,7 @@ namespace ProjectWebApp.Controllers
         }
 
         // POST: SEND ANNOUNCEMENT
-       
+
         [HttpPost]
         public async Task<IActionResult> Send(AnnouncementVM model)
         {
@@ -50,38 +51,56 @@ namespace ProjectWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Get logged-in admin email
             var email = User.FindFirstValue(ClaimTypes.Email);
 
-            int? adminId = null;
-
-            if (!string.IsNullOrEmpty(email))
-            {
-                // Find the admin in database
-                var admin = await _context.UserProfiles
-                    .FirstOrDefaultAsync(u => u.Email == email);
-
-                if (admin != null)
-                {
-                    adminId = admin.UserId;  // ⭐ Correct UserId
-                }
-            }
+            var admin = await _context.UserProfiles
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             var announcement = new Announcement
             {
                 Title = model.Title,
                 Message = model.Message,
                 CreatedAt = DateTime.Now,
-                CreatedBy = adminId,  // ⭐ Now filled correctly
-                UserId = null         // sent to all users
+                CreatedBy = admin?.UserId,
+                UserId = null
             };
 
             _context.Announcements.Add(announcement);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // ⭐ SAVE FIRST
 
-            TempData["Success"] = "Announcement sent successfully!";
+            // ⭐ Get subscribed users
+            var subscribedUsers = await _context.UserPreferences
+                .Where(p => p.IsSubscribedToNewsletter)
+                .Include(p => p.User)
+                .Select(p => new
+                {
+                    p.User.Email,
+                    p.User.FirstName
+                })
+                .ToListAsync();
+
+            // ⭐ Send emails
+            foreach (var user in subscribedUsers)
+            {
+                if (!string.IsNullOrEmpty(user.Email))
+                {
+                    await _emailService.SendEmailAsync(
+                        user.Email,
+                        $"📢 New Announcement: {model.Title}",
+                        $@"
+                    <p>Hi {user.FirstName},</p>
+                    <p>{model.Message}</p>
+                    <br/>
+                    <p>— Flightly Team</p>
+                "
+                    );
+                }
+            }
+
+            TempData["Success"] = "Announcement sent and emails delivered to subscribers!";
             return RedirectToAction("Index");
         }
+
 
 
     }

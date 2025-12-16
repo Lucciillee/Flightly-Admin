@@ -21,6 +21,7 @@ namespace ProjectWebApp.Model
         public string PassportLast4 { get; set; }
         [Column(TypeName = "date")]
         public DateTime? PassportExpiryDate { get; set; }
+        public bool IsSubscribedToNewsletter { get; set; }
 
         [ForeignKey("PreferredOriginAirportId")]
         [InverseProperty("UserPreferences")]
