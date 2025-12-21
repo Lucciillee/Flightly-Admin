@@ -14,6 +14,23 @@ public class EmailService
 
     public async Task SendEmailAsync(string toEmail, string subject, string htmlMessage)
     {
+        var username = _config["EmailSettings:Username"];
+        var password = _config["EmailSettings:Password"];
+        var host = _config["EmailSettings:SmtpHost"];
+        var from = _config["EmailSettings:FromEmail"];
+
+        // ✅ SAFETY CHECK — prevents crashes
+        if (string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(password) ||
+            string.IsNullOrWhiteSpace(host) ||
+            string.IsNullOrWhiteSpace(from))
+        {
+            // Optional: log for debugging
+            Console.WriteLine("Email service disabled (missing configuration).");
+            return;
+        }
+
+        //Email sending logic
         var email = new MimeMessage();
 
         email.From.Add(new MailboxAddress("Flightly", _config["EmailSettings:FromEmail"]));
