@@ -35,25 +35,52 @@ namespace ProjectWebApp.Controllers
         // GET: Create Flight
         public IActionResult Create()
         {
+            var now = DateTime.Now;
+
+            var departure = new DateTime(
+                now.Year,
+                now.Month,
+                now.Day,
+                now.Hour + 1,
+                now.Minute,
+                0 // seconds
+            );
+
+            var arrival = departure.AddHours(2);
+
             var vm = new CreateFlightVM
             {
+                DepartureTime = departure,
+                ArrivalTime = arrival,
+
                 Airlines = _context.Airlines
-                    .Select(a => new SelectListItem { Value = a.AirlineId.ToString(), Text = a.AirlineName })
-                    .ToList(),
+                    .Select(a => new SelectListItem
+                    {
+                        Value = a.AirlineId.ToString(),
+                        Text = a.AirlineName
+                    }).ToList(),
 
                 Airports = _context.Airports
-                    .Select(a => new SelectListItem { Value = a.AirportId.ToString(), Text = a.Code })
-                    .ToList(),
+                    .Select(a => new SelectListItem
+                    {
+                        Value = a.AirportId.ToString(),
+                        Text = a.Code
+                    }).ToList(),
 
                 Statuses = _context.FlightStatuses
-                    .Select(s => new SelectListItem { Value = s.StatusId.ToString(), Text = s.StatusName })
-                    .ToList()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.StatusId.ToString(),
+                        Text = s.StatusName
+                    }).ToList()
             };
 
             return View(vm);
         }
 
-       
+
+
+
         // POST: Create Flight
         [HttpPost]
         public async Task<IActionResult> Create(CreateFlightVM model)

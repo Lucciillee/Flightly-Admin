@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectWebApp.Model;
 using System.Security.Claims;
 
+//Backup and restore are disabled by default because they depend on local SQL Server permissions and file system access. The code is included but guarded for security and compatibility.
 namespace ProjectWebApp.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -40,6 +41,13 @@ namespace ProjectWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> BackupNow()
         {
+
+            if (!_config.GetValue<bool>("BackupSettings:EnableBackup"))
+            {
+                TempData["Error"] = "Backup feature is disabled in this environment.";
+                return RedirectToAction("Index");
+            }
+
             int? adminId = null;  // ⭐ Declare here so it can be used in catch
 
             try
@@ -126,6 +134,14 @@ namespace ProjectWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Restore(int backupId)
         {
+
+            //  SAFETY GUARD — prevents restore on other machines
+            if (!_config.GetValue<bool>("BackupSettings:EnableBackup"))
+            {
+                TempData["Error"] = "Restore feature is disabled in this environment.";
+                return RedirectToAction("Index");
+            }
+
             // ⭐ FIX: declare adminId BEFORE the try
             int? adminId = null;
 

@@ -14,10 +14,6 @@ namespace ProjectWebApp.Controllers
         {
             _context = context;
         }
-
-        // -----------------------------
-        // LIST USERS (RoleId = 3)
-        // -----------------------------
         public IActionResult Index(string search)
         {
             var users = _context.UserProfiles

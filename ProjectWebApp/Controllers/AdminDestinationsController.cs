@@ -240,6 +240,7 @@ namespace ProjectWebApp.Controllers
             }
 
             _context.SaveChanges();
+            TempData["Success"] = "Tourism popup updated successfully!";
             return RedirectToAction("Index");
         }
 
