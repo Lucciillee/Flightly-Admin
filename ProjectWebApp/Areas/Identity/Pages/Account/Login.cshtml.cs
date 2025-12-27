@@ -122,8 +122,19 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    // Check if deleted
                     var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
+                    // 🔐 ROLE CHECK (THIS IS THE FIX)
+                    bool isAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
+                    bool isSubAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Sub-Admin");
+
+                    if (!isAdmin && !isSubAdmin)
+                    {
+                        await _signInManager.SignOutAsync();
+                        ModelState.AddModelError(string.Empty, "You are not authorized to access the admin panel.");
+                        return Page();
+                    }
+
                     var profile = _context.UserProfiles.FirstOrDefault(x => x.IdentityUserId == user.Id);
 
                     if (profile != null && profile.IsDeleted)
@@ -133,21 +144,20 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                         return Page();
                     }
 
-                    // _logger.LogInformation("User logged in."); OLD CODE
-                    // NEW CODE LOG LOGIN EVENT
+                    // ✅ LOG ADMIN LOGIN
                     _context.Logs.Add(new Log
                     {
                         UserId = profile?.UserId,
                         ActionType = "Login",
-                        Description = $"User {Input.Email} logged in.",
+                        Description = $"Admin {Input.Email} logged in.",
                         Timestamp = DateTime.Now
                     });
 
                     await _context.SaveChangesAsync();
 
-                    // Correct redirect for MVC Controllers
                     return RedirectToAction("Index", "AdminDashboard");
                 }
+
 
 
                 if (result.RequiresTwoFactor)

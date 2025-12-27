@@ -44,8 +44,8 @@ namespace ProjectWebApp.Controllers
         public IActionResult Create()
         {
             var allowedStatuses = _context.PromoStatuses
-    .Where(s => s.StatusId != 2) // Exclude Expired
-    .ToList();
+            .Where(s => s.StatusId != 2) // Exclude Expired
+            .ToList();
 
             ViewBag.StatusList = new SelectList(allowedStatuses, "StatusId", "StatusName");
             return View();

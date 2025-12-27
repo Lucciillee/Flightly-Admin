@@ -152,38 +152,39 @@ namespace ProjectWebApp.Controllers
             // TOP PERFORMING AIRLINES (WITH REVENUE SHARE)
             // =====================
 
-            // total revenue this month (confirmed bookings)
+            // Calculate the total revenue for the current month
             var totalRevenueThisMonth = _context.Bookings
-                .Where(b =>
-                    b.BookingStatusId == 1 &&
-                    b.BookingDate >= startOfMonth
-                )
-                .Sum(b => (decimal?)b.TotalAmount) ?? 0;
+                .Where(b => // Filter bookings to include only those that are confirmed (BookingStatusId == 1)
+                       b.BookingDate >= startOfMonth // And bookings that started from the beginning of the current month
+                   )
+                .Sum(b => (decimal?)b.TotalAmount) ?? 0; // Sum up the total amount of these bookings, and if there are none, default to 0
 
+            // Get the top airlines for the current month
             var topAirlinesRaw = _context.Bookings
-                .Where(b =>
-                    b.BookingStatusId == 1 &&
-                    b.BookingDate >= startOfMonth
-                )
-                .Include(b => b.Flight)
-                    .ThenInclude(f => f.Airline)
-                .GroupBy(b => b.Flight.Airline.AirlineName)
-                .Select(g => new
+                .Where(b => // Similarly, filter bookings to include only confirmed ones and from the current month
+                       b.BookingStatusId == 1 &&
+                       b.BookingDate >= startOfMonth
+                   )
+                .Include(b => b.Flight) // Include the flight information for each booking
+                    .ThenInclude(f => f.Airline) // Then include the airline information for each flight
+                .GroupBy(b => b.Flight.Airline.AirlineName) // Group the bookings by airline name
+                .Select(g => new // For each group, create a new object
                 {
-                    Airline = g.Key,
-                    BookingsThisMonth = g.Count(),
-                    Revenue = g.Sum(x => x.TotalAmount),
+                    Airline = g.Key, // The airline name is the key of the group
+                    BookingsThisMonth = g.Count(), // Count how many bookings are in this group
+                    Revenue = g.Sum(x => x.TotalAmount), // Sum up the total revenue for this airline
                     RevenueShare = totalRevenueThisMonth == 0
                         ? 0
-                        : (g.Sum(x => x.TotalAmount) / totalRevenueThisMonth) * 100
+                        : (g.Sum(x => x.TotalAmount) / totalRevenueThisMonth) * 100 // Calculate the percentage of total revenue this airline contributes
                 })
-                .OrderByDescending(x => x.Revenue)
-                .Take(5)
-                .ToList();
+                .OrderByDescending(x => x.Revenue) // Order the airlines by revenue in descending order
+                .Take(5) // Take the top 5 airlines
+                .ToList(); // Convert the result to a list
 
+            // Pass the top airlines data to the view
             ViewBag.TopAirlines = topAirlinesRaw;
 
-
+            // Return the view to render the dashboard
             return View();
         }
     }

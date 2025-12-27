@@ -47,6 +47,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");// Sets up a global exception handler for production environment
 }
 
+app.UseHttpsRedirection();
 app.UseStaticFiles();// Enables serving static files like CSS, JS, images, Protect the website
 
 app.UseRouting();// Enables routing middleware, necessary for URL routing, Protect the website

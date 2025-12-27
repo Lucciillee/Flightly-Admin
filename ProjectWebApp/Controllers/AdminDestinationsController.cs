@@ -44,14 +44,14 @@ namespace ProjectWebApp.Controllers
             return View(activeDestinations);
         }
 
-        // ================= CREATE (GET) =================
+        // ================= CREATE (GET) ================= Display the create form 
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // ================= CREATE (POST) =================
+        // ================= CREATE (POST) =================//after submitting the form
         [HttpPost]
         public IActionResult Create(string CityName, IFormFile ImageFile)
         {
@@ -63,8 +63,11 @@ namespace ProjectWebApp.Controllers
                 ModelState.AddModelError("", "City name and image are required.");
                 return View();
             }
+
+            //Convert city name to Title case for polished UI
             CityName = CultureInfo.CurrentCulture.TextInfo
     .ToTitleCase(CityName.ToLower());
+
             // 🔴 CHECK: City already exists (case-insensitive)
             bool cityExists = _context.FeaturedDestinations
                 .Any(d => d.CityName.ToLower() == CityName.ToLower());
@@ -77,26 +80,32 @@ namespace ProjectWebApp.Controllers
                 );
                 return View();
             }
-
+            //define the folder in which the image will be saved
             var uploadsFolder = Path.Combine(
                 Directory.GetCurrentDirectory(),
                 "wwwroot/uploads/destinations"
             );
 
+            //create folder if it does not exist alredy
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
 
+            //generate a unique file name for the uploaded image
             var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
             var filePath = Path.Combine(uploadsFolder, fileName);
 
+            //Save the uploaded image to the server
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 ImageFile.CopyTo(stream);
             }
 
+            //Get the id of the currently logged-in user
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            //Create a new destination entity or record
             var destination = new FeaturedDestination
             {
                 CityName = CityName,
@@ -107,6 +116,7 @@ namespace ProjectWebApp.Controllers
 
             };
 
+            //Add new destination to the database and save changes
             _context.FeaturedDestinations.Add(destination);
             _context.SaveChanges();
 
@@ -228,14 +238,17 @@ namespace ProjectWebApp.Controllers
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
+                //generate a unique file name for the uploaded image
                 var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
+                //combine the folder path and the unique file name to get the full file path where the image will be saved
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
+                //Save the uploaded image to the server, This part creates a new file stream at the specified file path and then copies the uploaded image into that stream. Essentially, this is the step where the image is actually saved to the server’s file system
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     ImageFile.CopyTo(stream);
                 }
-
+                // Update the ImageUrl property of the popup to point to the new image location
                 popup.ImageUrl = "/uploads/popup/" + fileName;
             }
 
