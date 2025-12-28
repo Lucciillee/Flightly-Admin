@@ -27,7 +27,8 @@ namespace ProjectWebApp.Controllers
                     u.LastName.ToLower().Contains(s) ||
                     u.Email.ToLower().Contains(s));
             }
-
+            // Order users by most recent first
+            users = users.OrderByDescending(u => u.CreatedAt);
             // --- Monthly Chart Data ---
             var monthlyCounts = _context.UserProfiles
                 .Where(u => u.RoleId == 3)

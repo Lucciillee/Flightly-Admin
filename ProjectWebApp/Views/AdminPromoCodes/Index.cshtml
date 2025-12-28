@@ -62,9 +62,7 @@
                             <td>@promo.Code</td>
 
                             <td>
-                                @(promo.Value % 1 == 0
-                                    ? $"{promo.Value:0}%"
-                                    : $"${promo.Value}")
+                                    @($"{promo.Value:0.##}%")
                             </td>
 
                             <td>@promo.StartDate.ToString("yyyy-MM-dd") → @promo.EndDate.ToString("yyyy-MM-dd")</td>

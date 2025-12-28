@@ -117,34 +117,40 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                // 1️⃣ Find user first
+                var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
+
+                // 2️⃣ Check profile for block
+                var profile = _context.UserProfiles.FirstOrDefault(x => x.IdentityUserId == user.Id);
+
+                if (profile != null && profile.IsDeleted)
+                {
+                    ModelState.AddModelError(string.Empty, "Your account has been disabled by an administrator.");
+                    return Page();
+                }
+
+                // 3️⃣ Check roles
+                bool isAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
+                bool isSubAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Sub-Admin");
+
+                if (!isAdmin && !isSubAdmin)
+                {
+                    ModelState.AddModelError(string.Empty, "You are not authorized to access the admin panel.");
+                    return Page();
+                }
+
+                // 4️⃣ Now attempt sign-in
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
-                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
-
-                    // 🔐 ROLE CHECK (THIS IS THE FIX)
-                    bool isAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
-                    bool isSubAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Sub-Admin");
-
-                    if (!isAdmin && !isSubAdmin)
-                    {
-                        await _signInManager.SignOutAsync();
-                        ModelState.AddModelError(string.Empty, "You are not authorized to access the admin panel.");
-                        return Page();
-                    }
-
-                    var profile = _context.UserProfiles.FirstOrDefault(x => x.IdentityUserId == user.Id);
-
-                    if (profile != null && profile.IsDeleted)
-                    {
-                        await _signInManager.SignOutAsync();
-                        ModelState.AddModelError(string.Empty, "Your account has been disabled by an administrator.");
-                        return Page();
-                    }
-
-                    // ✅ LOG ADMIN LOGIN
+                    // ✅ Log admin login
                     _context.Logs.Add(new Log
                     {
                         UserId = profile?.UserId,
@@ -152,32 +158,28 @@ namespace ProjectWebApp.Areas.Identity.Pages.Account
                         Description = $"Admin {Input.Email} logged in.",
                         Timestamp = DateTime.Now
                     });
-
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index", "AdminDashboard");
                 }
 
-
-
                 if (result.RequiresTwoFactor)
-                {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                // Default invalid login
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }

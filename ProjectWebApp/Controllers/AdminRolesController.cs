@@ -68,6 +68,7 @@ namespace ProjectWebApp.Controllers
         {
             return await _context.UserProfiles
                 .Where(u => u.RoleId == 1 || u.RoleId == 2)
+                .OrderByDescending(u => u.CreatedAt)
                 .Select(u => new AdminUserVM
                 {
                     IdentityUserId = u.IdentityUserId,
@@ -85,13 +86,11 @@ namespace ProjectWebApp.Controllers
             {
                 profile.IsDeleted = true;
                 _context.SaveChanges();
+                TempData["Success"] = $"{profile.FirstName} {profile.LastName} has been blocked successfully!";
+
             }
 
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-            {
-                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
-            }
+           
 
             return RedirectToAction("Index");
         }
@@ -104,13 +103,11 @@ namespace ProjectWebApp.Controllers
             {
                 profile.IsDeleted = false;
                 _context.SaveChanges();
+
+                TempData["Success"] = $"{profile.FirstName} {profile.LastName} has been restored successfully!";
             }
 
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-            {
-                await _userManager.SetLockoutEndDateAsync(user, null);
-            }
+           
 
             return RedirectToAction("Index");
         }
