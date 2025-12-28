@@ -3,8 +3,8 @@
 // ===========================
 document.addEventListener("DOMContentLoaded", () => {
 
-    if (!window.dashboardData) return;
-
+    if (!window.dashboardData) return;//if no data is available, exit the script.
+    //extract the data, destructures the object to get labels and data for each chart.
     const {
         revenueLabels,
         revenueData,
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         routeLabels,
         routeData
     } = window.dashboardData;
-
+    //common chart options used across multiple charts to maintain consistency.
     const baseOpts = {
         responsive: true,
         maintainAspectRatio: false,

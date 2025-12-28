@@ -161,7 +161,7 @@
 </section>
 
 
-<script>
+<script>//passing server data to JavaScript
     window.dashboardData = {
         revenueLabels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueLabels)),
         revenueData: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RevenueData)),

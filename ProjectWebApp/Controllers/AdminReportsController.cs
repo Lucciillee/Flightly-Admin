@@ -14,7 +14,7 @@ namespace ProjectWebApp.Controllers
     {
         private readonly FlightlyDBContext _context;
 
-        // Report type codes from dbo.ReportTypes
+        // Report type codes from dbo.ReportTypes/ They are used to decide which query to run
         private const string RT_TIME_RANGE = "TIME_RANGE";
         private const string RT_AIRLINE = "AIRLINE";
         private const string RT_ORIGIN = "ORIGIN";
@@ -23,13 +23,13 @@ namespace ProjectWebApp.Controllers
 
         public AdminReportsController(FlightlyDBContext context)
         {
-            _context = context;
+            _context = context;// Inject DB context
         }
 
         // GET: Reports page
         public async Task<IActionResult> Index()
         {
-            var vm = new ReportVM
+            var vm = new ReportVM //Loads all available report types from the database
             {
                 ReportTypes = await _context.ReportTypes
                     .Select(r => new ReportTypeItem
@@ -41,7 +41,7 @@ namespace ProjectWebApp.Controllers
                     .ToListAsync()
             };
 
-            return View(vm);
+            return View(vm);//Sends them to the view inside ReportVM
         }
 
         // POST: Generate / Preview / Export
@@ -66,7 +66,7 @@ namespace ProjectWebApp.Controllers
                 TempData["Error"] = "Date From cannot be later than Date To.";
                 return RedirectToAction("Index");
             }
-
+            // Load report metadata
             var reportType = await _context.ReportTypes
                 .FirstAsync(r => r.ReportTypeId == model.ReportTypeId.Value);
 
